@@ -6,10 +6,17 @@ import { WebSocketMock } from '../mock/web-socket';
 
 describe('WebSocketFactory', () => {
 
-    var webSocket,
+    var globalWebSocket,
+        webSocket,
         webSocketFactory;
 
+    afterEach(() => {
+        WebSocket = globalWebSocket;
+    });
+
     beforeEach(() => {
+        globalWebSocket = WebSocket;
+
         webSocket = new WebSocketMock();
         WebSocket = stub();
 

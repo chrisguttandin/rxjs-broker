@@ -5,7 +5,7 @@ describe('module', () => {
     describe('connect()', () => {
 
         it('should connect to a WebSocket and send and receive a messagge', function (done) {
-            this.timeout(5000);
+            this.timeout(10000);
 
             connect('ws://echo.websocket.org')
                 .then((webSocketBroker) => webSocketBroker.register('a fake type'))

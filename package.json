@@ -50,9 +50,14 @@
     "sinon-chai": "^2.8.0",
     "watchify": "^3.7.0"
   },
+  "homepage": "https://github.com/chrisguttandin/broken",
   "license": "MIT",
   "main": "src/module.js",
   "name": "broken",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisguttandin/broken.git"
+  },
   "scripts": {
     "test": "grunt test"
   },

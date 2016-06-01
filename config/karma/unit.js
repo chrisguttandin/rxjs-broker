@@ -13,7 +13,6 @@ module.exports = function (config) {
                     served: false,
                     watched: true,
                 },
-                '../../test/integration/**/*.js',
                 '../../test/unit/**/*.js'
             ],
 
@@ -59,6 +58,8 @@ module.exports = function (config) {
             'ChromeCanary',
             'FirefoxDeveloper'
         ];
+
+        configuration.files.push('../../test/integration/**/*.js');
     }
 
     config.set(configuration);

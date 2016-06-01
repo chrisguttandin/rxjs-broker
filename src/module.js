@@ -1,17 +1,24 @@
 import 'reflect-metadata';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketBrokerFactory } from './web-socket-broker-factory';
 import { WebSocketFactory } from './web-socket-factory';
+import { WebSocketObservableFactory } from './web-socket-observable-factory';
+import { WebSocketObserverFactory } from './web-socket-observer-factory';
 import { WebSocketSubjectFactory } from './web-socket-subject-factory';
 
 /* eslint-disable indent */
 const injector = ReflectiveInjector.resolveAndCreate([
-          WebSocketBrokerFactory,
           WebSocketFactory,
+          WebSocketObservableFactory,
+          WebSocketObserverFactory,
           WebSocketSubjectFactory,
       ]);
 /* eslint-enable indent */
 
-const webSocketBrokerFactory = injector.get(WebSocketBrokerFactory);
+const webSocketFactory = injector.get(WebSocketFactory);
+const webSocketSubjectFactory = injector.get(WebSocketSubjectFactory);
 
-export const connect = (url) => webSocketBrokerFactory.create({ url });
+export const connect = (url) => {
+    const webSocket = webSocketFactory.create({ url });
+
+    return webSocketSubjectFactory.create({ webSocket });
+};

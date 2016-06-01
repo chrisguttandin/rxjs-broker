@@ -5,23 +5,25 @@ describe('module', () => {
     describe('connect()', () => {
 
         it('should connect to a WebSocket and send and receive a messagge', function (done) {
+            var message,
+                webSocketSubject;
+
             this.timeout(10000);
 
-            connect('ws://echo.websocket.org')
-                .then((webSocketBroker) => webSocketBroker.register('a fake type'))
-                .then((webSocketSubject) => {
-                    var message = { a: 'b', c: 'd' };
+            message = { a: 'b', c: 'd' };
+            webSocketSubject = connect('ws://echo.websocket.org')
+                .mask({ a: 'fake mask' });
 
-                    webSocketSubject.subscribe({
-                        next (mssge) {
-                            expect(mssge).to.deep.equal(message);
+            webSocketSubject
+                .subscribe({
+                    next (mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-                            done();
-                        }
-                    });
-
-                    webSocketSubject.send(message);
+                        done();
+                    }
                 });
+
+            webSocketSubject.send(message);
         });
 
     });

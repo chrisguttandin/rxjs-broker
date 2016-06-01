@@ -1,58 +1,54 @@
-import { Observable } from 'rxjs/Observable';
+import { Inject } from '@angular/core/src/di/decorators';
 import { Subject } from 'rxjs/Subject';
+import { WebSocketObservableFactory } from './web-socket-observable-factory';
+import { WebSocketObserverFactory } from './web-socket-observer-factory';
 import { filter } from 'rxjs/operator/filter';
 import { map } from 'rxjs/operator/map';
 
 class WebSocketSubject extends Subject {
 
-    constructor ({ type, webSocket }) {
-        super();
+    constructor ({ webSocket, webSocketObservableFactory, webSocketObserverFactory }) {
+        var observable = webSocketObservableFactory.create({ webSocket }),
+            observer = webSocketObserverFactory.create({ webSocket });
 
-        this._observable = Observable
-            .create((observer) => {
-                const close = () => observer.complete();
-                const error = (event) => observer.error(event);
-                const message = (event) => observer.next(event);
-
-                this._webSocket.addEventListener('close', close);
-                this._webSocket.addEventListener('error', error);
-                this._webSocket.addEventListener('message', message);
-
-                return () => {
-                    this._webSocket.removeEventListener('close', close);
-                    this._webSocket.removeEventListener('error', error);
-                    this._webSocket.removeEventListener('message', message);
-                };
-            })
-            ::map(({ data }) => data)
-            ::map((data) => JSON.parse(data))
-            ::filter(({ type }) => type === this._type)
-            ::map(({ message }) => message);
-        this._webSocket = webSocket;
-        this._type = type;
+        super(observer, observable);
     }
 
-    next (message) {
-        var data = JSON.stringify({ message, type: this._type });
+    mask (mask) {
+        var maskedSubject = this
+                ::filter((message) => Object
+                    .keys(mask)
+                    .every((key) => mask[key] === message[key]))
+                ::map(({ message }) => message);
 
-        this._webSocket.send(data);
+        maskedSubject.next = ((next) => (message) => next.call(this, { ...mask, message: { ...message } }))(this.next);
+        maskedSubject.send = ((send) => (message) => send.call(this, { ...mask, message: { ...message } }))(this.send);
+
+        return maskedSubject;
     }
 
-    async send (message) {
-        this.next(message);
-    }
+    send (message) {
+        if (this.isUnsubscribed) {
+            // throw new ObjectUnsubscribedError();
+        }
 
-    subscribe (subscriber) {
-        return this._observable
-            .subscribe(subscriber);
+        if (!this.isStopped) {
+            this.destination.send(message);
+        }
     }
 
 }
 
 export class WebSocketSubjectFactory {
 
-    create ({ type, webSocket }) {
-        return new WebSocketSubject({ type, webSocket });
+    constructor (webSocketObservableFactory, webSocketObserverFactory) {
+        this._options = { webSocketObservableFactory, webSocketObserverFactory };
+    }
+
+    create ({ webSocket }) {
+        return new WebSocketSubject({ ...this._options, webSocket });
     }
 
 }
+
+WebSocketSubjectFactory.parameters = [ [ new Inject(WebSocketObservableFactory) ], [ new Inject(WebSocketObserverFactory) ] ];

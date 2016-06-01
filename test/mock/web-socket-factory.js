@@ -1,3 +1,4 @@
+import { WebSocketMock } from './web-socket';
 import { spy } from 'sinon';
 
 export class WebSocketFactoryMock {
@@ -11,12 +12,8 @@ export class WebSocketFactoryMock {
         return this._webSockets;
     }
 
-    async create () {
-        /* eslint-disable indent */
-        const webSocket = {
-                  close: spy()
-              };
-        /* eslint-enable indent */
+    create () {
+        const webSocket = new WebSocketMock();
 
         this._webSockets.push(webSocket);
 

@@ -1,8 +1,8 @@
 import 'reflect-metadata';
-import { stub } from 'sinon';
 import { ReflectiveInjector } from '@angular/core';
 import { WebSocketFactory } from '../../src/web-socket-factory';
 import { WebSocketMock } from '../mock/web-socket';
+import { stub } from 'sinon';
 
 describe('WebSocketFactory', () => {
 
@@ -11,16 +11,16 @@ describe('WebSocketFactory', () => {
         webSocketFactory;
 
     afterEach(() => {
-        WebSocket = globalWebSocket;
+        WebSocket = globalWebSocket; // eslint-disable-line no-undef
     });
 
     beforeEach(() => {
-        globalWebSocket = WebSocket;
+        globalWebSocket = WebSocket; // eslint-disable-line no-undef
 
         webSocket = new WebSocketMock();
-        WebSocket = stub();
+        WebSocket = stub(); // eslint-disable-line no-undef
 
-        WebSocket.returns(webSocket);
+        WebSocket.returns(webSocket); // eslint-disable-line no-undef
     });
 
     beforeEach(() => {
@@ -35,34 +35,19 @@ describe('WebSocketFactory', () => {
 
     describe('create()', () => {
 
-        it('should create a new WebSocket with the given URL', (done) => {
-            var url = 'a fake URL';
+        var url;
 
-            webSocketFactory
-                .create({ url })
-                .then((webSocket) => {
-                    expect(WebSocket).to.have.been.calledOnce;
-                    expect(WebSocket).to.have.been.calledWithExactly(url);
+        beforeEach(() => url = 'a fake URL');
 
-                    done();
-                });
+        it('should create a new WebSocket with the given URL', () => {
+            webSocketFactory.create({ url });
 
-            webSocket.dispatchEvent({ type: 'open' });
+            expect(WebSocket).to.have.been.calledOnce; // eslint-disable-line no-undef
+            expect(WebSocket).to.have.been.calledWithExactly(url); // eslint-disable-line no-undef
         });
 
-        it('should fail to create a new WebSocket in case of an error', (done) => {
-            var error = 'a fake error',
-                url = 'a fake URL';
-
-            webSocketFactory
-                .create({ url })
-                .catch((err) => {
-                    expect(err).to.equal(error);
-
-                    done();
-                });
-
-            webSocket.dispatchEvent({ error, type: 'error' });
+        it('should return a new WebSocket', () => {
+            expect(webSocketFactory.create({ url })).to.equal(webSocket);
         });
 
     });

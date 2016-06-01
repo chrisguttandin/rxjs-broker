@@ -51,13 +51,13 @@
     "sinon-chai": "^2.8.0",
     "watchify": "^3.7.0"
   },
-  "homepage": "https://github.com/chrisguttandin/broken",
+  "homepage": "https://github.com/chrisguttandin/rxjs-broker",
   "license": "MIT",
   "main": "src/module.js",
-  "name": "broken",
+  "name": "rxjs-broker",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chrisguttandin/broken.git"
+    "url": "https://github.com/chrisguttandin/rxjs-broker.git"
   },
   "scripts": {
     "test": "grunt test"

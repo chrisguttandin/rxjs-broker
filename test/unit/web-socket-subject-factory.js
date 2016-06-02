@@ -30,6 +30,54 @@ describe('WebSocketSubject', () => {
         webSocketSubject = webSocketSubjectFactory.create({ webSocket });
     });
 
+    describe('mask()', () => {
+
+        var message;
+
+        beforeEach(() => {
+            message = { a: 'fake message' };
+
+            webSocketSubject = webSocketSubject.mask({ a: 'fake mask' });
+        });
+
+        it('should augment messages with the mask when calling next()', () => {
+            webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
+
+            webSocketSubject.next(message);
+
+            expect(webSocket.send).to.have.been.calledOnce;
+            expect(webSocket.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
+        });
+
+        it('should augment messages with the mask when calling send()', async () => {
+            webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
+
+            await webSocketSubject.send(message);
+
+            expect(webSocket.send).to.have.been.calledOnce;
+            expect(webSocket.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
+        });
+
+        it('should filter messages by the mask', (done) => {
+            var message,
+                webSocketSubscription;
+
+            webSocketSubscription = webSocketSubject
+                .subscribe({
+                    next (mssg) {
+                        expect(mssg).to.equal(message);
+
+                        webSocketSubscription.unsubscribe();
+
+                        done();
+                    }
+                });
+
+            webSocket.dispatchEvent({ data: { a: 'fake mask', message }, type: 'message' });
+        });
+
+    });
+
     describe('subscribe()', () => {
 
         it('should emit a message from the socket', (done) => {
@@ -75,54 +123,6 @@ describe('WebSocketSubject', () => {
                 });
 
             webSocket.dispatchEvent({ type: 'close' });
-        });
-
-    });
-
-    describe('mask()', () => {
-
-        var message;
-
-        beforeEach(() => {
-            message = { a: 'fake message' };
-
-            webSocketSubject = webSocketSubject.mask({ a: 'fake mask' });
-        });
-
-        it('should augment messages with the mask when calling next()', () => {
-            webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
-
-            webSocketSubject.next(message);
-
-            expect(webSocket.send).to.have.been.calledOnce;
-            expect(webSocket.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
-        });
-
-        it('should augment messages with the mask when calling send()', async () => {
-            webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
-
-            await webSocketSubject.send(message);
-
-            expect(webSocket.send).to.have.been.calledOnce;
-            expect(webSocket.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
-        });
-
-        it('should filter messages by the mask', (done) => {
-            var message,
-                webSocketSubscription;
-
-            webSocketSubscription = webSocketSubject
-                .subscribe({
-                    next (mssg) {
-                        expect(mssg).to.equal(message);
-
-                        webSocketSubscription.unsubscribe();
-
-                        done();
-                    }
-                });
-
-            webSocket.dispatchEvent({ data: { a: 'fake mask', message }, type: 'message' });
         });
 
     });

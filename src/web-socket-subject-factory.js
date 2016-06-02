@@ -12,6 +12,12 @@ class WebSocketSubject extends Subject {
             observer = webSocketObserverFactory.create({ webSocket });
 
         super(observer, observable);
+
+        this._webSocket = webSocket;
+    }
+
+    close () {
+        this._webSocket.close();
     }
 
     mask (mask) {

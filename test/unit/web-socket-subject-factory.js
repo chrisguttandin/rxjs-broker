@@ -30,6 +30,17 @@ describe('WebSocketSubject', () => {
         webSocketSubject = webSocketSubjectFactory.create({ webSocket });
     });
 
+    describe('close()', () => {
+
+        it('should close the socket', () => {
+            webSocketSubject.close();
+
+            expect(webSocket.close).to.have.been.calledOnce;
+            expect(webSocket.close).to.have.been.calledWithExactly();
+        });
+
+    });
+
     describe('mask()', () => {
 
         var message;

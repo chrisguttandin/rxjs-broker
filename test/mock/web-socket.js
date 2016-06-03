@@ -1,5 +1,5 @@
+import { spy, stub } from 'sinon';
 import EventTarget from 'event-target';
-import { spy } from 'sinon';
 
 export class WebSocketMock {
 
@@ -7,8 +7,10 @@ export class WebSocketMock {
         this.addEventListener = EventTarget.addEventListener;
         this.close = spy();
         this.dispatchEvent = EventTarget.dispatchEvent;
-        this.removeEventListener = EventTarget.removeEventListener;
+        this.removeEventListener = stub();
         this.send = spy();
+
+        this.removeEventListener.returns(EventTarget.removeEventListener);
     }
 
 }

@@ -72,6 +72,15 @@ describe('WebSocketObservable', () => {
             webSocket.dispatchEvent({ data: message, type: 'message' });
         });
 
+        it('should remove the message listener when the subscription is canceled', () => {
+            webSocketObservable
+                .subscribe()
+                .unsubscribe();
+
+            expect(webSocket.removeEventListener).to.have.been.called;
+            expect(webSocket.removeEventListener).to.have.been.calledWith('message');
+        });
+
         it('should pass on an error event to the subscribed observer', (done) => {
             var error = 'a fake error';
 
@@ -87,6 +96,15 @@ describe('WebSocketObservable', () => {
             webSocket.dispatchEvent({ error, type: 'error' });
         });
 
+        it('should remove the error listener when the subscription is canceled', () => {
+            webSocketObservable
+                .subscribe()
+                .unsubscribe();
+
+            expect(webSocket.removeEventListener).to.have.been.called;
+            expect(webSocket.removeEventListener).to.have.been.calledWith('error');
+        });
+
         it('should complete the subscribed observer on a close event', (done) => {
             webSocketObservable
                 .subscribe({
@@ -96,6 +114,15 @@ describe('WebSocketObservable', () => {
                 });
 
             webSocket.dispatchEvent({ type: 'close' });
+        });
+
+        it('should remove the close listener when the subscription is canceled', () => {
+            webSocketObservable
+                .subscribe()
+                .unsubscribe();
+
+            expect(webSocket.removeEventListener).to.have.been.called;
+            expect(webSocket.removeEventListener).to.have.been.calledWith('close');
         });
 
     });

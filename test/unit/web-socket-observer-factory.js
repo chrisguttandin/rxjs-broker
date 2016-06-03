@@ -62,7 +62,7 @@ describe('WebSocketObserver', () => {
 
         });
 
-        describe('with a open socket', () => {
+        describe('with an open socket', () => {
 
             beforeEach(() => webSocket.readyState = WebSocket.OPEN); // eslint-disable-line no-undef
 

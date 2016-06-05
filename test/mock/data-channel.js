@@ -5,6 +5,8 @@ export class DataChannelMock {
 
     constructor () {
         this.addEventListener = EventTarget.addEventListener;
+        this.bufferedAmount = 0;
+        this.bufferedAmountLowThreshold = 0;
         this.close = spy();
         this.dispatchEvent = EventTarget.dispatchEvent;
         this.removeEventListener = stub();

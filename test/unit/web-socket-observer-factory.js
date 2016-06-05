@@ -28,36 +28,24 @@ describe('WebSocketObserver', () => {
 
     describe('next()', () => {
 
-        it('should send a given value as message to the socket', () => {
-            var value = 'a fake value';
+        var value;
 
-            webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
-
-            webSocketObserver.next(value);
-
-            expect(webSocket.send).to.have.been.calledOnce;
-            expect(webSocket.send).to.have.been.calledWithExactly(`"${ value }"`);
-        });
-
-    });
-
-    describe('send()', () => {
+        beforeEach(() => value = 'a fake value');
 
         describe('with a connecting socket', () => {
 
             beforeEach(() => webSocket.readyState = WebSocket.CONNECTING); // eslint-disable-line no-undef
 
-            it("should wait with sending a given message to the socket until it's open", () => {
-                var message = 'a fake message';
-
-                webSocketObserver.next(message);
+            it("should wait with sending a given value as message to the socket until it's open", () => {
+                webSocketObserver.next(value);
 
                 expect(webSocket.send).to.have.not.been.called;
 
+                webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
                 webSocket.dispatchEvent({ type: 'open' });
 
                 expect(webSocket.send).to.have.been.calledOnce;
-                expect(webSocket.send).to.have.been.calledWithExactly(`"${ message }"`);
+                expect(webSocket.send).to.have.been.calledWithExactly(`"${ value }"`);
             });
 
         });
@@ -66,13 +54,58 @@ describe('WebSocketObserver', () => {
 
             beforeEach(() => webSocket.readyState = WebSocket.OPEN); // eslint-disable-line no-undef
 
-            it('should send a given message to the socket', () => {
-                var message = 'a fake message';
-
-                webSocketObserver.next(message);
+            it('should send a given value as message to the socket', () => {
+                webSocketObserver.next(value);
 
                 expect(webSocket.send).to.have.been.calledOnce;
-                expect(webSocket.send).to.have.been.calledWithExactly(`"${ message }"`);
+                expect(webSocket.send).to.have.been.calledWithExactly(`"${ value }"`);
+            });
+
+        });
+
+    });
+
+    describe('send()', () => {
+
+        var message;
+
+        beforeEach(() => message = 'a fake message');
+
+        describe('with a connecting socket', () => {
+
+            beforeEach(() => webSocket.readyState = WebSocket.CONNECTING); // eslint-disable-line no-undef
+
+            it("should wait with sending a given message to the socket until it's open", (done) => {
+                webSocketObserver
+                    .send(message)
+                    .then(() => {
+                        expect(webSocket.send).to.have.been.calledOnce;
+                        expect(webSocket.send).to.have.been.calledWithExactly(`"${ message }"`);
+
+                        done();
+                    });
+
+                expect(webSocket.send).to.have.not.been.called;
+
+                webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
+                webSocket.dispatchEvent({ type: 'open' });
+            });
+
+        });
+
+        describe('with an open socket', () => {
+
+            beforeEach(() => webSocket.readyState = WebSocket.OPEN); // eslint-disable-line no-undef
+
+            it('should send a given message to the socket', (done) => {
+                webSocketObserver
+                    .send(message)
+                    .then(() => {
+                        expect(webSocket.send).to.have.been.calledOnce;
+                        expect(webSocket.send).to.have.been.calledWithExactly(`"${ message }"`);
+
+                        done();
+                    });
             });
 
         });

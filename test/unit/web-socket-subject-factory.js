@@ -5,6 +5,7 @@ import { WebSocketFactoryMock } from '../mock/web-socket-factory';
 import { WebSocketObservableFactory } from '../../src/web-socket-observable-factory';
 import { WebSocketObserverFactory } from '../../src/web-socket-observer-factory';
 import { WebSocketSubjectFactory } from '../../src/web-socket-subject-factory';
+import { filter } from 'rxjs/operator/filter';
 
 describe('WebSocketSubject', () => {
 
@@ -28,6 +29,26 @@ describe('WebSocketSubject', () => {
 
         webSocket = webSocketFactory.create();
         webSocketSubject = webSocketSubjectFactory.create({ webSocket });
+    });
+
+    it('should allow to be used with other operators', (done) => {
+        var message,
+            webSocketSubscription;
+
+        message = 'a fake message';
+        webSocketSubscription = webSocketSubject
+            ::filter(() => true)
+            .subscribe({
+                next (mssg) {
+                    expect(mssg).to.equal(message);
+
+                    webSocketSubscription.unsubscribe();
+
+                    done();
+                }
+            });
+
+        webSocket.dispatchEvent({ data: message, type: 'message' });
     });
 
     describe('close()', () => {

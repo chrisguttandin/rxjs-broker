@@ -44,7 +44,7 @@ describe('DataChannelSubject', () => {
         beforeEach(() => {
             message = { a: 'fake message' };
 
-            dataChannelSubject = dataChannelSubject.mask({ a: 'fake mask' });
+            dataChannelSubject = dataChannelSubject.mask({ a: { fake: 'mask' } });
         });
 
         it('should augment messages with the mask when calling next()', () => {
@@ -53,7 +53,7 @@ describe('DataChannelSubject', () => {
             dataChannelSubject.next(message);
 
             expect(dataChannel.send).to.have.been.calledOnce;
-            expect(dataChannel.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
+            expect(dataChannel.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
         });
 
         it('should augment messages with the mask when calling send()', async () => {
@@ -62,7 +62,7 @@ describe('DataChannelSubject', () => {
             await dataChannelSubject.send(message);
 
             expect(dataChannel.send).to.have.been.calledOnce;
-            expect(dataChannel.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
+            expect(dataChannel.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
         });
 
         it('should filter messages by the mask', (done) => {
@@ -80,7 +80,7 @@ describe('DataChannelSubject', () => {
                     }
                 });
 
-            dataChannel.dispatchEvent({ data: { a: 'fake mask', message }, type: 'message' });
+            dataChannel.dispatchEvent({ data: { a: { fake: 'mask' }, message }, type: 'message' });
         });
 
     });

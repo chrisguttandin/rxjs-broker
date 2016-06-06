@@ -48,7 +48,7 @@ describe('WebSocketSubject', () => {
         beforeEach(() => {
             message = { a: 'fake message' };
 
-            webSocketSubject = webSocketSubject.mask({ a: 'fake mask' });
+            webSocketSubject = webSocketSubject.mask({ a: { fake: 'mask' } });
         });
 
         it('should augment messages with the mask when calling next()', () => {
@@ -57,7 +57,7 @@ describe('WebSocketSubject', () => {
             webSocketSubject.next(message);
 
             expect(webSocket.send).to.have.been.calledOnce;
-            expect(webSocket.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
+            expect(webSocket.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
         });
 
         it('should augment messages with the mask when calling send()', async () => {
@@ -66,7 +66,7 @@ describe('WebSocketSubject', () => {
             await webSocketSubject.send(message);
 
             expect(webSocket.send).to.have.been.calledOnce;
-            expect(webSocket.send).to.have.been.calledWithExactly('{"a":"fake mask","message":{"a":"fake message"}}');
+            expect(webSocket.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
         });
 
         it('should filter messages by the mask', (done) => {
@@ -84,7 +84,7 @@ describe('WebSocketSubject', () => {
                     }
                 });
 
-            webSocket.dispatchEvent({ data: { a: 'fake mask', message }, type: 'message' });
+            webSocket.dispatchEvent({ data: { a: { fake: 'mask' }, message }, type: 'message' });
         });
 
     });

@@ -24,7 +24,7 @@ class WebSocketSubject extends Subject {
         var maskedSubject = this
                 ::filter((message) => Object
                     .keys(mask)
-                    .every((key) => mask[key] === message[key]))
+                    .every((key) => JSON.stringify(mask[key]) === JSON.stringify(message[key])))
                 ::map(({ message }) => message);
 
         maskedSubject.next = ((next) => (message) => next.call(this, { ...mask, message: { ...message } }))(this.next);

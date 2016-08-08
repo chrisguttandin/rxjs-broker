@@ -11,7 +11,7 @@ class WebSocketObserver {
     async send (message) {
         message = JSON.stringify(message);
 
-        if (this._webSocket.readyState === WebSocket.OPEN) { // eslint-disable-line no-undef
+        if (this._webSocket.readyState === WebSocket.OPEN) {
             return this._webSocket.send(message);
         }
 

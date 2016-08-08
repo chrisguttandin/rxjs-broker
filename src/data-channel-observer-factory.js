@@ -21,7 +21,7 @@ class DataChannelObserver {
     }
 
     async send (message) {
-        if (this._dataChannel.readyState === 'open') { // eslint-disable-line no-undef
+        if (this._dataChannel.readyState === 'open') {
             if (this._isSupportingBufferedAmountLowThreshold &&
                     this._dataChannel.bufferedAmount > this._dataChannel.bufferedAmountLowThreshold) {
                 return new Promise((resolve, reject) => {

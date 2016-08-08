@@ -1,10 +1,7 @@
 {
     "env": {
-        "node": true
+        "browser": true
     },
     "extends": "eslint-config-holy-grail",
-    "parser": "babel-eslint",
-    "parserOptions": {
-        "sourceType": "module"
-    }
+    "parser": "babel-eslint"
 }

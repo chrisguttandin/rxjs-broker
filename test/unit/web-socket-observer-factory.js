@@ -34,14 +34,14 @@ describe('WebSocketObserver', () => {
 
         describe('with a connecting socket', () => {
 
-            beforeEach(() => webSocket.readyState = WebSocket.CONNECTING); // eslint-disable-line no-undef
+            beforeEach(() => webSocket.readyState = WebSocket.CONNECTING);
 
             it("should wait with sending a given value as message to the socket until it's open", () => {
                 webSocketObserver.next(value);
 
                 expect(webSocket.send).to.have.not.been.called;
 
-                webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
+                webSocket.readyState = WebSocket.OPEN;
                 webSocket.dispatchEvent({ type: 'open' });
 
                 expect(webSocket.send).to.have.been.calledOnce;
@@ -52,7 +52,7 @@ describe('WebSocketObserver', () => {
 
         describe('with an open socket', () => {
 
-            beforeEach(() => webSocket.readyState = WebSocket.OPEN); // eslint-disable-line no-undef
+            beforeEach(() => webSocket.readyState = WebSocket.OPEN);
 
             it('should send a given value as message to the socket', () => {
                 webSocketObserver.next(value);
@@ -73,7 +73,7 @@ describe('WebSocketObserver', () => {
 
         describe('with a connecting socket', () => {
 
-            beforeEach(() => webSocket.readyState = WebSocket.CONNECTING); // eslint-disable-line no-undef
+            beforeEach(() => webSocket.readyState = WebSocket.CONNECTING);
 
             it("should wait with sending a given message to the socket until it's open", (done) => {
                 webSocketObserver
@@ -87,7 +87,7 @@ describe('WebSocketObserver', () => {
 
                 expect(webSocket.send).to.have.not.been.called;
 
-                webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
+                webSocket.readyState = WebSocket.OPEN;
                 webSocket.dispatchEvent({ type: 'open' });
             });
 
@@ -95,7 +95,7 @@ describe('WebSocketObserver', () => {
 
         describe('with an open socket', () => {
 
-            beforeEach(() => webSocket.readyState = WebSocket.OPEN); // eslint-disable-line no-undef
+            beforeEach(() => webSocket.readyState = WebSocket.OPEN);
 
             it('should send a given message to the socket', (done) => {
                 webSocketObserver

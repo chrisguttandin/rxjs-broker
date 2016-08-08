@@ -73,7 +73,7 @@ describe('WebSocketSubject', () => {
         });
 
         it('should augment messages with the mask when calling next()', () => {
-            webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
+            webSocket.readyState = WebSocket.OPEN;
 
             webSocketSubject.next(message);
 
@@ -82,7 +82,7 @@ describe('WebSocketSubject', () => {
         });
 
         it('should augment messages with the mask when calling send()', async () => {
-            webSocket.readyState = WebSocket.OPEN; // eslint-disable-line no-undef
+            webSocket.readyState = WebSocket.OPEN;
 
             await webSocketSubject.send(message);
 

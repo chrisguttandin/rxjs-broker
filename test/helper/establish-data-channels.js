@@ -26,11 +26,11 @@ export const establishDataChannels = () => {
             remoteDataChannelIsOpen = false,
             remotePeerConnection;
 
-        localPeerConnection = new RTCPeerConnection({ // eslint-disable-line no-undef
+        localPeerConnection = new RTCPeerConnection({
             iceServers: ICE_SERVERS
         });
 
-        remotePeerConnection = new RTCPeerConnection({ // eslint-disable-line no-undef
+        remotePeerConnection = new RTCPeerConnection({
             iceServers: ICE_SERVERS
         });
 

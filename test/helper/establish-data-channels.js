@@ -12,11 +12,9 @@ const ICE_SERVERS = [{
       }];
 /* eslint-enable indent */
 
-/* eslint-disable no-undef */
 if (!('RTCPeerConnection' in window) && ('webkitRTCPeerConnection' in window)) {
     window.RTCPeerConnection = window.webkitRTCPeerConnection;
 }
-/* eslint-enable no-undef */
 
 export const establishDataChannels = () => {
     return new Promise((resolve, reject) => {

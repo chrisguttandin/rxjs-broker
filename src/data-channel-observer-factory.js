@@ -73,7 +73,7 @@ class DataChannelObserver {
 
 export class DataChannelObserverFactory {
 
-    create ({ dataChannel }) {
+    create ({ dataChannel }) { // eslint-disable-line class-methods-use-this
         return new DataChannelObserver({ dataChannel });
     }
 

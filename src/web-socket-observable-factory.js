@@ -30,7 +30,7 @@ class WebSocketObservable extends Observable {
 
 export class WebSocketObservableFactory {
 
-    create ({ webSocket }) {
+    create ({ webSocket }) { // eslint-disable-line class-methods-use-this
         return new WebSocketObservable({ webSocket });
     }
 

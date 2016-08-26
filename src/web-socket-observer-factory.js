@@ -40,7 +40,7 @@ class WebSocketObserver {
 
 export class WebSocketObserverFactory {
 
-    create ({ webSocket }) {
+    create ({ webSocket }) { // eslint-disable-line class-methods-use-this
         return new WebSocketObserver({ webSocket });
     }
 

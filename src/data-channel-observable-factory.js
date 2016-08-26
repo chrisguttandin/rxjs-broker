@@ -30,7 +30,7 @@ class DataChannelObservable extends Observable {
 
 export class DataChannelObservableFactory {
 
-    create ({ dataChannel }) {
+    create ({ dataChannel }) { // eslint-disable-line class-methods-use-this
         return new DataChannelObservable({ dataChannel });
     }
 

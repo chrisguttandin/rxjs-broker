@@ -11,16 +11,16 @@ describe('WebSocketFactory', () => {
         webSocketFactory;
 
     afterEach(() => {
-        WebSocket = globalWebSocket; // eslint-disable-line no-undef
+        WebSocket = globalWebSocket; // eslint-disable-line no-global-assign
     });
 
     beforeEach(() => {
-        globalWebSocket = WebSocket; // eslint-disable-line no-undef
+        globalWebSocket = WebSocket;
 
         webSocket = new WebSocketMock();
-        WebSocket = stub(); // eslint-disable-line no-undef
+        WebSocket = stub(); // eslint-disable-line no-global-assign
 
-        WebSocket.returns(webSocket); // eslint-disable-line no-undef
+        WebSocket.returns(webSocket);
     });
 
     beforeEach(() => {
@@ -42,8 +42,8 @@ describe('WebSocketFactory', () => {
         it('should create a new WebSocket with the given URL', () => {
             webSocketFactory.create({ url });
 
-            expect(WebSocket).to.have.been.calledOnce; // eslint-disable-line no-undef
-            expect(WebSocket).to.have.been.calledWithExactly(url); // eslint-disable-line no-undef
+            expect(WebSocket).to.have.been.calledOnce;
+            expect(WebSocket).to.have.been.calledWithExactly(url);
         });
 
         it('should return a new WebSocket', () => {

@@ -16,7 +16,7 @@ const injector = ReflectiveInjector.resolveAndCreate([
           WebSocketFactory,
           WebSocketObservableFactory,
           WebSocketObserverFactory,
-          WebSocketSubjectFactory,
+          WebSocketSubjectFactory
       ]);
 /* eslint-enable indent */
 

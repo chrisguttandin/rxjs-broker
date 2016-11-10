@@ -1,11 +1,11 @@
-import { Inject } from '@angular/core/src/di/decorators';
-import { Subject } from 'rxjs/Subject';
+import { AnonymousSubject } from 'rxjs/Subject';
+import { Inject } from '@angular/core';
 import { WebSocketObservableFactory } from './web-socket-observable-factory';
 import { WebSocketObserverFactory } from './web-socket-observer-factory';
 import { filter } from 'rxjs/operator/filter';
 import { map } from 'rxjs/operator/map';
 
-class WebSocketSubject extends Subject {
+class WebSocketSubject extends AnonymousSubject {
 
     constructor ({ webSocket, webSocketObservableFactory, webSocketObserverFactory }) {
         var observable = webSocketObservableFactory.create({ webSocket }),

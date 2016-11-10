@@ -1,11 +1,11 @@
+import { AnonymousSubject } from 'rxjs/Subject';
 import { DataChannelObservableFactory } from './data-channel-observable-factory';
 import { DataChannelObserverFactory } from './data-channel-observer-factory';
-import { Inject } from '@angular/core/src/di/decorators';
-import { Subject } from 'rxjs/Subject';
+import { Inject } from '@angular/core';
 import { filter } from 'rxjs/operator/filter';
 import { map } from 'rxjs/operator/map';
 
-class DataChannelSubject extends Subject {
+class DataChannelSubject extends AnonymousSubject {
 
     constructor ({ dataChannel, dataChannelObservableFactory, dataChannelObserverFactory }) {
         var observable = dataChannelObservableFactory.create({ dataChannel }),

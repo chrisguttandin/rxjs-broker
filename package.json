@@ -19,7 +19,7 @@
     "url": "https://github.com/chrisguttandin/rxjs-broker/issues"
   },
   "dependencies": {
-    "@angular/core": "^2.1.2",
+    "@angular/core": "^2.2.1",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
     "babel-plugin-transform-function-bind": "^6.8.0",

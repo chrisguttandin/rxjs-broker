@@ -1,39 +1,36 @@
-import 'reflect-metadata';
-import { DataChannelMock } from '../mock/data-channel';
-import { DataChannelObservableFactory } from '../../src/data-channel-observable-factory';
-import { DataChannelObserverFactory } from '../../src/data-channel-observer-factory';
-import { DataChannelSubjectFactory } from '../../src/data-channel-subject-factory';
+import 'core-js/es7/reflect';
+import { DataChannelMock } from '../../mock/data-channel';
+import { DataChannelObservableFactory } from '../../../src/factories/data-channel-observable';
+import { DataChannelObserverFactory } from '../../../src/factories/data-channel-observer';
+import { DataChannelSubjectFactory } from '../../../src/factories/data-channel-subject';
+import { MaskedDataChannelSubjectFactory } from '../../../src/factories/masked-data-channel-subject';
 import { ReflectiveInjector } from '@angular/core';
-import { filter } from 'rxjs/operator/filter';
 
 describe('DataChannelSubject', () => {
 
-    var dataChannel,
-        dataChannelSubject;
+    let dataChannel;
+
+    let dataChannelSubject;
 
     beforeEach(() => {
-        var dataChannelSubjectFactory,
-            injector;
-
-        injector = ReflectiveInjector.resolveAndCreate([
+        const injector = ReflectiveInjector.resolveAndCreate([
             DataChannelObservableFactory,
             DataChannelObserverFactory,
-            DataChannelSubjectFactory
+            DataChannelSubjectFactory,
+            MaskedDataChannelSubjectFactory
         ]);
 
-        dataChannelSubjectFactory = injector.get(DataChannelSubjectFactory);
+        const dataChannelSubjectFactory = injector.get(DataChannelSubjectFactory);
 
         dataChannel = new DataChannelMock();
         dataChannelSubject = dataChannelSubjectFactory.create({ dataChannel });
     });
 
     it('should allow to be used with other operators', (done) => {
-        var dataChannelSubscription,
-            message;
+        const message = 'a fake message';
 
-        message = 'a fake message';
-        dataChannelSubscription = dataChannelSubject
-            ::filter(() => true)
+        const dataChannelSubscription = dataChannelSubject
+            .filter(() => true)
             .subscribe({
                 next (mssg) {
                     expect(mssg).to.equal(message);
@@ -60,7 +57,7 @@ describe('DataChannelSubject', () => {
 
     describe('mask()', () => {
 
-        var message;
+        let message;
 
         beforeEach(() => {
             message = { a: 'fake message' };
@@ -77,20 +74,21 @@ describe('DataChannelSubject', () => {
             expect(dataChannel.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
         });
 
-        it('should augment messages with the mask when calling send()', async () => {
+        it('should augment messages with the mask when calling send()', (done) => {
             dataChannel.readyState = 'open';
 
-            await dataChannelSubject.send(message);
+            dataChannelSubject
+                .send(message)
+                .then(() => {
+                    expect(dataChannel.send).to.have.been.calledOnce;
+                    expect(dataChannel.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
 
-            expect(dataChannel.send).to.have.been.calledOnce;
-            expect(dataChannel.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
+                    done();
+                });
         });
 
         it('should filter messages by the mask', (done) => {
-            var dataChannelSubscription,
-                message;
-
-            dataChannelSubscription = dataChannelSubject
+            const dataChannelSubscription = dataChannelSubject
                 .subscribe({
                     next (mssg) {
                         expect(mssg).to.equal(message);
@@ -109,11 +107,9 @@ describe('DataChannelSubject', () => {
     describe('subscribe()', () => {
 
         it('should emit a message from the data channel', (done) => {
-            var dataChannelSubscription,
-                message;
+            const message = 'a fake message';
 
-            message = 'a fake message';
-            dataChannelSubscription = dataChannelSubject
+            const dataChannelSubscription = dataChannelSubject
                 .subscribe({
                     next (mssg) {
                         expect(mssg).to.equal(message);
@@ -128,7 +124,7 @@ describe('DataChannelSubject', () => {
         });
 
         it('should emit an error from the data channel', (done) => {
-            var error = 'a fake error';
+            const error = 'a fake error';
 
             dataChannelSubject
                 .subscribe({

@@ -1,14 +1,15 @@
-import 'reflect-metadata';
+import 'core-js/es7/reflect';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../src/web-socket-factory';
-import { WebSocketMock } from '../mock/web-socket';
-import { stub } from 'sinon';
+import { WebSocketFactory } from '../../../src/factories/web-socket';
+import { WebSocketMock } from '../../mock/web-socket';
 
 describe('WebSocketFactory', () => {
 
-    var globalWebSocket,
-        webSocket,
-        webSocketFactory;
+    let globalWebSocket;
+
+    let webSocket;
+
+    let webSocketFactory;
 
     afterEach(() => {
         WebSocket = globalWebSocket; // eslint-disable-line no-global-assign
@@ -18,24 +19,22 @@ describe('WebSocketFactory', () => {
         globalWebSocket = WebSocket;
 
         webSocket = new WebSocketMock();
-        WebSocket = stub(); // eslint-disable-line no-global-assign
+        WebSocket = sinon.stub(); // eslint-disable-line no-global-assign, no-undef
 
         WebSocket.returns(webSocket);
     });
 
     beforeEach(() => {
-        /* eslint-disable indent */
-        var injector = ReflectiveInjector.resolveAndCreate([
-                WebSocketFactory
-            ]);
-        /* eslint-enable indent */
+        const injector = ReflectiveInjector.resolveAndCreate([
+            WebSocketFactory
+        ]);
 
         webSocketFactory = injector.get(WebSocketFactory);
     });
 
     describe('create()', () => {
 
-        var url;
+        let url;
 
         beforeEach(() => url = 'a fake URL');
 

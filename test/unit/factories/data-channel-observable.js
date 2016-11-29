@@ -1,19 +1,17 @@
-import 'reflect-metadata';
-import { DataChannelMock } from '../mock/data-channel';
-import { DataChannelObservableFactory } from '../../src/data-channel-observable-factory';
-import { Observable } from 'rxjs/Observable';
+import 'core-js/es7/reflect';
+import { DataChannelMock } from '../../mock/data-channel';
+import { DataChannelObservableFactory } from '../../../src/factories/data-channel-observable';
+import { Observable } from 'rxjs';
 import { ReflectiveInjector } from '@angular/core';
 
 describe('DataChannelObservableFactory', () => {
 
-    var dataChannelObservableFactory;
+    let dataChannelObservableFactory;
 
     beforeEach(() => {
-        /* eslint-disable indent */
-        var injector = ReflectiveInjector.resolveAndCreate([
-                DataChannelObservableFactory
-            ]);
-        /* eslint-enable indent */
+        const injector = ReflectiveInjector.resolveAndCreate([
+            DataChannelObservableFactory
+        ]);
 
         dataChannelObservableFactory = injector.get(DataChannelObservableFactory);
     });
@@ -30,18 +28,16 @@ describe('DataChannelObservableFactory', () => {
 
 describe('DataChannelObservable', () => {
 
-    var dataChannel,
-        dataChannelObservable;
+    let dataChannel;
+
+    let dataChannelObservable;
 
     beforeEach(() => {
-        var dataChannelObservableFactory,
-            injector;
-
-        injector = ReflectiveInjector.resolveAndCreate([
+        const injector = ReflectiveInjector.resolveAndCreate([
             DataChannelObservableFactory
         ]);
 
-        dataChannelObservableFactory = injector.get(DataChannelObservableFactory);
+        const dataChannelObservableFactory = injector.get(DataChannelObservableFactory);
 
         dataChannel = new DataChannelMock();
         dataChannelObservable = dataChannelObservableFactory.create({ dataChannel });
@@ -50,11 +46,9 @@ describe('DataChannelObservable', () => {
     describe('subscribe()', () => {
 
         it('should pass on a message event to the subscribed observer', (done) => {
-            var dataChannelSubscription,
-                message;
+            const message = 'a fake message';
 
-            message = 'a fake message';
-            dataChannelSubscription = dataChannelObservable
+            const dataChannelSubscription = dataChannelObservable
                 .subscribe({
                     next (mssg) {
                         expect(mssg).to.equal(message);
@@ -78,7 +72,7 @@ describe('DataChannelObservable', () => {
         });
 
         it('should pass on an error event to the subscribed observer', (done) => {
-            var error = 'a fake error';
+            const error = 'a fake error';
 
             dataChannelObservable
                 .subscribe({

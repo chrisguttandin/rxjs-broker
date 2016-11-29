@@ -1,20 +1,18 @@
-import 'reflect-metadata';
-import { Observable } from 'rxjs/Observable';
+import 'core-js/es7/reflect';
+import { Observable } from 'rxjs';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../src/web-socket-factory';
-import { WebSocketFactoryMock } from '../mock/web-socket-factory';
-import { WebSocketObservableFactory } from '../../src/web-socket-observable-factory';
+import { WebSocketFactory } from '../../../src/factories/web-socket';
+import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
+import { WebSocketObservableFactory } from '../../../src/factories/web-socket-observable';
 
 describe('WebSocketObservableFactory', () => {
 
-    var webSocketObservableFactory;
+    let webSocketObservableFactory;
 
     beforeEach(() => {
-        /* eslint-disable indent */
-        var injector = ReflectiveInjector.resolveAndCreate([
-                WebSocketObservableFactory
-            ]);
-        /* eslint-enable indent */
+        const injector = ReflectiveInjector.resolveAndCreate([
+            WebSocketObservableFactory
+        ]);
 
         webSocketObservableFactory = injector.get(WebSocketObservableFactory);
     });
@@ -31,21 +29,19 @@ describe('WebSocketObservableFactory', () => {
 
 describe('WebSocketObservable', () => {
 
-    var webSocket,
-        webSocketObservable;
+    let webSocket;
+
+    let webSocketObservable;
 
     beforeEach(() => {
-        var injector,
-            webSocketFactory,
-            webSocketObservableFactory;
-
-        injector = ReflectiveInjector.resolveAndCreate([
+        const injector = ReflectiveInjector.resolveAndCreate([
             { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
             WebSocketObservableFactory
         ]);
 
-        webSocketFactory = injector.get(WebSocketFactory);
-        webSocketObservableFactory = injector.get(WebSocketObservableFactory);
+        const webSocketFactory = injector.get(WebSocketFactory);
+
+        const webSocketObservableFactory = injector.get(WebSocketObservableFactory);
 
         webSocket = webSocketFactory.create();
         webSocketObservable = webSocketObservableFactory.create({ webSocket });
@@ -54,11 +50,9 @@ describe('WebSocketObservable', () => {
     describe('subscribe()', () => {
 
         it('should pass on a message event to the subscribed observer', (done) => {
-            var message,
-                webSocketSubscription;
+            const message = 'a fake message';
 
-            message = 'a fake message';
-            webSocketSubscription = webSocketObservable
+            const webSocketSubscription = webSocketObservable
                 .subscribe({
                     next (mssg) {
                         expect(mssg).to.equal(message);
@@ -82,7 +76,7 @@ describe('WebSocketObservable', () => {
         });
 
         it('should pass on an error event to the subscribed observer', (done) => {
-            var error = 'a fake error';
+            const error = 'a fake error';
 
             webSocketObservable
                 .subscribe({

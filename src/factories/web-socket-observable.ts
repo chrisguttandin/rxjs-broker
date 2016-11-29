@@ -1,6 +1,7 @@
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-class WebSocketObservable extends Observable {
+export class WebSocketObservable<T> extends Observable<T> {
 
     constructor ({ webSocket }) {
         super((observer) => {
@@ -28,9 +29,10 @@ class WebSocketObservable extends Observable {
 
 }
 
+@Injectable()
 export class WebSocketObservableFactory {
 
-    create ({ webSocket }) { // eslint-disable-line class-methods-use-this
+    public create ({ webSocket }) {
         return new WebSocketObservable({ webSocket });
     }
 

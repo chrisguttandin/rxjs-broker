@@ -1,4 +1,3 @@
-import { spy, stub } from 'sinon';
 import EventTarget from 'event-target';
 
 export class DataChannelMock {
@@ -7,10 +6,10 @@ export class DataChannelMock {
         this.addEventListener = EventTarget.addEventListener;
         this.bufferedAmount = 0;
         this.bufferedAmountLowThreshold = 0;
-        this.close = spy();
+        this.close = sinon.spy(); // eslint-disable-line no-undef
         this.dispatchEvent = EventTarget.dispatchEvent;
-        this.removeEventListener = stub();
-        this.send = spy();
+        this.removeEventListener = sinon.stub(); // eslint-disable-line no-undef
+        this.send = sinon.spy(); // eslint-disable-line no-undef
 
         this.removeEventListener.returns(EventTarget.removeEventListener);
     }

@@ -1,22 +1,20 @@
-import 'reflect-metadata';
-import { DataChannelMock } from '../mock/data-channel';
-import { DataChannelObserverFactory } from '../../src/data-channel-observer-factory';
+import 'core-js/es7/reflect';
+import { DataChannelMock } from '../../mock/data-channel';
+import { DataChannelObserverFactory } from '../../../src/factories/data-channel-observer';
 import { ReflectiveInjector } from '@angular/core';
 
 describe('DataChannelObserver', () => {
 
-    var dataChannel,
-        dataChannelObserver;
+    let dataChannel;
+
+    let dataChannelObserver;
 
     beforeEach(() => {
-        var dataChannelObserverFactory,
-            injector;
-
-        injector = ReflectiveInjector.resolveAndCreate([
+        const injector = ReflectiveInjector.resolveAndCreate([
             DataChannelObserverFactory
         ]);
 
-        dataChannelObserverFactory = injector.get(DataChannelObserverFactory);
+        const dataChannelObserverFactory = injector.get(DataChannelObserverFactory);
 
         dataChannel = new DataChannelMock();
         dataChannelObserver = dataChannelObserverFactory.create({ dataChannel });
@@ -24,7 +22,7 @@ describe('DataChannelObserver', () => {
 
     describe('next()', () => {
 
-        var value;
+        let value;
 
         beforeEach(() => value = 'a fake value');
 
@@ -85,7 +83,7 @@ describe('DataChannelObserver', () => {
 
     describe('send()', () => {
 
-        var message;
+        let message;
 
         beforeEach(() => message = 'a fake message');
 

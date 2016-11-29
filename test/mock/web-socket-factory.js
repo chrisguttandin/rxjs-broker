@@ -1,10 +1,9 @@
 import { WebSocketMock } from './web-socket';
-import { spy } from 'sinon';
 
 export class WebSocketFactoryMock {
 
     constructor () {
-        this.create = spy(this.create);
+        this.create = sinon.spy(this.create); // eslint-disable-line no-undef
         this._webSockets = [];
     }
 

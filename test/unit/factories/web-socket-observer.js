@@ -1,26 +1,24 @@
-import 'reflect-metadata';
+import 'core-js/es7/reflect';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../src/web-socket-factory';
-import { WebSocketFactoryMock } from '../mock/web-socket-factory';
-import { WebSocketObserverFactory } from '../../src/web-socket-observer-factory';
+import { WebSocketFactory } from '../../../src/factories/web-socket';
+import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
+import { WebSocketObserverFactory } from '../../../src/factories/web-socket-observer';
 
 describe('WebSocketObserver', () => {
 
-    var webSocket,
-        webSocketObserver;
+    let webSocket;
+
+    let webSocketObserver;
 
     beforeEach(() => {
-        var injector,
-            webSocketFactory,
-            webSocketObserverFactory;
-
-        injector = ReflectiveInjector.resolveAndCreate([
+        const injector = ReflectiveInjector.resolveAndCreate([
             { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
             WebSocketObserverFactory
         ]);
 
-        webSocketFactory = injector.get(WebSocketFactory);
-        webSocketObserverFactory = injector.get(WebSocketObserverFactory);
+        const webSocketFactory = injector.get(WebSocketFactory);
+
+        const webSocketObserverFactory = injector.get(WebSocketObserverFactory);
 
         webSocket = webSocketFactory.create();
         webSocketObserver = webSocketObserverFactory.create({ webSocket });
@@ -28,7 +26,7 @@ describe('WebSocketObserver', () => {
 
     describe('next()', () => {
 
-        var value;
+        let value;
 
         beforeEach(() => value = 'a fake value');
 
@@ -67,7 +65,7 @@ describe('WebSocketObserver', () => {
 
     describe('send()', () => {
 
-        var message;
+        let message;
 
         beforeEach(() => message = 'a fake message');
 

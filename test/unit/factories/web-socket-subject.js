@@ -1,43 +1,40 @@
-import 'reflect-metadata';
+import 'core-js/es7/reflect';
+import { MaskedWebSocketSubjectFactory } from '../../../src/factories/masked-web-socket-subject';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../src/web-socket-factory';
-import { WebSocketFactoryMock } from '../mock/web-socket-factory';
-import { WebSocketObservableFactory } from '../../src/web-socket-observable-factory';
-import { WebSocketObserverFactory } from '../../src/web-socket-observer-factory';
-import { WebSocketSubjectFactory } from '../../src/web-socket-subject-factory';
-import { filter } from 'rxjs/operator/filter';
+import { WebSocketFactory } from '../../../src/factories/web-socket';
+import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
+import { WebSocketObservableFactory } from '../../../src/factories/web-socket-observable';
+import { WebSocketObserverFactory } from '../../../src/factories/web-socket-observer';
+import { WebSocketSubjectFactory } from '../../../src/factories/web-socket-subject';
 
 describe('WebSocketSubject', () => {
 
-    var webSocket,
-        webSocketSubject;
+    let webSocket;
+
+    let webSocketSubject;
 
     beforeEach(() => {
-        var injector,
-            webSocketFactory,
-            webSocketSubjectFactory;
-
-        injector = ReflectiveInjector.resolveAndCreate([
+        const injector = ReflectiveInjector.resolveAndCreate([
+            MaskedWebSocketSubjectFactory,
             { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
             WebSocketObservableFactory,
             WebSocketObserverFactory,
             WebSocketSubjectFactory
         ]);
 
-        webSocketFactory = injector.get(WebSocketFactory);
-        webSocketSubjectFactory = injector.get(WebSocketSubjectFactory);
+        const webSocketFactory = injector.get(WebSocketFactory);
+
+        const webSocketSubjectFactory = injector.get(WebSocketSubjectFactory);
 
         webSocket = webSocketFactory.create();
         webSocketSubject = webSocketSubjectFactory.create({ webSocket });
     });
 
     it('should allow to be used with other operators', (done) => {
-        var message,
-            webSocketSubscription;
+        const message = 'a fake message';
 
-        message = 'a fake message';
-        webSocketSubscription = webSocketSubject
-            ::filter(() => true)
+        const webSocketSubscription = webSocketSubject
+            .filter(() => true)
             .subscribe({
                 next (mssg) {
                     expect(mssg).to.equal(message);
@@ -64,7 +61,7 @@ describe('WebSocketSubject', () => {
 
     describe('mask()', () => {
 
-        var message;
+        let message;
 
         beforeEach(() => {
             message = { a: 'fake message' };
@@ -81,20 +78,21 @@ describe('WebSocketSubject', () => {
             expect(webSocket.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
         });
 
-        it('should augment messages with the mask when calling send()', async () => {
+        it('should augment messages with the mask when calling send()', (done) => {
             webSocket.readyState = WebSocket.OPEN;
 
-            await webSocketSubject.send(message);
+            webSocketSubject
+                .send(message)
+                .then(() => {
+                    expect(webSocket.send).to.have.been.calledOnce;
+                    expect(webSocket.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
 
-            expect(webSocket.send).to.have.been.calledOnce;
-            expect(webSocket.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
+                    done();
+                });
         });
 
         it('should filter messages by the mask', (done) => {
-            var message,
-                webSocketSubscription;
-
-            webSocketSubscription = webSocketSubject
+            const webSocketSubscription = webSocketSubject
                 .subscribe({
                     next (mssg) {
                         expect(mssg).to.equal(message);
@@ -113,11 +111,9 @@ describe('WebSocketSubject', () => {
     describe('subscribe()', () => {
 
         it('should emit a message from the socket', (done) => {
-            var message,
-                webSocketSubscription;
+            const message = 'a fake message';
 
-            message = 'a fake message';
-            webSocketSubscription = webSocketSubject
+            const webSocketSubscription = webSocketSubject
                 .subscribe({
                     next (mssg) {
                         expect(mssg).to.equal(message);
@@ -132,7 +128,7 @@ describe('WebSocketSubject', () => {
         });
 
         it('should emit an error from the socket', (done) => {
-            var error = 'a fake error';
+            const error = 'a fake error';
 
             webSocketSubject
                 .subscribe({

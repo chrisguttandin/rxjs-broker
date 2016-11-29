@@ -1,6 +1,7 @@
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-class DataChannelObservable extends Observable {
+export class DataChannelObservable<T> extends Observable<T> {
 
     constructor ({ dataChannel }) {
         super((observer) => {
@@ -28,9 +29,10 @@ class DataChannelObservable extends Observable {
 
 }
 
+@Injectable()
 export class DataChannelObservableFactory {
 
-    create ({ dataChannel }) { // eslint-disable-line class-methods-use-this
+    public create ({ dataChannel }) {
         return new DataChannelObservable({ dataChannel });
     }
 

@@ -1,10 +1,9 @@
-import { Subject } from 'rxjs/Subject';
-import { spy } from 'sinon';
+import { Subject } from 'rxjs';
 
 export class WebSocketSubjectFactoryMock {
 
     constructor () {
-        this.create = spy(this.create);
+        this.create = sinon.spy(this.create); // eslint-disable-line no-undef
         this._webSocketSubjects = [];
     }
 

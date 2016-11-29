@@ -18,17 +18,15 @@ if (!('RTCPeerConnection' in window) && ('webkitRTCPeerConnection' in window)) {
 
 export const establishDataChannels = () => {
     return new Promise((resolve, reject) => {
-        var localDataChannel,
-            localPeerConnection,
-            remoteDataChannel,
-            remoteDataChannelIsOpen = false,
-            remotePeerConnection;
+        let localDataChannel;
 
-        localPeerConnection = new RTCPeerConnection({
+        let remoteDataChannelIsOpen = false;
+
+        const localPeerConnection = new RTCPeerConnection({
             iceServers: ICE_SERVERS
         });
 
-        remotePeerConnection = new RTCPeerConnection({
+        const remotePeerConnection = new RTCPeerConnection({
             iceServers: ICE_SERVERS
         });
 
@@ -48,7 +46,7 @@ export const establishDataChannels = () => {
 
         remotePeerConnection.onicecandidate = ({ candidate }) => localPeerConnection.addIceCandidate(candidate, () => {}, (err) => reject(err));
 
-        remoteDataChannel = remotePeerConnection.createDataChannel('channel');
+        const remoteDataChannel = remotePeerConnection.createDataChannel('channel');
 
         remoteDataChannel.onerror = (event) => reject(event.error);
 

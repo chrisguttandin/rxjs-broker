@@ -12,11 +12,11 @@ export class WebSocketObserver {
         this.send(value);
     }
 
-    public async send (message) {
+    public send (message) {
         message = JSON.stringify(message);
 
         if (this._webSocket.readyState === WebSocket.OPEN) {
-            return this._webSocket.send(message);
+            return Promise.resolve(this._webSocket.send(message));
         }
 
         return new Promise((resolve, reject) => {

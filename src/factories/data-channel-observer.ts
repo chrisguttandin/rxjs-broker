@@ -26,7 +26,7 @@ export class DataChannelObserver {
         this.send(value);
     }
 
-    public async send (message) {
+    public send (message) {
         if (this._dataChannel.readyState === 'open') {
             if (this._isSupportingBufferedAmountLowThreshold &&
                     this._dataChannel.bufferedAmount > this._dataChannel.bufferedAmountLowThreshold) {
@@ -50,7 +50,7 @@ export class DataChannelObserver {
                 });
             }
 
-            return this._dataChannel.send(JSON.stringify(message));
+            return Promise.resolve(this._dataChannel.send(JSON.stringify(message)));
         }
 
         return new Promise((resolve, reject) => {

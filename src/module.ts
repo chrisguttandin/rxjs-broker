@@ -32,4 +32,9 @@ export const connect = (url) => {
     return webSocketSubjectFactory.create({ webSocket });
 };
 
+/**
+ * This property is true if the browser supports WebSockets.
+ */
+export const isSupported = (typeof window !== undefined && 'WebSocket' in window);
+
 export const wrap = (dataChannel) => dataChannelSubjectFactory.create({ dataChannel });

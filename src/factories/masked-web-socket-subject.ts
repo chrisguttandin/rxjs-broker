@@ -1,6 +1,6 @@
-import { IMaskableSubject } from '../interfaces/maskable-subject';
 import { Injectable } from '@angular/core';
 import { AnonymousSubject } from 'rxjs/Subject';
+import { IMaskableSubject } from '../interfaces/maskable-subject';
 
 export class MaskedWebSocketSubject<T> extends AnonymousSubject<T> implements IMaskableSubject {
 

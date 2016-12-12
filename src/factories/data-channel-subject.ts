@@ -1,9 +1,9 @@
+import { Inject, Injectable } from '@angular/core';
+import { AnonymousSubject } from 'rxjs/Subject';
 import { IMaskableSubject } from '../interfaces/maskable-subject';
 import { DataChannelObservableFactory } from './data-channel-observable';
 import { DataChannelObserverFactory } from './data-channel-observer';
 import { MaskedDataChannelSubjectFactory } from './masked-data-channel-subject';
-import { Inject, Injectable } from '@angular/core';
-import { AnonymousSubject } from 'rxjs/Subject';
 
 export class DataChannelSubject<T> extends AnonymousSubject<T> implements IMaskableSubject {
 

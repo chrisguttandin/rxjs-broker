@@ -1,9 +1,9 @@
+import { Inject, Injectable } from '@angular/core';
+import { AnonymousSubject } from 'rxjs/Subject';
 import { IMaskableSubject } from '../interfaces/maskable-subject';
 import { MaskedWebSocketSubjectFactory } from './masked-web-socket-subject';
 import { WebSocketObservableFactory } from './web-socket-observable';
 import { WebSocketObserverFactory } from './web-socket-observer';
-import { Inject, Injectable } from '@angular/core';
-import { AnonymousSubject } from 'rxjs/Subject';
 
 export class WebSocketSubject<T> extends AnonymousSubject<T> implements IMaskableSubject {
 

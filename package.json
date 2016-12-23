@@ -4,9 +4,9 @@
     "url": "https://github.com/chrisguttandin/rxjs-broker/issues"
   },
   "dependencies": {
-    "@angular/core": "^2.3.0",
+    "@angular/core": "^2.4.0",
     "core-js": "^2.4.1",
-    "rxjs": "5.0.0-rc.4",
+    "rxjs": "^5.0.1",
     "zone.js": "^0.7.2"
   },
   "description": "An rxjs message broker for WebRTC DataChannels, WebSockets and WebWorkers.",
@@ -33,7 +33,7 @@
     "karma-webpack": "^1.8.0",
     "load-grunt-config": "^0.19.2",
     "mocha": "^3.0.0",
-    "rollup": "^0.37.0",
+    "rollup": "^0.38.0",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^6.0.0",
     "rollup-plugin-node-resolve": "^2.0.0",

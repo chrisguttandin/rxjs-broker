@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 export class WebSocketObservable<T> extends Observable<T> {
 

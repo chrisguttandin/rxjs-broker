@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
 import { AnonymousSubject } from 'rxjs/Subject';
 import { IMaskableSubject } from '../interfaces/maskable-subject';
 

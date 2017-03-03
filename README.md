@@ -46,7 +46,7 @@ As mentioned above the `IMaskableSubject` interface is used to describe the comm
 ```typescript
 interface IMaskableSubject {
 
-    close ();
+    close (): void;
 
     mask (mask): IMaskableSubject;
 

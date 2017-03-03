@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { IWebSocketObserverFactoryOptions } from '../interfaces';
 import { TJsonValue } from '../types';
@@ -56,7 +55,6 @@ export class WebSocketObserver implements Observer<TJsonValue> {
 
 }
 
-@Injectable()
 export class WebSocketObserverFactory {
 
     public create ({ webSocket }: IWebSocketObserverFactoryOptions) {

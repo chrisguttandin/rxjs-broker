@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { IWebSocketObservableFactoryOptions } from '../interfaces';
 
@@ -30,7 +29,6 @@ export class WebSocketObservable<T> extends Observable<T> {
 
 }
 
-@Injectable()
 export class WebSocketObservableFactory {
 
     public create ({ webSocket }: IWebSocketObservableFactoryOptions) {

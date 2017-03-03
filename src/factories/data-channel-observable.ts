@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { IDataChannelObservableFactoryOptions } from '../interfaces';
 
@@ -30,7 +29,6 @@ export class DataChannelObservable<T> extends Observable<T> {
 
 }
 
-@Injectable()
 export class DataChannelObservableFactory {
 
     public create ({ dataChannel }: IDataChannelObservableFactoryOptions) {

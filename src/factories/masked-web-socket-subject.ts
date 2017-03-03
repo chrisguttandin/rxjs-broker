@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { AnonymousSubject } from 'rxjs/Subject';
@@ -43,7 +42,6 @@ export class MaskedWebSocketSubject extends AnonymousSubject<TJsonValue> impleme
 
 }
 
-@Injectable()
 export class MaskedWebSocketSubjectFactory {
 
     public create ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions): MaskedWebSocketSubject {

@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { IDataChannel, IDataChannelObserverFactoryOptions } from '../interfaces';
 import { TJsonValue } from '../types';
@@ -88,7 +87,6 @@ export class DataChannelObserver implements Observer<TJsonValue> {
 
 }
 
-@Injectable()
 export class DataChannelObserverFactory {
 
     public create ({ dataChannel }: IDataChannelObserverFactoryOptions) {

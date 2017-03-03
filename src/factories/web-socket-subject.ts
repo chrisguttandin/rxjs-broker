@@ -1,17 +1,20 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IMaskableSubject } from '../interfaces/maskable-subject';
-import { MaskedWebSocketSubjectFactory } from './masked-web-socket-subject';
+import { IMaskableSubject, IWebSocketSubjectFactoryOptions, IWebSocketSubjectOptions } from '../interfaces';
+import { TJsonValue } from '../types';
+import { MaskedWebSocketSubject, MaskedWebSocketSubjectFactory } from './masked-web-socket-subject';
 import { WebSocketObservableFactory } from './web-socket-observable';
 import { WebSocketObserverFactory } from './web-socket-observer';
 
-export class WebSocketSubject<T> extends AnonymousSubject<T> implements IMaskableSubject {
+export class WebSocketSubject extends AnonymousSubject<TJsonValue> implements IMaskableSubject {
 
-    private _maskedWebSocketSubjectFactory;
+    private _maskedWebSocketSubjectFactory: MaskedWebSocketSubjectFactory;
 
-    private _webSocket;
+    private _webSocket: WebSocket;
 
-    constructor ({ maskedWebSocketSubjectFactory, webSocket, webSocketObservableFactory, webSocketObserverFactory }) {
+    constructor ({
+        maskedWebSocketSubjectFactory, webSocket, webSocketObservableFactory, webSocketObserverFactory
+    }: IWebSocketSubjectOptions) {
         const observable = webSocketObservableFactory.create({ webSocket });
 
         const observer = webSocketObserverFactory.create({ webSocket });
@@ -26,11 +29,11 @@ export class WebSocketSubject<T> extends AnonymousSubject<T> implements IMaskabl
         this._webSocket.close();
     }
 
-    public mask (mask) {
-        return this._maskedWebSocketSubjectFactory.create({ mask, webSocketSubject: this });
+    public mask (mask: TJsonValue): MaskedWebSocketSubject {
+        return this._maskedWebSocketSubjectFactory.create({ maskableSubject: this, mask });
     }
 
-    public send (message) {
+    public send (message: TJsonValue) {
         const { destination }: any = this;
 
         if (!this.isStopped) {
@@ -43,17 +46,21 @@ export class WebSocketSubject<T> extends AnonymousSubject<T> implements IMaskabl
 @Injectable()
 export class WebSocketSubjectFactory {
 
-    private _options;
+    private _options: {
+        maskedWebSocketSubjectFactory: MaskedWebSocketSubjectFactory,
+        webSocketObservableFactory: WebSocketObservableFactory,
+        webSocketObserverFactory: WebSocketObserverFactory
+    };
 
     constructor (
-        @Inject(MaskedWebSocketSubjectFactory) maskedWebSocketSubjectFactory,
-        @Inject(WebSocketObservableFactory) webSocketObservableFactory,
-        @Inject(WebSocketObserverFactory) webSocketObserverFactory
+        maskedWebSocketSubjectFactory: MaskedWebSocketSubjectFactory,
+        webSocketObservableFactory: WebSocketObservableFactory,
+        webSocketObserverFactory: WebSocketObserverFactory
     ) {
         this._options = { maskedWebSocketSubjectFactory, webSocketObservableFactory, webSocketObserverFactory };
     }
 
-    public create ({ webSocket }): IMaskableSubject {
+    public create ({ webSocket }: IWebSocketSubjectFactoryOptions): IMaskableSubject {
         return new WebSocketSubject(Object.assign({}, this._options, { webSocket }));
     }
 

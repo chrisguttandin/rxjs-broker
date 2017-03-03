@@ -1,9 +1,11 @@
 import 'core-js/es7/reflect';
+import {
+    DataChannelObservableFactory,
+    DataChannelObserverFactory,
+    DataChannelSubjectFactory,
+    MaskedDataChannelSubjectFactory
+} from '../../../src/factories';
 import { DataChannelMock } from '../../mock/data-channel';
-import { DataChannelObservableFactory } from '../../../src/factories/data-channel-observable';
-import { DataChannelObserverFactory } from '../../../src/factories/data-channel-observer';
-import { DataChannelSubjectFactory } from '../../../src/factories/data-channel-subject';
-import { MaskedDataChannelSubjectFactory } from '../../../src/factories/masked-data-channel-subject';
 import { ReflectiveInjector } from '@angular/core';
 
 describe('DataChannelSubject', () => {

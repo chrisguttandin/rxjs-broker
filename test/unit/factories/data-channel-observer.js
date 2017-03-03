@@ -1,6 +1,6 @@
 import 'core-js/es7/reflect';
 import { DataChannelMock } from '../../mock/data-channel';
-import { DataChannelObserverFactory } from '../../../src/factories/data-channel-observer';
+import { DataChannelObserverFactory } from '../../../src/factories';
 import { ReflectiveInjector } from '@angular/core';
 
 describe('DataChannelObserver', () => {

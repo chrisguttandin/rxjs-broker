@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
+import { Observer } from 'rxjs/Observer';
+import { IDataChannel, IDataChannelObserverFactoryOptions } from '../interfaces';
+import { TJsonValue } from '../types';
 
 const BUFFERED_AMOUNT_LOW_THRESHOLD = 2048;
 
-export class DataChannelObserver {
+export class DataChannelObserver implements Observer<TJsonValue> {
 
-    private _dataChannel;
+    private _dataChannel: IDataChannel;
 
-    private _isSupportingBufferedAmountLowThreshold;
+    private _isSupportingBufferedAmountLowThreshold: boolean;
 
-    constructor ({ dataChannel }) {
+    constructor ({ dataChannel }: IDataChannelObserverFactoryOptions) {
         this._dataChannel = dataChannel;
 
         if (typeof dataChannel.bufferedAmountLowThreshold === 'number') {
@@ -22,11 +25,19 @@ export class DataChannelObserver {
         }
     }
 
-    public next (value) {
+    public complete () {
+        // This method does nothing because the DataChannel can be closed separately.
+    }
+
+    public error (err: Error) {
+        throw err;
+    }
+
+    public next (value: TJsonValue) {
         this.send(value);
     }
 
-    public send (message) {
+    public send (message: TJsonValue) {
         if (this._dataChannel.readyState === 'open') {
             if (this._isSupportingBufferedAmountLowThreshold &&
                     this._dataChannel.bufferedAmount > this._dataChannel.bufferedAmountLowThreshold) {
@@ -35,10 +46,12 @@ export class DataChannelObserver {
                         this._dataChannel.removeEventListener('bufferedamountlow', handleBufferedAmountLowEvent);
                         this._dataChannel.removeEventListener('error', handleErrorEvent); // tslint:disable-line:no-use-before-declare
 
-                        resolve(this.send(message));
+                        this.send(message);
+
+                        resolve();
                     };
 
-                    const handleErrorEvent = ({ error }) => {
+                    const handleErrorEvent = ({ error }: ErrorEvent) => {
                         this._dataChannel.removeEventListener('bufferedamountlow', handleBufferedAmountLowEvent);
                         this._dataChannel.removeEventListener('error', handleErrorEvent);
 
@@ -54,7 +67,7 @@ export class DataChannelObserver {
         }
 
         return new Promise((resolve, reject) => {
-            const handleErrorEvent = ({ error }) => {
+            const handleErrorEvent = ({ error }: ErrorEvent) => {
                 this._dataChannel.removeEventListener('error', handleErrorEvent);
                 this._dataChannel.removeEventListener('open', handleOpenEvent); // tslint:disable-line:no-use-before-declare
 
@@ -78,7 +91,7 @@ export class DataChannelObserver {
 @Injectable()
 export class DataChannelObserverFactory {
 
-    public create ({ dataChannel }) {
+    public create ({ dataChannel }: IDataChannelObserverFactoryOptions) {
         return new DataChannelObserver({ dataChannel });
     }
 

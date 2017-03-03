@@ -2,42 +2,43 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IMaskableSubject } from '../interfaces/maskable-subject';
+import { IJsonObject, IMaskableSubject, IMaskedDataChannelSubjectFactoryOptions } from '../interfaces';
+import { TJsonValue } from '../types';
 
-export class MaskedDataChannelSubject<T> extends AnonymousSubject<T> implements IMaskableSubject {
+export class MaskedDataChannelSubject extends AnonymousSubject<TJsonValue> implements IMaskableSubject {
 
-    private _mask;
+    private _mask: TJsonValue;
 
-    private _dataChannelSubject;
+    private _maskableSubject: IMaskableSubject;
 
-    constructor ({ dataChannelSubject, mask }) {
-        const maskedDataChannelSubject = dataChannelSubject
+    constructor ({ mask, maskableSubject }: IMaskedDataChannelSubjectFactoryOptions) {
+        const maskedDataChannelSubject = maskableSubject
             .asObservable()
             .filter((message) => Object
                 .keys(mask)
-                .every((key) => JSON.stringify(mask[key]) === JSON.stringify(message[key])))
+                .every((key) => JSON.stringify((<IJsonObject> mask)[key]) === JSON.stringify((<IJsonObject> message)[key])))
             .map(({ message }: any) => message);
 
-        super(dataChannelSubject, maskedDataChannelSubject);
+        super(maskableSubject, maskedDataChannelSubject);
 
-        this._dataChannelSubject = dataChannelSubject;
         this._mask = mask;
+        this._maskableSubject = maskableSubject;
     }
 
     public close () {
-        this._dataChannelSubject.close();
+        this._maskableSubject.close();
     }
 
-    public mask (mask) {
-        return new MaskedDataChannelSubject({ mask, dataChannelSubject: this });
+    public mask (mask: TJsonValue): MaskedDataChannelSubject {
+        return new MaskedDataChannelSubject({ mask, maskableSubject: this });
     }
 
-    public next (value) {
+    public next (value: TJsonValue) {
         this.send(value);
     }
 
-    public send (value) {
-        return this._dataChannelSubject.send(Object.assign({}, this._mask, { message: value }));
+    public send (value: TJsonValue) {
+        return this._maskableSubject.send(Object.assign({}, this._mask, { message: value }));
     }
 
 }
@@ -45,8 +46,8 @@ export class MaskedDataChannelSubject<T> extends AnonymousSubject<T> implements 
 @Injectable()
 export class MaskedDataChannelSubjectFactory {
 
-    public create ({ dataChannelSubject, mask }): IMaskableSubject {
-        return new MaskedDataChannelSubject({ dataChannelSubject, mask });
+    public create ({ mask, maskableSubject }: IMaskedDataChannelSubjectFactoryOptions): MaskedDataChannelSubject {
+        return new MaskedDataChannelSubject({ mask, maskableSubject });
     }
 
 }

@@ -1,9 +1,12 @@
-export interface IMaskableSubject {
+import { AnonymousSubject } from 'rxjs/Subject';
+import { TJsonValue } from '../types';
 
-    close ();
+export interface IMaskableSubject extends AnonymousSubject<TJsonValue> {
 
-    mask (mask): IMaskableSubject;
+    close (): void;
 
-    send (message): Promise<any>;
+    mask (mask: TJsonValue): IMaskableSubject;
+
+    send (message: TJsonValue): Promise<any>;
 
 }

@@ -1,6 +1,6 @@
 import 'core-js/es7/reflect';
 import { DataChannelMock } from '../../mock/data-channel';
-import { DataChannelObservableFactory } from '../../../src/factories/data-channel-observable';
+import { DataChannelObservableFactory } from '../../../src/factories';
 import { Observable } from 'rxjs';
 import { ReflectiveInjector } from '@angular/core';
 

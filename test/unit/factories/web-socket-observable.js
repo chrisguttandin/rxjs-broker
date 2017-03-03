@@ -1,9 +1,8 @@
 import 'core-js/es7/reflect';
+import { WebSocketFactory, WebSocketObservableFactory } from '../../../src/factories';
 import { Observable } from 'rxjs';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../../src/factories/web-socket';
 import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
-import { WebSocketObservableFactory } from '../../../src/factories/web-socket-observable';
 
 describe('WebSocketObservableFactory', () => {
 

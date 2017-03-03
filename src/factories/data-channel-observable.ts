@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { IDataChannelObservableFactoryOptions } from '../interfaces';
 
 export class DataChannelObservable<T> extends Observable<T> {
 
-    constructor ({ dataChannel }) {
+    constructor ({ dataChannel }: IDataChannelObservableFactoryOptions) {
         super((observer) => {
             const handleCloseEvent = () => observer.complete();
-            const handleErrorEvent = ({ error }) => observer.error(error);
-            const handleMessageEvent = ({ data }) => {
+            const handleErrorEvent = ({ error }: ErrorEvent) => observer.error(error);
+            const handleMessageEvent = ({ data }: MessageEvent) => {
                 try {
                     observer.next(JSON.parse(data));
                 } catch (err) {
@@ -32,7 +33,7 @@ export class DataChannelObservable<T> extends Observable<T> {
 @Injectable()
 export class DataChannelObservableFactory {
 
-    public create ({ dataChannel }) {
+    public create ({ dataChannel }: IDataChannelObservableFactoryOptions) {
         return new DataChannelObservable({ dataChannel });
     }
 

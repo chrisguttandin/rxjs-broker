@@ -1,11 +1,13 @@
 import 'core-js/es7/reflect';
-import { MaskedWebSocketSubjectFactory } from '../../../src/factories/masked-web-socket-subject';
+import {
+    MaskedWebSocketSubjectFactory,
+    WebSocketFactory,
+    WebSocketObservableFactory,
+    WebSocketObserverFactory,
+    WebSocketSubjectFactory
+} from '../../../src/factories';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../../src/factories/web-socket';
 import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
-import { WebSocketObservableFactory } from '../../../src/factories/web-socket-observable';
-import { WebSocketObserverFactory } from '../../../src/factories/web-socket-observer';
-import { WebSocketSubjectFactory } from '../../../src/factories/web-socket-subject';
 
 describe('WebSocketSubject', () => {
 

@@ -2,42 +2,43 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IMaskableSubject } from '../interfaces/maskable-subject';
+import { IJsonObject, IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions } from '../interfaces';
+import { TJsonValue } from '../types';
 
-export class MaskedWebSocketSubject<T> extends AnonymousSubject<T> implements IMaskableSubject {
+export class MaskedWebSocketSubject extends AnonymousSubject<TJsonValue> implements IMaskableSubject {
 
-    private _mask;
+    private _mask: TJsonValue;
 
-    private _webSocketSubject;
+    private _maskableSubject: IMaskableSubject;
 
-    constructor ({ mask, webSocketSubject }) {
-        const maskedWebSocketSubject = webSocketSubject
+    constructor ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions) {
+        const maskedWebSocketSubject = maskableSubject
             .asObservable()
             .filter((message) => Object
                 .keys(mask)
-                .every((key) => JSON.stringify(mask[key]) === JSON.stringify(message[key])))
+                .every((key) => JSON.stringify((<IJsonObject> mask)[key]) === JSON.stringify((<IJsonObject> message)[key])))
             .map(({ message }: any) => message);
 
-        super(webSocketSubject, maskedWebSocketSubject);
+        super(maskableSubject, maskedWebSocketSubject);
 
         this._mask = mask;
-        this._webSocketSubject = webSocketSubject;
+        this._maskableSubject = maskableSubject;
     }
 
     public close () {
-        this._webSocketSubject.close();
+        this._maskableSubject.close();
     }
 
-    public mask (mask) {
-        return new MaskedWebSocketSubject({ mask, webSocketSubject: this });
+    public mask (mask: TJsonValue): MaskedWebSocketSubject {
+        return new MaskedWebSocketSubject({ mask, maskableSubject: this });
     }
 
-    public next (value) {
+    public next (value: TJsonValue) {
         this.send(value);
     }
 
-    public send (value) {
-        return this._webSocketSubject.send(Object.assign({}, this._mask, { message: value }));
+    public send (value: TJsonValue) {
+        return this._maskableSubject.send(Object.assign({}, this._mask, { message: value }));
     }
 
 }
@@ -45,8 +46,8 @@ export class MaskedWebSocketSubject<T> extends AnonymousSubject<T> implements IM
 @Injectable()
 export class MaskedWebSocketSubjectFactory {
 
-    public create ({ mask, webSocketSubject }): IMaskableSubject {
-        return new MaskedWebSocketSubject({ mask, webSocketSubject });
+    public create ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions): MaskedWebSocketSubject {
+        return new MaskedWebSocketSubject({ mask, maskableSubject });
     }
 
 }

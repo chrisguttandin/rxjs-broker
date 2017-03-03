@@ -11,7 +11,7 @@ import {
     WebSocketObserverFactory,
     WebSocketSubjectFactory
 } from './factories';
-import { IDataChannel } from './interfaces';
+import { IDataChannel, IMaskableSubject } from './interfaces';
 
 const injector = ReflectiveInjector.resolveAndCreate([
     DataChannelObservableFactory,
@@ -29,15 +29,17 @@ const dataChannelSubjectFactory = injector.get(DataChannelSubjectFactory);
 const webSocketFactory = injector.get(WebSocketFactory);
 const webSocketSubjectFactory = injector.get(WebSocketSubjectFactory);
 
-export const connect = (url: string) => {
+export const connect = (url: string): IMaskableSubject => {
     const webSocket = webSocketFactory.create({ url });
 
     return webSocketSubjectFactory.create({ webSocket });
 };
+
+export { IDataChannel, IMaskableSubject };
 
 /**
  * This property is true if the browser supports WebSockets.
  */
 export const isSupported = (typeof window !== undefined && 'WebSocket' in window);
 
-export const wrap = (dataChannel: IDataChannel) => dataChannelSubjectFactory.create({ dataChannel });
+export const wrap = (dataChannel: IDataChannel): IMaskableSubject => dataChannelSubjectFactory.create({ dataChannel });

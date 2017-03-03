@@ -8,6 +8,8 @@ export default {
     external: [
         '@angular/core',
         'core-js/es7/reflect',
+        'rxjs/add/operator/filter',
+        'rxjs/add/operator/map',
         'rxjs/Observable',
         'rxjs/Observer',
         'rxjs/Subject'

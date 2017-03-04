@@ -1,10 +1,9 @@
 import { Observer } from 'rxjs/Observer';
 import { IDataChannel, IDataChannelObserverFactoryOptions } from '../interfaces';
-import { TJsonValue } from '../types';
 
 const BUFFERED_AMOUNT_LOW_THRESHOLD = 2048;
 
-export class DataChannelObserver implements Observer<TJsonValue> {
+export class DataChannelObserver<T> implements Observer<T> {
 
     private _dataChannel: IDataChannel;
 
@@ -32,11 +31,11 @@ export class DataChannelObserver implements Observer<TJsonValue> {
         throw err;
     }
 
-    public next (value: TJsonValue) {
+    public next (value: T) {
         this.send(value);
     }
 
-    public send (message: TJsonValue) {
+    public send (message: T) {
         if (this._dataChannel.readyState === 'open') {
             if (this._isSupportingBufferedAmountLowThreshold &&
                     this._dataChannel.bufferedAmount > this._dataChannel.bufferedAmountLowThreshold) {
@@ -89,8 +88,8 @@ export class DataChannelObserver implements Observer<TJsonValue> {
 
 export class DataChannelObserverFactory {
 
-    public create ({ dataChannel }: IDataChannelObserverFactoryOptions) {
-        return new DataChannelObserver({ dataChannel });
+    public create<T> ({ dataChannel }: IDataChannelObserverFactoryOptions) {
+        return new DataChannelObserver<T>({ dataChannel });
     }
 
 }

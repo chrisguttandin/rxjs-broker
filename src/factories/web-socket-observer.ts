@@ -1,8 +1,7 @@
 import { Observer } from 'rxjs/Observer';
 import { IWebSocketObserverFactoryOptions } from '../interfaces';
-import { TJsonValue } from '../types';
 
-export class WebSocketObserver implements Observer<TJsonValue> {
+export class WebSocketObserver<T> implements Observer<T> {
 
     private _webSocket: WebSocket;
 
@@ -18,11 +17,11 @@ export class WebSocketObserver implements Observer<TJsonValue> {
         throw err;
     }
 
-    public next (value: TJsonValue) {
+    public next (value: T) {
         this.send(value);
     }
 
-    public send (message: TJsonValue) {
+    public send (message: T) {
         const stringifiedMessage = JSON.stringify(message);
 
         if (this._webSocket.readyState === WebSocket.OPEN) {
@@ -57,8 +56,8 @@ export class WebSocketObserver implements Observer<TJsonValue> {
 
 export class WebSocketObserverFactory {
 
-    public create ({ webSocket }: IWebSocketObserverFactoryOptions) {
-        return new WebSocketObserver({ webSocket });
+    public create<T> ({ webSocket }: IWebSocketObserverFactoryOptions) {
+        return new WebSocketObserver<T>({ webSocket });
     }
 
 }

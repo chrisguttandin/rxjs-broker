@@ -31,8 +31,8 @@ export class WebSocketObservable<T> extends Observable<T> {
 
 export class WebSocketObservableFactory {
 
-    public create ({ webSocket }: IWebSocketObservableFactoryOptions) {
-        return new WebSocketObservable({ webSocket });
+    public create<T> ({ webSocket }: IWebSocketObservableFactoryOptions) {
+        return new WebSocketObservable<T>({ webSocket });
     }
 
 }

@@ -31,8 +31,8 @@ export class DataChannelObservable<T> extends Observable<T> {
 
 export class DataChannelObservableFactory {
 
-    public create ({ dataChannel }: IDataChannelObservableFactoryOptions) {
-        return new DataChannelObservable({ dataChannel });
+    public create<T> ({ dataChannel }: IDataChannelObservableFactoryOptions) {
+        return new DataChannelObservable<T>({ dataChannel });
     }
 
 }

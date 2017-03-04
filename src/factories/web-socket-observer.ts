@@ -1,4 +1,4 @@
-import { Observer } from 'rxjs/Observer';
+import { Observer } from 'rxjs/Observer';
 import { IWebSocketObserverFactoryOptions } from '../interfaces';
 
 export class WebSocketObserver<T> implements Observer<T> {

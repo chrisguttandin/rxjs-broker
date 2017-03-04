@@ -6,7 +6,7 @@ import {
     MaskedDataChannelSubjectFactory
 } from '../../../src/factories';
 import { DataChannelMock } from '../../mock/data-channel';
-import { ReflectiveInjector } from '@angular/core';
+import { ReflectiveInjector } from '@angular/core';
 
 describe('DataChannelSubject', () => {
 
@@ -64,7 +64,7 @@ describe('DataChannelSubject', () => {
         beforeEach(() => {
             message = { a: 'fake message' };
 
-            dataChannelSubject = dataChannelSubject.mask({ a: { fake: 'mask' } });
+            dataChannelSubject = dataChannelSubject.mask({ a: { fake: 'mask' } });
         });
 
         it('should augment messages with the mask when calling next()', () => {

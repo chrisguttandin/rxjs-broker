@@ -1,7 +1,7 @@
 import 'core-js/es7/reflect';
-import { WebSocketFactory, WebSocketObservableFactory } from '../../../src/factories';
+import { WebSocketFactory, WebSocketObservableFactory } from '../../../src/factories';
 import { Observable } from 'rxjs';
-import { ReflectiveInjector } from '@angular/core';
+import { ReflectiveInjector } from '@angular/core';
 import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
 
 describe('WebSocketObservableFactory', () => {
@@ -34,7 +34,7 @@ describe('WebSocketObservable', () => {
 
     beforeEach(() => {
         const injector = ReflectiveInjector.resolveAndCreate([
-            { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
+            { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
             WebSocketObservableFactory
         ]);
 

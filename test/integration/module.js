@@ -1,4 +1,4 @@
-import { connect, isSupported, wrap } from '../../src/module';
+import { connect, isSupported, wrap } from '../../src/module';
 import { establishDataChannels } from '../helper/establish-data-channels';
 
 describe('module', () => {

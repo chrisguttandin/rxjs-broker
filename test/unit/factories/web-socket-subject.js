@@ -6,7 +6,7 @@ import {
     WebSocketObserverFactory,
     WebSocketSubjectFactory
 } from '../../../src/factories';
-import { ReflectiveInjector } from '@angular/core';
+import { ReflectiveInjector } from '@angular/core';
 import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
 
 describe('WebSocketSubject', () => {
@@ -18,7 +18,7 @@ describe('WebSocketSubject', () => {
     beforeEach(() => {
         const injector = ReflectiveInjector.resolveAndCreate([
             MaskedWebSocketSubjectFactory,
-            { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
+            { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
             WebSocketObservableFactory,
             WebSocketObserverFactory,
             WebSocketSubjectFactory
@@ -68,7 +68,7 @@ describe('WebSocketSubject', () => {
         beforeEach(() => {
             message = { a: 'fake message' };
 
-            webSocketSubject = webSocketSubject.mask({ a: { fake: 'mask' } });
+            webSocketSubject = webSocketSubject.mask({ a: { fake: 'mask' } });
         });
 
         it('should augment messages with the mask when calling next()', () => {

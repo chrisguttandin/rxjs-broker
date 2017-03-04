@@ -1,5 +1,5 @@
-import { Observer } from 'rxjs/Observer';
-import { IDataChannel, IDataChannelObserverFactoryOptions } from '../interfaces';
+import { Observer } from 'rxjs/Observer';
+import { IDataChannel, IDataChannelObserverFactoryOptions } from '../interfaces';
 
 const BUFFERED_AMOUNT_LOW_THRESHOLD = 2048;
 

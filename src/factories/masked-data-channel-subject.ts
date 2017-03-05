@@ -1,22 +1,29 @@
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IJsonObject, IMaskableSubject, IMaskedDataChannelSubjectFactoryOptions } from '../interfaces';
-import { TJsonValue } from '../types';
+import { IMaskableSubject, IMaskedDataChannelSubjectFactoryOptions, IStringifyableJsonObject } from '../interfaces';
+import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
 
-export class MaskedDataChannelSubject extends AnonymousSubject<TJsonValue> implements IMaskableSubject {
+export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
+        extends AnonymousSubject<TMessage>
+        implements IMaskableSubject<TMessage> {
 
-    private _mask: TJsonValue;
+    private _mask: TParsedJsonValue;
 
-    private _maskableSubject: IMaskableSubject;
+    private _maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
 
     constructor ({ mask, maskableSubject }: IMaskedDataChannelSubjectFactoryOptions) {
         const maskedDataChannelSubject = maskableSubject
             .asObservable()
-            .filter((message) => Object
+            .filter((message: TStringifyableJsonValue) => Object
                 .keys(mask)
-                .every((key) => JSON.stringify((<IJsonObject> mask)[key]) === JSON.stringify((<IJsonObject> message)[key])))
-            .map(({ message }: any) => message);
+                .every((key) => {
+                    const maskValue = JSON.stringify((<IStringifyableJsonObject> mask)[key]);
+                    const messageValue = JSON.stringify((<IStringifyableJsonObject> message)[key]);
+
+                    return maskValue === messageValue;
+                }))
+            .map(({ message }: { message: TMessage }) => message);
 
         super(maskableSubject, maskedDataChannelSubject);
 
@@ -28,15 +35,15 @@ export class MaskedDataChannelSubject extends AnonymousSubject<TJsonValue> imple
         this._maskableSubject.close();
     }
 
-    public mask (mask: TJsonValue): MaskedDataChannelSubject {
-        return new MaskedDataChannelSubject({ mask, maskableSubject: this });
+    public mask<TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedDataChannelSubject<TMessage> {
+        return new MaskedDataChannelSubject<TMessage>({ mask, maskableSubject: this });
     }
 
-    public next (value: TJsonValue) {
+    public next (value: TMessage) {
         this.send(value);
     }
 
-    public send (value: TJsonValue) {
+    public send (value: TMessage) {
         return this._maskableSubject.send(Object.assign({}, this._mask, { message: value }));
     }
 
@@ -44,8 +51,9 @@ export class MaskedDataChannelSubject extends AnonymousSubject<TJsonValue> imple
 
 export class MaskedDataChannelSubjectFactory {
 
-    public create ({ mask, maskableSubject }: IMaskedDataChannelSubjectFactoryOptions): MaskedDataChannelSubject {
-        return new MaskedDataChannelSubject({ mask, maskableSubject });
+    public create<TMessage extends TStringifyableJsonValue>
+            ({ mask, maskableSubject }: IMaskedDataChannelSubjectFactoryOptions): MaskedDataChannelSubject<TMessage> {
+        return new MaskedDataChannelSubject<TMessage>({ mask, maskableSubject });
     }
 
 }

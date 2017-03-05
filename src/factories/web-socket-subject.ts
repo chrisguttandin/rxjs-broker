@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AnonymousSubject } from 'rxjs/Subject';
 import { IMaskableSubject, IWebSocketSubjectFactoryOptions, IWebSocketSubjectOptions } from '../interfaces';
-import { TJsonValue } from '../types';
+import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
 import { MaskedWebSocketSubject, MaskedWebSocketSubjectFactory } from './masked-web-socket-subject';
 import { WebSocketObservableFactory } from './web-socket-observable';
 import { WebSocketObserverFactory } from './web-socket-observer';
 
-export class WebSocketSubject extends AnonymousSubject<TJsonValue> implements IMaskableSubject {
+export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> implements IMaskableSubject<TStringifyableJsonValue> {
 
     private _maskedWebSocketSubjectFactory: MaskedWebSocketSubjectFactory;
 
@@ -15,9 +15,9 @@ export class WebSocketSubject extends AnonymousSubject<TJsonValue> implements IM
     constructor ({
         maskedWebSocketSubjectFactory, webSocket, webSocketObservableFactory, webSocketObserverFactory
     }: IWebSocketSubjectOptions) {
-        const observable = webSocketObservableFactory.create({ webSocket });
+        const observable = webSocketObservableFactory.create<TStringifyableJsonValue>({ webSocket });
 
-        const observer = webSocketObserverFactory.create({ webSocket });
+        const observer = webSocketObserverFactory.create<TStringifyableJsonValue>({ webSocket });
 
         super(observer, observable);
 
@@ -29,11 +29,11 @@ export class WebSocketSubject extends AnonymousSubject<TJsonValue> implements IM
         this._webSocket.close();
     }
 
-    public mask (mask: TJsonValue): MaskedWebSocketSubject {
-        return this._maskedWebSocketSubjectFactory.create({ maskableSubject: this, mask });
+    public mask <TMessage extends TStringifyableJsonValue>(mask: TParsedJsonValue): MaskedWebSocketSubject<TMessage> {
+        return this._maskedWebSocketSubjectFactory.create<TMessage>({ maskableSubject: this, mask });
     }
 
-    public send (message: TJsonValue) {
+    public send (message: TStringifyableJsonValue) {
         const { destination }: any = this;
 
         if (!this.isStopped) {
@@ -60,7 +60,7 @@ export class WebSocketSubjectFactory {
         this._options = { maskedWebSocketSubjectFactory, webSocketObservableFactory, webSocketObserverFactory };
     }
 
-    public create ({ webSocket }: IWebSocketSubjectFactoryOptions): IMaskableSubject {
+    public create ({ webSocket }: IWebSocketSubjectFactoryOptions): IMaskableSubject<TStringifyableJsonValue> {
         return new WebSocketSubject({ ...this._options, webSocket });
     }
 

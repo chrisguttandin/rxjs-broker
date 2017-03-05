@@ -1,12 +1,12 @@
 import { AnonymousSubject } from 'rxjs/Subject';
-import { TJsonValue } from '../types';
+import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
 
-export interface IMaskableSubject extends AnonymousSubject<TJsonValue> {
+export interface IMaskableSubject<TMessage extends TStringifyableJsonValue> extends AnonymousSubject<TMessage> {
 
     close (): void;
 
-    mask (mask: TJsonValue): IMaskableSubject;
+    mask<TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): IMaskableSubject<TMessage>;
 
-    send (message: TJsonValue): Promise<any>;
+    send (message: TMessage): Promise<any>;
 
 }

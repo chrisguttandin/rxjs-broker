@@ -1,22 +1,29 @@
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IJsonObject, IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions } from '../interfaces';
-import { TJsonValue } from '../types';
+import { IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions, IStringifyableJsonObject } from '../interfaces';
+import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
 
-export class MaskedWebSocketSubject extends AnonymousSubject<TJsonValue> implements IMaskableSubject {
+export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
+        extends AnonymousSubject<TMessage>
+        implements IMaskableSubject<TMessage> {
 
-    private _mask: TJsonValue;
+    private _mask: TParsedJsonValue;
 
-    private _maskableSubject: IMaskableSubject;
+    private _maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
 
     constructor ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions) {
         const maskedWebSocketSubject = maskableSubject
             .asObservable()
-            .filter((message) => Object
+            .filter((message: TStringifyableJsonValue) => Object
                 .keys(mask)
-                .every((key) => JSON.stringify((<IJsonObject> mask)[key]) === JSON.stringify((<IJsonObject> message)[key])))
-            .map(({ message }: any) => message);
+                .every((key) => {
+                    const maskValue = JSON.stringify((<IStringifyableJsonObject> mask)[key]);
+                    const messageValue = JSON.stringify((<IStringifyableJsonObject> message)[key]);
+
+                    return maskValue === messageValue;
+                }))
+            .map(({ message }: { message: TMessage }) => message);
 
         super(maskableSubject, maskedWebSocketSubject);
 
@@ -28,15 +35,15 @@ export class MaskedWebSocketSubject extends AnonymousSubject<TJsonValue> impleme
         this._maskableSubject.close();
     }
 
-    public mask (mask: TJsonValue): MaskedWebSocketSubject {
-        return new MaskedWebSocketSubject({ mask, maskableSubject: this });
+    public mask<TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedWebSocketSubject<TMessage> {
+        return new MaskedWebSocketSubject<TMessage>({ mask, maskableSubject: this });
     }
 
-    public next (value: TJsonValue) {
+    public next (value: TMessage) {
         this.send(value);
     }
 
-    public send (value: TJsonValue) {
+    public send (value: TMessage) {
         return this._maskableSubject.send(Object.assign({}, this._mask, { message: value }));
     }
 
@@ -44,8 +51,9 @@ export class MaskedWebSocketSubject extends AnonymousSubject<TJsonValue> impleme
 
 export class MaskedWebSocketSubjectFactory {
 
-    public create ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions): MaskedWebSocketSubject {
-        return new MaskedWebSocketSubject({ mask, maskableSubject });
+    public create<TMessage extends TStringifyableJsonValue>
+            ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions): MaskedWebSocketSubject<TMessage> {
+        return new MaskedWebSocketSubject<TMessage>({ mask, maskableSubject });
     }
 
 }

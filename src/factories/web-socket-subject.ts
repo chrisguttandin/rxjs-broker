@@ -61,7 +61,7 @@ export class WebSocketSubjectFactory {
     }
 
     public create ({ webSocket }: IWebSocketSubjectFactoryOptions): IMaskableSubject {
-        return new WebSocketSubject(Object.assign({}, this._options, { webSocket }));
+        return new WebSocketSubject({ ...this._options, webSocket });
     }
 
 }

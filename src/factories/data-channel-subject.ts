@@ -61,7 +61,7 @@ export class DataChannelSubjectFactory {
     }
 
     public create ({ dataChannel }: IDataChannelSubjectFactoryOptions): IMaskableSubject {
-        return new DataChannelSubject(Object.assign({}, this._options, { dataChannel }));
+        return new DataChannelSubject({ ...this._options, dataChannel });
     }
 
 }

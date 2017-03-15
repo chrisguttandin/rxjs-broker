@@ -2,6 +2,7 @@ import 'core-js/es7/reflect';
 import { ReflectiveInjector } from '@angular/core';
 import { WebSocketFactory } from '../../../src/factories';
 import { WebSocketMock } from '../../mock/web-socket';
+import { stub } from 'sinon';
 
 describe('WebSocketFactory', () => {
 
@@ -19,7 +20,7 @@ describe('WebSocketFactory', () => {
         globalWebSocket = WebSocket;
 
         webSocket = new WebSocketMock();
-        WebSocket = sinon.stub(); // eslint-disable-line no-global-assign, no-undef
+        WebSocket = stub(); // eslint-disable-line no-global-assign
 
         WebSocket.returns(webSocket);
     });

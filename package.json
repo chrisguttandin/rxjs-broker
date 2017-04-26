@@ -51,9 +51,9 @@
     "src/"
   ],
   "homepage": "https://github.com/chrisguttandin/rxjs-broker",
-  "jsnext:main": "build/es2015/module.js",
   "license": "MIT",
   "main": "build/es5/bundle.js",
+  "module": "build/es2015/module.js",
   "name": "rxjs-broker",
   "repository": {
     "type": "git",

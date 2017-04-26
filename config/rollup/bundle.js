@@ -31,8 +31,6 @@ export default {
         commonjs({
             exclude: 'node_modules/**'
         }),
-        nodeResolve({
-            jsnext: true
-        })
+        nodeResolve()
     ]
 };

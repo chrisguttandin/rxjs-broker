@@ -32,11 +32,11 @@ export interface IDataChannel extends EventTarget {
 
     onopen: TEventHandler;
 
-    onmessage: (event: MessageEvent) => void;
+    onmessage (event: MessageEvent): void;
 
     onbufferedamountlow: TEventHandler;
 
-    onerror: (event: ErrorEvent) => void;
+    onerror (event: ErrorEvent): void;
 
     onclose: TEventHandler;
 

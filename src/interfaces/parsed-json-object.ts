@@ -1,5 +1,7 @@
 import { TParsedJsonValue } from '../types';
 
 export interface IParsedJsonObject {
-    [ key: string ]:  TParsedJsonValue;
+
+    [ key: string ]: TParsedJsonValue;
+
 }

@@ -6,6 +6,10 @@ export interface IDataChannel extends EventTarget {
 
     readonly bufferedAmount: number;
 
+    bufferedAmountLowThreshold: number;
+
+    binaryType: TBinaryType;
+
     readonly id: number;
 
     readonly label: string;
@@ -16,28 +20,24 @@ export interface IDataChannel extends EventTarget {
 
     readonly negotiated: boolean;
 
+    onbufferedamountlow: TEventHandler;
+
+    onclose: TEventHandler;
+
+    onopen: TEventHandler;
+
     readonly ordered: boolean;
 
     readonly protocol: string;
 
     readonly readyState: TDataChannelState;
 
-    bufferedAmountLowThreshold: number;
-
-    binaryType: TBinaryType;
-
     close (): void;
 
     send (data: string | Blob | ArrayBuffer | ArrayBufferView): void;
 
-    onopen: TEventHandler;
-
     onmessage (event: MessageEvent): void;
 
-    onbufferedamountlow: TEventHandler;
-
     onerror (event: ErrorEvent): void;
-
-    onclose: TEventHandler;
 
 }

@@ -12,7 +12,6 @@ import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
 describe('WebSocketSubject', () => {
 
     let webSocket;
-
     let webSocketSubject;
 
     beforeEach(() => {
@@ -23,9 +22,7 @@ describe('WebSocketSubject', () => {
             WebSocketObserverFactory,
             WebSocketSubjectFactory
         ]);
-
         const webSocketFactory = injector.get(WebSocketFactory);
-
         const webSocketSubjectFactory = injector.get(WebSocketSubjectFactory);
 
         webSocket = webSocketFactory.create();
@@ -34,7 +31,6 @@ describe('WebSocketSubject', () => {
 
     it('should allow to be used with other operators', (done) => {
         const message = 'a fake message';
-
         const webSocketSubscription = webSocketSubject
             .filter(() => true)
             .subscribe({
@@ -114,7 +110,6 @@ describe('WebSocketSubject', () => {
 
         it('should emit a message from the socket', (done) => {
             const message = 'a fake message';
-
             const webSocketSubscription = webSocketSubject
                 .subscribe({
                     next (mssg) {

@@ -14,7 +14,6 @@ describe('module', () => {
     describe('connect()', () => {
 
         let message;
-
         let webSocketSubject;
 
         afterEach(() => webSocketSubject.close());

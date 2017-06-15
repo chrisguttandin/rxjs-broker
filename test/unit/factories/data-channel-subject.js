@@ -11,7 +11,6 @@ import { ReflectiveInjector } from '@angular/core';
 describe('DataChannelSubject', () => {
 
     let dataChannel;
-
     let dataChannelSubject;
 
     beforeEach(() => {
@@ -21,7 +20,6 @@ describe('DataChannelSubject', () => {
             DataChannelSubjectFactory,
             MaskedDataChannelSubjectFactory
         ]);
-
         const dataChannelSubjectFactory = injector.get(DataChannelSubjectFactory);
 
         dataChannel = new DataChannelMock();
@@ -30,7 +28,6 @@ describe('DataChannelSubject', () => {
 
     it('should allow to be used with other operators', (done) => {
         const message = 'a fake message';
-
         const dataChannelSubscription = dataChannelSubject
             .filter(() => true)
             .subscribe({
@@ -110,7 +107,6 @@ describe('DataChannelSubject', () => {
 
         it('should emit a message from the data channel', (done) => {
             const message = 'a fake message';
-
             const dataChannelSubscription = dataChannelSubject
                 .subscribe({
                     next (mssg) {

@@ -7,9 +7,7 @@ import { stub } from 'sinon';
 describe('WebSocketFactory', () => {
 
     let globalWebSocket;
-
     let webSocket;
-
     let webSocketFactory;
 
     afterEach(() => {

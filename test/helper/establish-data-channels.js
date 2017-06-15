@@ -11,13 +11,11 @@ const ICE_SERVERS = [ {
 export const establishDataChannels = () => {
     return new Promise((resolve, reject) => {
         let localDataChannel;
-
         let remoteDataChannelIsOpen = false;
 
         const localPeerConnection = new RTCPeerConnection({
             iceServers: ICE_SERVERS
         });
-
         const remotePeerConnection = new RTCPeerConnection({
             iceServers: ICE_SERVERS
         });

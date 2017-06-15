@@ -29,7 +29,6 @@ describe('WebSocketObservableFactory', () => {
 describe('WebSocketObservable', () => {
 
     let webSocket;
-
     let webSocketObservable;
 
     beforeEach(() => {
@@ -37,9 +36,7 @@ describe('WebSocketObservable', () => {
             { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
             WebSocketObservableFactory
         ]);
-
         const webSocketFactory = injector.get(WebSocketFactory);
-
         const webSocketObservableFactory = injector.get(WebSocketObservableFactory);
 
         webSocket = webSocketFactory.create();
@@ -50,7 +47,6 @@ describe('WebSocketObservable', () => {
 
         it('should pass on a message event to the subscribed observer', (done) => {
             const message = 'a fake message';
-
             const webSocketSubscription = webSocketObservable
                 .subscribe({
                     next (mssg) {

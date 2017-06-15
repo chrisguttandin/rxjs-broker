@@ -6,7 +6,6 @@ import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
 describe('WebSocketObserver', () => {
 
     let webSocket;
-
     let webSocketObserver;
 
     beforeEach(() => {
@@ -14,9 +13,7 @@ describe('WebSocketObserver', () => {
             { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
             WebSocketObserverFactory
         ]);
-
         const webSocketFactory = injector.get(WebSocketFactory);
-
         const webSocketObserverFactory = injector.get(WebSocketObserverFactory);
 
         webSocket = webSocketFactory.create();

@@ -29,14 +29,12 @@ describe('DataChannelObservableFactory', () => {
 describe('DataChannelObservable', () => {
 
     let dataChannel;
-
     let dataChannelObservable;
 
     beforeEach(() => {
         const injector = ReflectiveInjector.resolveAndCreate([
             DataChannelObservableFactory
         ]);
-
         const dataChannelObservableFactory = injector.get(DataChannelObservableFactory);
 
         dataChannel = new DataChannelMock();
@@ -47,7 +45,6 @@ describe('DataChannelObservable', () => {
 
         it('should pass on a message event to the subscribed observer', (done) => {
             const message = 'a fake message';
-
             const dataChannelSubscription = dataChannelObservable
                 .subscribe({
                     next (mssg) {

@@ -6,14 +6,12 @@ import { ReflectiveInjector } from '@angular/core';
 describe('DataChannelObserver', () => {
 
     let dataChannel;
-
     let dataChannelObserver;
 
     beforeEach(() => {
         const injector = ReflectiveInjector.resolveAndCreate([
             DataChannelObserverFactory
         ]);
-
         const dataChannelObserverFactory = injector.get(DataChannelObserverFactory);
 
         dataChannel = new DataChannelMock();

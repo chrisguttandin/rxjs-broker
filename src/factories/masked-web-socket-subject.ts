@@ -35,8 +35,8 @@ export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
         this._maskableSubject.close();
     }
 
-    public mask<TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedWebSocketSubject<TMessage> {
-        return new MaskedWebSocketSubject<TMessage>({ mask, maskableSubject: this });
+    public mask<TMakedMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedWebSocketSubject<TMakedMessage> {
+        return new MaskedWebSocketSubject<TMakedMessage>({ mask, maskableSubject: this });
     }
 
     public next (value: TMessage) {

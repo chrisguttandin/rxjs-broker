@@ -35,8 +35,8 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
         this._maskableSubject.close();
     }
 
-    public mask<TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedDataChannelSubject<TMessage> {
-        return new MaskedDataChannelSubject<TMessage>({ mask, maskableSubject: this });
+    public mask<TMakedMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedDataChannelSubject<TMakedMessage> {
+        return new MaskedDataChannelSubject<TMakedMessage>({ mask, maskableSubject: this });
     }
 
     public next (value: TMessage) {

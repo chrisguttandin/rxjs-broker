@@ -5,7 +5,7 @@ export interface IMaskableSubject<TMessage extends TStringifyableJsonValue> exte
 
     close (): void;
 
-    mask<TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): IMaskableSubject<TMessage>;
+    mask<TMakedMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): IMaskableSubject<TMakedMessage>;
 
     send (message: TMessage): Promise<any>;
 

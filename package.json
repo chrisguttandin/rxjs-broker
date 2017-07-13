@@ -12,7 +12,7 @@
   "description": "An rxjs message broker for WebRTC DataChannels, WebSockets and WebWorkers.",
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0",
-    "chai": "^4.0.2",
+    "chai": "^4.1.0",
     "eslint-config-holy-grail": "^18.1.0",
     "event-target": "^0.1.0",
     "greenkeeper-lockfile": "^1.7.1",

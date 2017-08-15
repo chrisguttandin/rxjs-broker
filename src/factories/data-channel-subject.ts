@@ -29,7 +29,7 @@ export class DataChannelSubject extends AnonymousSubject<TStringifyableJsonValue
         this._dataChannel.close();
     }
 
-    public mask <TMessage extends TStringifyableJsonValue>(mask: TParsedJsonValue): MaskedDataChannelSubject<TMessage> {
+    public mask <TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedDataChannelSubject<TMessage> {
         return this._maskedDataChannelSubjectFactory.create<TMessage>({ maskableSubject: this, mask });
     }
 

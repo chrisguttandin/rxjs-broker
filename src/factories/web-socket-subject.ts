@@ -29,7 +29,7 @@ export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> 
         this._webSocket.close();
     }
 
-    public mask <TMessage extends TStringifyableJsonValue>(mask: TParsedJsonValue): MaskedWebSocketSubject<TMessage> {
+    public mask <TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedWebSocketSubject<TMessage> {
         return this._maskedWebSocketSubjectFactory.create<TMessage>({ maskableSubject: this, mask });
     }
 

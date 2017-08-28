@@ -1,24 +1,18 @@
 import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
-    dest: 'build/es5/bundle.js',
-    entry: 'build/es2015/module.js',
-    external: [
-        '@angular/core',
-        'core-js/es7/reflect',
-        'rxjs/add/operator/filter',
-        'rxjs/add/operator/map',
-        'rxjs/Observable',
-        'rxjs/Observer',
-        'rxjs/Subject'
-    ],
-    format: 'umd',
-    moduleName: 'rxjsBroker',
+    input: 'build/es2015/module.js',
+    output: {
+        file: 'build/es5/bundle.js',
+        format: 'umd',
+        name: 'rxjsBroker'
+    },
     plugins: [
         babel({
             exclude: 'node_modules/**',
+            plugins: [
+                'external-helpers'
+            ],
             presets: [
                 [
                     'es2015',
@@ -27,10 +21,6 @@ export default {
                     }
                 ]
             ]
-        }),
-        commonjs({
-            exclude: 'node_modules/**'
-        }),
-        nodeResolve()
+        })
     ]
 };

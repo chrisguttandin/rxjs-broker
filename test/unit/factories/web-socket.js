@@ -1,6 +1,6 @@
 import 'core-js/es7/reflect';
 import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../../src/factories';
+import { WebSocketFactory } from '../../../src/factories/web-socket';
 import { WebSocketMock } from '../../mock/web-socket';
 import { stub } from 'sinon';
 

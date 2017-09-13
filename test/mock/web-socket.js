@@ -1,4 +1,4 @@
-import { spy, stub } from 'sinon';
+import { spy, stub } from 'sinon';
 import EventTarget from 'event-target';
 
 export class WebSocketMock {

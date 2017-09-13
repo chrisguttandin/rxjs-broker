@@ -1,5 +1,5 @@
 import { WebSocketMock } from './web-socket';
-import { spy } from 'sinon';
+import { spy } from 'sinon';
 
 export class WebSocketFactoryMock {
 

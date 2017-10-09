@@ -39,7 +39,7 @@ export { IDataChannel, IStringifyableJsonObject, IMaskableSubject };
 /**
  * This property is true if the browser supports WebSockets.
  */
-export const isSupported = (typeof window !== undefined && 'WebSocket' in window);
+export const isSupported = (typeof window !== 'undefined' && 'WebSocket' in window);
 
 export { TParsedJsonValue, TStringifyableJsonValue };
 

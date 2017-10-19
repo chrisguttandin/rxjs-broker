@@ -5,6 +5,7 @@ import { DataChannelObserverFactory } from '../../../src/factories/data-channel-
 import { DataChannelSubjectFactory } from '../../../src/factories/data-channel-subject';
 import { MaskedDataChannelSubjectFactory } from '../../../src/factories/masked-data-channel-subject';
 import { ReflectiveInjector } from '@angular/core';
+import { filter } from 'rxjs/operators/filter';
 
 describe('DataChannelSubject', () => {
 
@@ -27,7 +28,7 @@ describe('DataChannelSubject', () => {
     it('should allow to be used with other operators', (done) => {
         const message = 'a fake message';
         const dataChannelSubscription = dataChannelSubject
-            .filter(() => true)
+            .pipe(filter(() => true))
             .subscribe({
                 next (mssg) {
                     expect(mssg).to.equal(message);

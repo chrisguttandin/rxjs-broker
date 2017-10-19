@@ -1,5 +1,5 @@
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+import { filter } from 'rxjs/operators/filter';
+import { map } from 'rxjs/operators/map';
 import { AnonymousSubject } from 'rxjs/Subject';
 import { IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions, IStringifyableJsonObject } from '../interfaces';
 import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
@@ -15,15 +15,17 @@ export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
     constructor ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions) {
         const maskedWebSocketSubject = maskableSubject
             .asObservable()
-            .filter((message: TStringifyableJsonValue) => Object
-                .keys(mask)
-                .every((key) => {
-                    const maskValue = JSON.stringify((<IStringifyableJsonObject> mask)[key]);
-                    const messageValue = JSON.stringify((<IStringifyableJsonObject> message)[key]);
+            .pipe(
+                filter((message: TStringifyableJsonValue) => Object
+                    .keys(mask)
+                    .every((key) => {
+                        const maskValue = JSON.stringify((<IStringifyableJsonObject> mask)[key]);
+                        const messageValue = JSON.stringify((<IStringifyableJsonObject> message)[key]);
 
-                    return maskValue === messageValue;
-                }))
-            .map(({ message }: { message: TMessage }) => message);
+                        return maskValue === messageValue;
+                    })),
+                map(({ message }: { message: TMessage }) => message)
+            );
 
         super(maskableSubject, maskedWebSocketSubject);
 

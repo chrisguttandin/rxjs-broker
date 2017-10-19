@@ -6,6 +6,7 @@ import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
 import { WebSocketObservableFactory } from '../../../src/factories/web-socket-observable';
 import { WebSocketObserverFactory } from '../../../src/factories/web-socket-observer';
 import { WebSocketSubjectFactory } from '../../../src/factories/web-socket-subject';
+import { filter } from 'rxjs/operators/filter';
 
 describe('WebSocketSubject', () => {
 
@@ -30,7 +31,7 @@ describe('WebSocketSubject', () => {
     it('should allow to be used with other operators', (done) => {
         const message = 'a fake message';
         const webSocketSubscription = webSocketSubject
-            .filter(() => true)
+            .pipe(filter(() => true))
             .subscribe({
                 next (mssg) {
                     expect(mssg).to.equal(message);

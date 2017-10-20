@@ -5,7 +5,7 @@ import { DataChannelObserverFactory } from '../../../src/factories/data-channel-
 import { DataChannelSubjectFactory } from '../../../src/factories/data-channel-subject';
 import { MaskedDataChannelSubjectFactory } from '../../../src/factories/masked-data-channel-subject';
 import { ReflectiveInjector } from '@angular/core';
-import { filter } from 'rxjs/operators/filter';
+import { filter } from 'rxjs/operators';
 
 describe('DataChannelSubject', () => {
 

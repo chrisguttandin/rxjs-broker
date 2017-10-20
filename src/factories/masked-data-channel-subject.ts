@@ -1,5 +1,4 @@
-import { filter } from 'rxjs/operators/filter';
-import { map } from 'rxjs/operators/map';
+import { filter, map } from 'rxjs/operators';
 import { AnonymousSubject } from 'rxjs/Subject';
 import { IMaskableSubject, IMaskedDataChannelSubjectFactoryOptions, IStringifyableJsonObject } from '../interfaces';
 import { TParsedJsonValue, TStringifyableJsonValue } from '../types';

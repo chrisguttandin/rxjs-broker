@@ -6,7 +6,7 @@ import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
 import { WebSocketObservableFactory } from '../../../src/factories/web-socket-observable';
 import { WebSocketObserverFactory } from '../../../src/factories/web-socket-observer';
 import { WebSocketSubjectFactory } from '../../../src/factories/web-socket-subject';
-import { filter } from 'rxjs/operators/filter';
+import { filter } from 'rxjs/operators';
 
 describe('WebSocketSubject', () => {
 

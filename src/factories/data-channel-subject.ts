@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IDataChannel, IDataChannelSubjectFactoryOptions, IDataChannelSubjectOptions, IMaskableSubject } from '../interfaces';
-import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
+import {
+    IDataChannel,
+    IDataChannelSubjectFactoryOptions,
+    IDataChannelSubjectOptions,
+    IMaskableSubject,
+    IParsedJsonObject
+} from '../interfaces';
+import { TStringifyableJsonValue } from '../types';
 import { DataChannelObservableFactory } from './data-channel-observable';
 import { DataChannelObserverFactory } from './data-channel-observer';
 import { MaskedDataChannelSubject, MaskedDataChannelSubjectFactory } from './masked-data-channel-subject';
@@ -29,7 +35,7 @@ export class DataChannelSubject extends AnonymousSubject<TStringifyableJsonValue
         this._dataChannel.close();
     }
 
-    public mask <TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedDataChannelSubject<TMessage> {
+    public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedDataChannelSubject<TMessage> {
         return this._maskedDataChannelSubjectFactory.create<TMessage>({ maskableSubject: this, mask });
     }
 

@@ -1,9 +1,9 @@
-import { IMaskableSubject } from '../interfaces';
-import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
+import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
+import { TStringifyableJsonValue } from '../types';
 
 export interface IMaskedDataChannelSubjectFactoryOptions {
 
-    mask: TParsedJsonValue;
+    mask: IParsedJsonObject;
 
     maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
 

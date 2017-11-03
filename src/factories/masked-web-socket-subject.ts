@@ -1,13 +1,13 @@
 import { filter, map } from 'rxjs/operators';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions, IStringifyableJsonObject } from '../interfaces';
-import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
+import { IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
+import { TStringifyableJsonValue } from '../types';
 
 export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
         extends AnonymousSubject<TMessage>
         implements IMaskableSubject<TMessage> {
 
-    private _mask: TParsedJsonValue;
+    private _mask: IParsedJsonObject;
 
     private _maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
 
@@ -36,7 +36,7 @@ export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
         this._maskableSubject.close();
     }
 
-    public mask<TMakedMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedWebSocketSubject<TMakedMessage> {
+    public mask<TMakedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedWebSocketSubject<TMakedMessage> {
         return new MaskedWebSocketSubject<TMakedMessage>({ mask, maskableSubject: this });
     }
 

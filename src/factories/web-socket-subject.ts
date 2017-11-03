@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AnonymousSubject } from 'rxjs/Subject';
-import { IMaskableSubject, IWebSocketSubjectFactoryOptions, IWebSocketSubjectOptions } from '../interfaces';
-import { TParsedJsonValue, TStringifyableJsonValue } from '../types';
+import { IMaskableSubject, IParsedJsonObject, IWebSocketSubjectFactoryOptions, IWebSocketSubjectOptions } from '../interfaces';
+import { TStringifyableJsonValue } from '../types';
 import { MaskedWebSocketSubject, MaskedWebSocketSubjectFactory } from './masked-web-socket-subject';
 import { WebSocketObservableFactory } from './web-socket-observable';
 import { WebSocketObserverFactory } from './web-socket-observer';
@@ -29,7 +29,7 @@ export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> 
         this._webSocket.close();
     }
 
-    public mask <TMessage extends TStringifyableJsonValue> (mask: TParsedJsonValue): MaskedWebSocketSubject<TMessage> {
+    public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedWebSocketSubject<TMessage> {
         return this._maskedWebSocketSubjectFactory.create<TMessage>({ maskableSubject: this, mask });
     }
 

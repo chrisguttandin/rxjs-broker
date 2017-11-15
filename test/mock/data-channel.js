@@ -1,18 +1,36 @@
 import { spy, stub } from 'sinon';
-import EventTarget from 'event-target';
 
+// @todo This is an obviously imperfect implementation of the EventTarget.
 export class DataChannelMock {
 
     constructor () {
-        this.addEventListener = EventTarget.addEventListener;
+        const events = new Map();
+
+        this.addEventListener = (type, listener) => {
+            if (events.has(type)) {
+                events.get(type).add(listener);
+            } else {
+                events.set(type, new Set([ listener ]));
+            }
+        };
         this.bufferedAmount = 0;
         this.bufferedAmountLowThreshold = 0;
         this.close = spy();
-        this.dispatchEvent = EventTarget.dispatchEvent;
+        this.dispatchEvent = (event) => {
+            if (events.has(event.type)) {
+                events.get(event.type).forEach((listener) => {
+                    listener(event);
+                });
+            }
+        };
         this.removeEventListener = stub();
         this.send = spy();
 
-        this.removeEventListener.returns(EventTarget.removeEventListener);
+        this.removeEventListener.callsFake((type, listener) => {
+            if (events.has(type)) {
+                events.get(type).delete(listener);
+            }
+        });
     }
 
 }

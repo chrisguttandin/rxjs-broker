@@ -43,4 +43,6 @@ export const isSupported = (typeof window !== 'undefined' && 'WebSocket' in wind
 
 export { TParsedJsonValue, TStringifyableJsonValue };
 
-export const wrap = (dataChannel: IDataChannel): IMaskableSubject<IStringifyableJsonObject> => dataChannelSubjectFactory.create({ dataChannel });
+export const wrap = (dataChannel: IDataChannel): IMaskableSubject<IStringifyableJsonObject> => {
+    return dataChannelSubjectFactory.create({ dataChannel });
+};

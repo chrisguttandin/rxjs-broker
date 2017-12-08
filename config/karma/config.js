@@ -72,7 +72,7 @@ module.exports = (config) => {
 
             browsers: [
                 'ChromeCanaryHeadless',
-                'FirefoxDeveloper'
+                'FirefoxDeveloperHeadless'
             ],
 
             files: [ ...files, '../../test/integration/**/*.js' ]

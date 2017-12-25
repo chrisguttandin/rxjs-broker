@@ -58,3 +58,5 @@ export class MaskedDataChannelSubjectFactory {
     }
 
 }
+
+export const MASKED_DATA_CHANNEL_SUBJECT_FACTORY_PROVIDER = { deps: [ ], provide: MaskedDataChannelSubjectFactory };

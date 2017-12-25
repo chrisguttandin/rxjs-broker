@@ -65,3 +65,8 @@ export class WebSocketSubjectFactory {
     }
 
 }
+
+export const WEB_SOCKET_SUBJECT_FACTORY_PROVIDER = {
+    deps: [ MaskedWebSocketSubjectFactory, WebSocketObservableFactory, WebSocketObserverFactory ],
+    provide: WebSocketSubjectFactory
+};

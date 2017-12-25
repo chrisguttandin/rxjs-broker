@@ -93,3 +93,5 @@ export class DataChannelObserverFactory {
     }
 
 }
+
+export const DATA_CHANNEL_OBSERVER_FACTORY_PROVIDER = { deps: [ ], provide: DataChannelObserverFactory };

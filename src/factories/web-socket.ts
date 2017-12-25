@@ -7,3 +7,5 @@ export class WebSocketFactory {
     }
 
 }
+
+export const WEB_SOCKET_FACTORY_PROVIDER = { deps: [ ], provide: WebSocketFactory };

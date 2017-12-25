@@ -58,3 +58,5 @@ export class MaskedWebSocketSubjectFactory {
     }
 
 }
+
+export const MASKED_WEB_SOCKET_SUBJECT_FACTORY_PROVIDER = { deps: [ ], provide: MaskedWebSocketSubjectFactory };

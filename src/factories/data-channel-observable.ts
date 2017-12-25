@@ -36,3 +36,5 @@ export class DataChannelObservableFactory {
     }
 
 }
+
+export const DATA_CHANNEL_OBSERVABLE_FACTORY_PROVIDER = { deps: [ ], provide: DataChannelObservableFactory };

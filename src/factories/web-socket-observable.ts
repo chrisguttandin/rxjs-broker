@@ -36,3 +36,5 @@ export class WebSocketObservableFactory {
     }
 
 }
+
+export const WEB_SOCKET_OBSERVABLE_FACTORY_PROVIDER = { deps: [ ], provide: WebSocketObservableFactory };

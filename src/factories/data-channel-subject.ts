@@ -71,3 +71,8 @@ export class DataChannelSubjectFactory {
     }
 
 }
+
+export const DATA_CHANNEL_SUBJECT_FACTORY_PROVIDER = {
+    deps: [ DataChannelObservableFactory, DataChannelObserverFactory, MaskedDataChannelSubjectFactory ],
+    provide: DataChannelSubjectFactory
+};

@@ -1,5 +1,4 @@
-import 'core-js/es7/reflect'; // tslint:disable-line:ordered-imports
-import { Injector } from '@angular/core'; // tslint:disable-line:ordered-imports
+import { Injector } from '@angular/core';
 import { DATA_CHANNEL_OBSERVABLE_FACTORY_PROVIDER } from './factories/data-channel-observable';
 import { DATA_CHANNEL_OBSERVER_FACTORY_PROVIDER } from './factories/data-channel-observer';
 import { DATA_CHANNEL_SUBJECT_FACTORY_PROVIDER, DataChannelSubjectFactory } from './factories/data-channel-subject';

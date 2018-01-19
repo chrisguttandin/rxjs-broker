@@ -12,16 +12,16 @@ export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
     private _maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
 
     constructor ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions) {
+        const stringifiedValues = Object
+            .keys(mask)
+            .map((key) => [ key, JSON.stringify(mask[key]) ]);
+
         const maskedWebSocketSubject = maskableSubject
             .asObservable()
             .pipe(
-                filter((message: TStringifyableJsonValue) => Object
-                    .keys(mask)
-                    .every((key) => {
-                        const maskValue = JSON.stringify((<IStringifyableJsonObject> mask)[key]);
-                        const messageValue = JSON.stringify((<IStringifyableJsonObject> message)[key]);
-
-                        return maskValue === messageValue;
+                filter((message) => stringifiedValues
+                    .every(([ key, value ]) => {
+                        return (value === JSON.stringify((<IStringifyableJsonObject> message)[key]));
                     })),
                 map(({ message }: { message: TMessage }) => message)
             );

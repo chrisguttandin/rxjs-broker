@@ -49,12 +49,12 @@ export class DataChannelObserver<T> implements Observer<T> {
                         resolve();
                     };
 
-                    const handleErrorEvent = ({ error }: ErrorEvent) => {
+                    const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => {
                         this._dataChannel.removeEventListener('bufferedamountlow', handleBufferedAmountLowEvent);
                         this._dataChannel.removeEventListener('error', handleErrorEvent);
 
                         reject(error);
-                    };
+                    });
 
                     this._dataChannel.addEventListener('bufferedamountlow', handleBufferedAmountLowEvent);
                     this._dataChannel.addEventListener('error', handleErrorEvent);
@@ -65,12 +65,12 @@ export class DataChannelObserver<T> implements Observer<T> {
         }
 
         return new Promise((resolve, reject) => {
-            const handleErrorEvent = ({ error }: ErrorEvent) => {
+            const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => {
                 this._dataChannel.removeEventListener('error', handleErrorEvent);
                 this._dataChannel.removeEventListener('open', handleOpenEvent); // tslint:disable-line:no-use-before-declare
 
                 reject(error);
-            };
+            });
 
             const handleOpenEvent = () => {
                 this._dataChannel.removeEventListener('error', handleErrorEvent);

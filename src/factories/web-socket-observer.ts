@@ -31,12 +31,12 @@ export class WebSocketObserver<T> implements Observer<T> {
         }
 
         return new Promise((resolve, reject) => {
-            const handleErrorEvent = ({ error }: ErrorEvent) => {
+            const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => {
                 this._webSocket.removeEventListener('error', handleErrorEvent);
                 this._webSocket.removeEventListener('open', handleOpenEvent); // tslint:disable-line:no-use-before-declare
 
                 reject(error);
-            };
+            });
 
             const handleOpenEvent = () => {
                 this._webSocket.removeEventListener('error', handleErrorEvent);

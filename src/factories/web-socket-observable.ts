@@ -6,7 +6,7 @@ export class WebSocketObservable<T> extends Observable<T> {
     constructor ({ webSocket }: IWebSocketObservableFactoryOptions) {
         super((observer) => {
             const handleCloseEvent = () => observer.complete();
-            const handleErrorEvent = ({ error }: ErrorEvent) => observer.error(error);
+            const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => observer.error(error));
             const handleMessageEvent = ({ data }: MessageEvent) => {
                 try {
                     observer.next(JSON.parse(data));

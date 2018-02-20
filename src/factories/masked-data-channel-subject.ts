@@ -19,11 +19,11 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
         const maskedDataChannelSubject = maskableSubject
             .asObservable()
             .pipe(
-                filter((message) => stringifiedValues
+                filter<TStringifyableJsonValue, { message: TMessage }>((message): message is { message: TMessage } => stringifiedValues
                     .every(([ key, value ]) => {
                         return (value === JSON.stringify((<IStringifyableJsonObject> message)[key]));
                     })),
-                map(({ message }: { message: TMessage }) => message)
+                map(({ message }) => message)
             );
 
         super(maskableSubject, maskedDataChannelSubject);
@@ -37,7 +37,8 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
     }
 
     public mask<TMakedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedDataChannelSubject<TMakedMessage> {
-        return new MaskedDataChannelSubject<TMakedMessage>({ mask, maskableSubject: this });
+        // @todo Casting this to any is a lazy fix to make TypeScript accept this as an IMaskableSubject.
+        return new MaskedDataChannelSubject<TMakedMessage>({ mask, maskableSubject: <any> this });
     }
 
     public next (value: TMessage) {

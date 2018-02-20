@@ -28,9 +28,9 @@ const injector = Injector.create({
     ]
 });
 
-const dataChannelSubjectFactory = injector.get(DataChannelSubjectFactory);
+const dataChannelSubjectFactory = injector.get<DataChannelSubjectFactory>(DataChannelSubjectFactory);
 const webSocketFactory = injector.get(WebSocketFactory);
-const webSocketSubjectFactory = injector.get(WebSocketSubjectFactory);
+const webSocketSubjectFactory = injector.get<WebSocketSubjectFactory>(WebSocketSubjectFactory);
 
 export const connect = (url: string): IMaskableSubject<TStringifyableJsonValue> => {
     const webSocket = webSocketFactory.create({ url });

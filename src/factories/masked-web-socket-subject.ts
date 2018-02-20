@@ -46,7 +46,7 @@ export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
     }
 
     public send (value: TMessage) {
-        return this._maskableSubject.send(Object.assign({}, this._mask, { message: value }));
+        return this._maskableSubject.send({ ...this._mask, message: value });
     }
 
 }

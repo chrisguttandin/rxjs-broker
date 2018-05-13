@@ -1,5 +1,5 @@
+import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
 import { filter, map } from 'rxjs/operators';
-import { AnonymousSubject } from 'rxjs/Subject';
 import { IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from '../types';
 

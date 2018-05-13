@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AnonymousSubject } from 'rxjs/Subject';
+import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
 import {
     IDataChannel,
     IDataChannelSubjectFactoryOptions,

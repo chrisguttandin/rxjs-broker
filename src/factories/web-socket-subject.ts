@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AnonymousSubject } from 'rxjs/Subject';
+import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
 import { IMaskableSubject, IParsedJsonObject, IWebSocketSubjectFactoryOptions, IWebSocketSubjectOptions } from '../interfaces';
 import { TStringifyableJsonValue } from '../types';
 import { MaskedWebSocketSubject, MaskedWebSocketSubjectFactory } from './masked-web-socket-subject';

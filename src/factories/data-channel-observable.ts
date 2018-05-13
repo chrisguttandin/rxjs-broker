@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IDataChannelObservableFactoryOptions } from '../interfaces';
 
 export class DataChannelObservable<T> extends Observable<T> {

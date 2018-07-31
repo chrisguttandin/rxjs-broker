@@ -48,14 +48,14 @@ export const establishDataChannels = () => {
             }
         };
 
-        remotePeerConnection.createOffer((description) => {
-            remotePeerConnection.setLocalDescription(description);
+        remotePeerConnection.createOffer((offerDescription) => {
+            remotePeerConnection.setLocalDescription(offerDescription);
 
-            localPeerConnection.setRemoteDescription(description);
-            localPeerConnection.createAnswer((description) => {
-                localPeerConnection.setLocalDescription(description);
+            localPeerConnection.setRemoteDescription(offerDescription);
+            localPeerConnection.createAnswer((answerDescription) => {
+                localPeerConnection.setLocalDescription(answerDescription);
 
-                remotePeerConnection.setRemoteDescription(description);
+                remotePeerConnection.setRemoteDescription(answerDescription);
             }, (err) => reject(err));
         }, (err) => reject(err));
     });

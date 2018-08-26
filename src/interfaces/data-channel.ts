@@ -4,11 +4,11 @@ import { TBinaryType, TDataChannelState, TEventHandler } from '../types';
 
 export interface IDataChannel extends EventTarget {
 
+    binaryType: TBinaryType;
+
     readonly bufferedAmount: number;
 
     bufferedAmountLowThreshold: number;
-
-    binaryType: TBinaryType;
 
     readonly id: number;
 
@@ -34,10 +34,10 @@ export interface IDataChannel extends EventTarget {
 
     close (): void;
 
-    send (data: string | Blob | ArrayBuffer | ArrayBufferView): void;
+    onerror (event: ErrorEvent): void;
 
     onmessage (event: MessageEvent): void;
 
-    onerror (event: ErrorEvent): void;
+    send (data: string | Blob | ArrayBuffer | ArrayBufferView): void;
 
 }

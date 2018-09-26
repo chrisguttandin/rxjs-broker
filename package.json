@@ -11,7 +11,7 @@
   "dependencies": {
     "@angular/core": "^6.1.8",
     "@babel/runtime": "^7.0.0",
-    "rxjs": "^6.3.2",
+    "rxjs": "^6.3.3",
     "tslib": "^1.9.3",
     "zone.js": "^0.8.26"
   },

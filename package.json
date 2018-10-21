@@ -9,6 +9,7 @@
     }
   },
   "dependencies": {
+    "@angular/compiler": "^7.0.0",
     "@angular/core": "^7.0.0",
     "@babel/runtime": "^7.1.2",
     "rxjs": "^6.3.3",

@@ -9,8 +9,8 @@
     }
   },
   "dependencies": {
-    "@angular/compiler": "^7.0.2",
-    "@angular/core": "^7.0.2",
+    "@angular/compiler": "^7.0.3",
+    "@angular/core": "^7.0.3",
     "@babel/runtime": "^7.1.5",
     "rxjs": "^6.3.3",
     "tslib": "^1.9.3",

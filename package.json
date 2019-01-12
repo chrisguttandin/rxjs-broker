@@ -14,7 +14,7 @@
     "@babel/runtime": "^7.2.0",
     "rxjs": "^6.3.3",
     "tslib": "^1.9.3",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.27"
   },
   "description": "An rxjs message broker for WebRTC DataChannels, WebSockets and WebWorkers.",
   "devDependencies": {

@@ -24,7 +24,7 @@ import { connect, wrap } from 'rxjs-broker';
 
 ### connect(url: string): WebSocketSubject
 
-The `connect()` method takes an URL as parameter and returns a `WebSocketSubject` which extends the `AnonymousSubject` provided by RxJS. It also implements the `IMaskableSubject` interface which adds three additional methods. It gets explained in more detail below.
+The `connect()` method takes an URL as parameter and returns a `WebSocketSubject` which extends the `AnonymousSubject` provided by RxJS. It also implements the `IRemoteSubject` interface which adds two additional methods. It gets explained in more detail below.
 
 ```js
 const webSocketSubject = connect('wss://super-cool-websock.et');
@@ -32,25 +32,23 @@ const webSocketSubject = connect('wss://super-cool-websock.et');
 
 ### wrap(dataChannel: DataChannel): DataChannelSubject
 
-The `wrap()` method can be used to turn a WebRTC DataChannel into a `DataChannelSubject` which does also extend the `AnonymousSubject` and implements the `IMaskableSubject` interface.
+The `wrap()` method can be used to turn a WebRTC DataChannel into a `DataChannelSubject` which does also extend the `AnonymousSubject` and implements the `IRemoteSubject` interface.
 
 ```js
 // Let's image a variable called dataChannel containing a WebRTC DataChannel exists
 const dataChannelSubject = wrap(dataChannel);
 ```
 
-### IMaskableSubject
+### IRemoteSubject
 
-As mentioned above the `IMaskableSubject` interface is used to describe the common behavior of the `DataChannelSubject` and the `WebSocketSubject`. In TypeScript it looks like this:
+As mentioned above the `IRemoteSubject` interface is used to describe the common behavior of the `DataChannelSubject` and the `WebSocketSubject`. In TypeScript it looks like this:
 
 ```typescript
-interface IMaskableSubject {
+interface IRemoteSubject<T> {
 
     close (): void;
 
-    mask (mask): IMaskableSubject;
-
-    send (message): Promise<any>;
+    send (message: T): Promise<void>;
 
 }
 ```
@@ -59,7 +57,17 @@ interface IMaskableSubject {
 
 The `close()` method is meant to close the underlying WebSocket.
 
-#### mask(mask): IMaskableSubject
+#### send(message): Promise<void>
+
+The `send()` method is basically a supercharged version of `next()`. It will stringify a given JSON message before sending it and returns a `Promise` which resolves when the message is actually on it's way.
+
+### mask(mask, maskableSubject): IRemoteSubject
+
+`rxjs-broker` does also provide another standalone function called `mask()`. It can be imported like that.
+
+```js
+import { mask } from 'rxjs-broker';
+```
 
 The `mask()` method takes a JSON object which gets used to extract incoming data and two enhance outgoing data. If there is for example a DataChannel which receives two types of message: control messages and measurement messages. They might look somehow like this:
 
@@ -84,20 +92,18 @@ The `mask()` method takes a JSON object which gets used to extract incoming data
 In case you are not interested in the messages of type control and only want to receive and send messages of type measurement, you can use `mask()` to achieve exactly that.
 
 ```js
-const maskedSubject = maskableSubject.mask({ type: 'measurement' });
+const maskedSubject = mask({ type: 'measurement' }, dataChannelSubject);
 
 // Will receive unwrapped messages like { temperature: '30°' }.
 maskedSubject.subscribe((message) => {
-    ...
+    // ...
 });
 ```
 
-#### send(message): Promise<any>
-
-The `send()` method is basically a supercharged version of `next()`. It will stringify a given JSON message before sending it and returns a `Promise` which resolves when the message is actually on it's way. It also wraps the message with the provided mask. Considering the example introduced above, the usage of the `send()` method will look like this:
+When you call `next()` or `send()` on the returned `IRemoteSubject` it also wraps the message with the provided mask. Considering the example introduced above, the usage of the `send()` method will look like this:
 
 ```js
-const maskedSubject = maskableSubject.mask({ type: 'measurement' });
+const maskedSubject = mask({ type: 'measurement' }, dataChannelSubject);
 
 // Will send wrapped messages like { type: 'measurement', message: { temperature: '30°' } }.
 maskedSubject.send({ temperature: '30°' });

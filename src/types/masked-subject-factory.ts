@@ -1,8 +1,7 @@
-import { MaskedSubject } from '../classes/masked-subject';
-import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
+import { IRemoteSubject, IStringifyableJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from './stringifyable-json-value';
 
-export type TMaskedSubjectFactory = <T extends TStringifyableJsonValue>(
-    mask: IParsedJsonObject,
-    maskableSubject: IMaskableSubject<TStringifyableJsonValue>
-) => MaskedSubject<T>;
+export type TMaskedSubjectFactory = <T extends TStringifyableJsonValue, U extends IStringifyableJsonObject & { message: T } = IStringifyableJsonObject & { message: T }, V extends IStringifyableJsonObject | U = IStringifyableJsonObject | U>( // tslint:disable-line max-line-length
+    mask: Partial<Pick<U, Exclude<keyof U, 'message'>>>,
+    maskableSubject: IRemoteSubject<V>
+) => IRemoteSubject<T>;

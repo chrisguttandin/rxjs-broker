@@ -5,7 +5,7 @@ import { createMaskedSubject } from './factories/masked-subject';
 import { createWebSocketObservable } from './factories/web-socket-observable';
 import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
-import { IMaskableSubject } from './interfaces';
+import { IRemoteSubject } from './interfaces';
 import { TStringifyableJsonValue } from './types';
 
 export * from './interfaces';
@@ -13,16 +13,14 @@ export * from './types';
 
 const createDataChannelSubject = createDataChannelSubjectFactory(
     createDataChannelObservable,
-    createDataChannelObserver,
-    createMaskedSubject
+    createDataChannelObserver
 );
 const createWebSocketSubject = createWebSocketSubjectFactory(
-    createMaskedSubject,
     createWebSocketObservable,
     createWebSocketObserver
 );
 
-export const connect = (url: string): IMaskableSubject<TStringifyableJsonValue> => {
+export const connect = <T extends TStringifyableJsonValue>(url: string): IRemoteSubject<T> => {
     return createWebSocketSubject(new WebSocket(url));
 };
 
@@ -31,6 +29,8 @@ export const connect = (url: string): IMaskableSubject<TStringifyableJsonValue> 
  */
 export const isSupported = (typeof window !== 'undefined' && 'WebSocket' in window);
 
-export const wrap = (dataChannel: RTCDataChannel): IMaskableSubject<TStringifyableJsonValue> => {
+export { createMaskedSubject as mask };
+
+export const wrap = <T extends TStringifyableJsonValue>(dataChannel: RTCDataChannel): IRemoteSubject<T> => {
     return createDataChannelSubject(dataChannel);
 };

@@ -2,7 +2,6 @@ import { DataChannelMock } from '../../mock/data-channel';
 import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
 import { createDataChannelObservable } from '../../../src/factories/data-channel-observable';
 import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
-import { createMaskedSubject } from '../../../src/factories/masked-subject';
 import { filter } from 'rxjs/operators';
 
 describe('DataChannelSubject', () => {
@@ -15,7 +14,6 @@ describe('DataChannelSubject', () => {
         dataChannelSubject = new DataChannelSubject(
             createDataChannelObservable,
             createDataChannelObserver,
-            createMaskedSubject,
             dataChannel
         );
     });
@@ -44,55 +42,6 @@ describe('DataChannelSubject', () => {
 
             expect(dataChannel.close).to.have.been.calledOnce;
             expect(dataChannel.close).to.have.been.calledWithExactly();
-        });
-
-    });
-
-    describe('mask()', () => {
-
-        let message;
-
-        beforeEach(() => {
-            message = { a: 'fake message' };
-
-            dataChannelSubject = dataChannelSubject.mask({ a: { fake: 'mask' } });
-        });
-
-        it('should augment messages with the mask when calling next()', () => {
-            dataChannel.readyState = 'open';
-
-            dataChannelSubject.next(message);
-
-            expect(dataChannel.send).to.have.been.calledOnce;
-            expect(dataChannel.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
-        });
-
-        it('should augment messages with the mask when calling send()', (done) => {
-            dataChannel.readyState = 'open';
-
-            dataChannelSubject
-                .send(message)
-                .then(() => {
-                    expect(dataChannel.send).to.have.been.calledOnce;
-                    expect(dataChannel.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
-
-                    done();
-                });
-        });
-
-        it('should filter messages by the mask', (done) => {
-            const dataChannelSubscription = dataChannelSubject
-                .subscribe({
-                    next (mssg) {
-                        expect(mssg).to.equal(message);
-
-                        dataChannelSubscription.unsubscribe();
-
-                        done();
-                    }
-                });
-
-            dataChannel.dispatchEvent({ data: { a: { fake: 'mask' }, message }, type: 'message' });
         });
 
     });

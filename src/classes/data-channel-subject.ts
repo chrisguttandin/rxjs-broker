@@ -1,41 +1,26 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
-import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
-import {
-    TDataChannelObservableFactory,
-    TDataChannelObserverFactory,
-    TMaskedSubjectFactory,
-    TStringifyableJsonValue
-} from '../types';
-import { MaskedSubject } from './masked-subject';
+import { IRemoteSubject } from '../interfaces';
+import { TDataChannelObservableFactory, TDataChannelObserverFactory, TStringifyableJsonValue } from '../types';
 
-export class DataChannelSubject extends AnonymousSubject<TStringifyableJsonValue> implements IMaskableSubject<TStringifyableJsonValue> {
-
-    private _createMaskedSubject: TMaskedSubjectFactory;
+export class DataChannelSubject<T extends TStringifyableJsonValue> extends AnonymousSubject<T> implements IRemoteSubject<T> {
 
     private _dataChannel: RTCDataChannel;
 
     constructor (
         createDataChannelObservable: TDataChannelObservableFactory,
         createDataChannelObserver: TDataChannelObserverFactory,
-        createMaskedSubject: TMaskedSubjectFactory,
         dataChannel: RTCDataChannel
     ) {
-        const observable = createDataChannelObservable<TStringifyableJsonValue>(dataChannel);
-
-        const observer = createDataChannelObserver<TStringifyableJsonValue>(dataChannel);
+        const observable = createDataChannelObservable<T>(dataChannel);
+        const observer = createDataChannelObserver<T>(dataChannel);
 
         super(observer, observable);
 
-        this._createMaskedSubject = createMaskedSubject;
         this._dataChannel = dataChannel;
     }
 
     public close () {
         this._dataChannel.close();
-    }
-
-    public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedSubject<TMessage> {
-        return this._createMaskedSubject<TMessage>(mask, this);
     }
 
     public send (message: TStringifyableJsonValue) {

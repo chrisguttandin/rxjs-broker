@@ -1,4 +1,4 @@
-import { connect, isSupported, wrap } from '../../src/module';
+import { connect, isSupported, mask, wrap } from '../../src/module';
 import { establishDataChannels } from '../helper/establish-data-channels';
 
 describe('module', () => {
@@ -42,8 +42,7 @@ describe('module', () => {
         it('should connect to a WebSocket and send and receive a masked messagge', function (done) {
             this.timeout(10000);
 
-            webSocketSubject = webSocketSubject
-                .mask({ a: 'fake mask' });
+            webSocketSubject = mask({ a: 'fake mask' }, webSocketSubject);
 
             webSocketSubject
                 .subscribe({
@@ -60,9 +59,7 @@ describe('module', () => {
         it('should connect to a WebSocket and send and receive a deeply masked messagge', function (done) {
             this.timeout(10000);
 
-            webSocketSubject = webSocketSubject
-                .mask({ a: 'fake mask' })
-                .mask({ another: 'fake mask' });
+            webSocketSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, webSocketSubject));
 
             webSocketSubject
                 .subscribe({
@@ -75,6 +72,12 @@ describe('module', () => {
 
             webSocketSubject.send(message);
         });
+
+    });
+
+    describe('mask()', () => {
+
+        // @todo
 
     });
 
@@ -123,8 +126,7 @@ describe('module', () => {
             it('should send and receive a messagge through a masked data channel', function (done) {
                 this.timeout(10000);
 
-                dataChannelSubject = dataChannelSubject
-                    .mask({ a: 'fake mask' });
+                dataChannelSubject = mask({ a: 'fake mask' }, dataChannelSubject);
 
                 dataChannelSubject
                     .subscribe({
@@ -147,9 +149,7 @@ describe('module', () => {
             it('should send and receive a messagge through a deeply masked data channel', function (done) {
                 this.timeout(10000);
 
-                dataChannelSubject = dataChannelSubject
-                    .mask({ a: 'fake mask' })
-                    .mask({ another: 'fake mask' });
+                dataChannelSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, dataChannelSubject));
 
                 dataChannelSubject
                     .subscribe({
@@ -176,8 +176,7 @@ describe('module', () => {
             it('should send and receive an empty messagge through a masked data channel', function (done) {
                 this.timeout(10000);
 
-                dataChannelSubject = dataChannelSubject
-                    .mask({ a: 'fake mask' });
+                dataChannelSubject = mask({ a: 'fake mask' }, dataChannelSubject);
 
                 dataChannelSubject
                     .subscribe({

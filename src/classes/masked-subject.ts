@@ -1,32 +1,36 @@
+import { Observable, Observer } from 'rxjs';
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
 import { filter, map } from 'rxjs/operators';
-import { IMaskableSubject, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
+import { IRemoteSubject, IStringifyableJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from '../types';
 
-export class MaskedSubject<TMessage extends TStringifyableJsonValue>
-        extends AnonymousSubject<TMessage>
-        implements IMaskableSubject<TMessage> {
+export class MaskedSubject<T extends TStringifyableJsonValue, U extends IStringifyableJsonObject & { message: T }, V extends IStringifyableJsonObject | U> // tslint:disable-line max-line-length
+        extends AnonymousSubject<T>
+        implements IRemoteSubject<T> {
 
-    private _mask: IParsedJsonObject;
+    private _mask: Partial<Pick<U, Exclude<keyof U, 'message'>>>;
 
-    private _maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
+    private _maskableSubject: IRemoteSubject<V>;
 
-    constructor (mask: IParsedJsonObject, maskableSubject: IMaskableSubject<TStringifyableJsonValue>) {
+    constructor (mask: Partial<Pick<U, Exclude<keyof U, 'message'>>>, maskableSubject: IRemoteSubject<V>) {
+        const destination: Observer<T> = {
+            complete: maskableSubject.complete,
+            error: maskableSubject.error,
+            next: (value) => this.send(value)
+        };
+
         const stringifiedValues = Object
             .keys(mask)
             .map((key) => [ key, JSON.stringify(mask[key]) ]);
 
-        const maskedSubject = maskableSubject
-            .asObservable()
+        const source: Observable<T> = (<Observable<U>> maskableSubject)
             .pipe(
-                filter<TStringifyableJsonValue, { message: TMessage }>((message): message is { message: TMessage } => stringifiedValues
-                    .every(([ key, value ]) => {
-                        return (value === JSON.stringify((<IStringifyableJsonObject> message)[key]));
-                    })),
+                filter((message): message is U => stringifiedValues
+                    .every(([ key, value ]) => (value === JSON.stringify(message[key])))),
                 map(({ message }) => message)
             );
 
-        super(maskableSubject, maskedSubject);
+        super(destination, source);
 
         this._mask = mask;
         this._maskableSubject = maskableSubject;
@@ -36,17 +40,8 @@ export class MaskedSubject<TMessage extends TStringifyableJsonValue>
         this._maskableSubject.close();
     }
 
-    public mask<TMaskedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedSubject<TMaskedMessage> {
-        // @todo Casting this to any is a lazy fix to make TypeScript accept this as an IMaskableSubject.
-        return new MaskedSubject<TMaskedMessage>(mask, <any> this);
-    }
-
-    public next (value: TMessage) {
-        this.send(value);
-    }
-
-    public send (value: TMessage) {
-        return this._maskableSubject.send({ ...this._mask, message: value });
+    public send (value: T) {
+        return this._maskableSubject.send(<V> { ...this._mask, message: value });
     }
 
 }

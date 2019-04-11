@@ -1,4 +1,3 @@
-export * from './data-channel';
 export * from './maskable-subject';
 export * from './parsed-json-array';
 export * from './parsed-json-object';

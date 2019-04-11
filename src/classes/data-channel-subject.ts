@@ -1,5 +1,5 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
-import { IDataChannel, IMaskableSubject, IParsedJsonObject } from '../interfaces';
+import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
 import {
     TDataChannelObservableFactory,
     TDataChannelObserverFactory,
@@ -12,13 +12,13 @@ export class DataChannelSubject extends AnonymousSubject<TStringifyableJsonValue
 
     private _createMaskedDataChannelSubject: TMaskedDataChannelSubjectFactory;
 
-    private _dataChannel: IDataChannel;
+    private _dataChannel: RTCDataChannel;
 
     constructor (
         createDataChannelObservable: TDataChannelObservableFactory,
         createDataChannelObserver: TDataChannelObserverFactory,
         createMaskedDataChannelSubject: TMaskedDataChannelSubjectFactory,
-        dataChannel: IDataChannel
+        dataChannel: RTCDataChannel
     ) {
         const observable = createDataChannelObservable<TStringifyableJsonValue>(dataChannel);
 

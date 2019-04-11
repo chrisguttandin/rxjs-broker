@@ -6,7 +6,7 @@ import { createMaskedWebSocketSubject } from './factories/masked-web-socket-subj
 import { createWebSocketObservable } from './factories/web-socket-observable';
 import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
-import { IDataChannel, IMaskableSubject } from './interfaces';
+import { IMaskableSubject } from './interfaces';
 import { TStringifyableJsonValue } from './types';
 
 export * from './interfaces';
@@ -32,6 +32,6 @@ export const connect = (url: string): IMaskableSubject<TStringifyableJsonValue> 
  */
 export const isSupported = (typeof window !== 'undefined' && 'WebSocket' in window);
 
-export const wrap = (dataChannel: IDataChannel): IMaskableSubject<TStringifyableJsonValue> => {
+export const wrap = (dataChannel: RTCDataChannel): IMaskableSubject<TStringifyableJsonValue> => {
     return createDataChannelSubject(dataChannel);
 };

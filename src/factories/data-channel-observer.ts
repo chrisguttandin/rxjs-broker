@@ -1,12 +1,7 @@
 import { DataChannelObserver } from '../classes/data-channel-observer';
-import { IDataChannelObserverFactoryOptions } from '../interfaces';
+import { IDataChannel } from '../interfaces';
+import { TDataChannelObserverFactory } from '../types';
 
-export class DataChannelObserverFactory {
-
-    public create<T> ({ dataChannel }: IDataChannelObserverFactoryOptions) {
-        return new DataChannelObserver<T>({ dataChannel });
-    }
-
-}
-
-export const DATA_CHANNEL_OBSERVER_FACTORY_PROVIDER = { deps: [ ], provide: DataChannelObserverFactory };
+export const createDataChannelObserver: TDataChannelObserverFactory = <T>(dataChannel: IDataChannel) => {
+    return new DataChannelObserver<T>(dataChannel);
+};

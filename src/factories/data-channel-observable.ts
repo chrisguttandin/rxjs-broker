@@ -1,12 +1,7 @@
 import { DataChannelObservable } from '../classes/data-channel-observable';
-import { IDataChannelObservableFactoryOptions } from '../interfaces';
+import { IDataChannel } from '../interfaces';
+import { TDataChannelObservableFactory } from '../types';
 
-export class DataChannelObservableFactory {
-
-    public create<T> ({ dataChannel }: IDataChannelObservableFactoryOptions) {
-        return new DataChannelObservable<T>({ dataChannel });
-    }
-
-}
-
-export const DATA_CHANNEL_OBSERVABLE_FACTORY_PROVIDER = { deps: [ ], provide: DataChannelObservableFactory };
+export const createDataChannelObservable: TDataChannelObservableFactory = <T>(dataChannel: IDataChannel) => {
+    return new DataChannelObservable<T>(dataChannel);
+};

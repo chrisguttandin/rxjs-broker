@@ -1,11 +1,10 @@
 import { Observer } from 'rxjs';
-import { IWebSocketObserverFactoryOptions } from '../interfaces';
 
 export class WebSocketObserver<T> implements Observer<T> {
 
     private _webSocket: WebSocket;
 
-    constructor ({ webSocket }: IWebSocketObserverFactoryOptions) {
+    constructor (webSocket: WebSocket) {
         this._webSocket = webSocket;
     }
 

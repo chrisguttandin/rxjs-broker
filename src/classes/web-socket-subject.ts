@@ -1,25 +1,27 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
-import { MaskedWebSocketSubjectFactory } from '../factories/masked-web-socket-subject';
-import { IMaskableSubject, IParsedJsonObject, IWebSocketSubjectOptions } from '../interfaces';
-import { TStringifyableJsonValue } from '../types';
+import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
+import { TMaskedWebSocketSubjectFactory, TStringifyableJsonValue, TWebSocketObservableFactory, TWebSocketObserverFactory } from '../types';
 import { MaskedWebSocketSubject } from './masked-web-socket-subject';
 
 export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> implements IMaskableSubject<TStringifyableJsonValue> {
 
-    private _maskedWebSocketSubjectFactory: MaskedWebSocketSubjectFactory;
+    private _createMaskedWebSocketSubject: TMaskedWebSocketSubjectFactory;
 
     private _webSocket: WebSocket;
 
-    constructor ({
-        maskedWebSocketSubjectFactory, webSocket, webSocketObservableFactory, webSocketObserverFactory
-    }: IWebSocketSubjectOptions) {
-        const observable = webSocketObservableFactory.create<TStringifyableJsonValue>({ webSocket });
+    constructor (
+        createWebSocketObservable: TWebSocketObservableFactory,
+        createWebSocketObserver: TWebSocketObserverFactory,
+        createMaskedWebSocketSubject: TMaskedWebSocketSubjectFactory,
+        webSocket: WebSocket
+    ) {
+        const observable = createWebSocketObservable<TStringifyableJsonValue>(webSocket);
 
-        const observer = webSocketObserverFactory.create<TStringifyableJsonValue>({ webSocket });
+        const observer = createWebSocketObserver<TStringifyableJsonValue>(webSocket);
 
         super(observer, observable);
 
-        this._maskedWebSocketSubjectFactory = maskedWebSocketSubjectFactory;
+        this._createMaskedWebSocketSubject = createMaskedWebSocketSubject;
         this._webSocket = webSocket;
     }
 
@@ -28,7 +30,7 @@ export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> 
     }
 
     public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedWebSocketSubject<TMessage> {
-        return this._maskedWebSocketSubjectFactory.create<TMessage>({ maskableSubject: this, mask });
+        return this._createMaskedWebSocketSubject<TMessage>(mask, this);
     }
 
     public send (message: TStringifyableJsonValue) {

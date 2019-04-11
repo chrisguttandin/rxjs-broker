@@ -1,6 +1,6 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
 import { filter, map } from 'rxjs/operators';
-import { IMaskableSubject, IMaskedWebSocketSubjectFactoryOptions, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
+import { IMaskableSubject, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from '../types';
 
 export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
@@ -11,7 +11,7 @@ export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
 
     private _maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
 
-    constructor ({ mask, maskableSubject }: IMaskedWebSocketSubjectFactoryOptions) {
+    constructor (mask: IParsedJsonObject, maskableSubject: IMaskableSubject<TStringifyableJsonValue>) {
         const stringifiedValues = Object
             .keys(mask)
             .map((key) => [ key, JSON.stringify(mask[key]) ]);
@@ -38,7 +38,7 @@ export class MaskedWebSocketSubject<TMessage extends TStringifyableJsonValue>
 
     public mask<TMakedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedWebSocketSubject<TMakedMessage> {
         // @todo Casting this to any is a lazy fix to make TypeScript accept this as an IMaskableSubject.
-        return new MaskedWebSocketSubject<TMakedMessage>({ mask, maskableSubject: <any> this });
+        return new MaskedWebSocketSubject<TMakedMessage>(mask, <any> this);
     }
 
     public next (value: TMessage) {

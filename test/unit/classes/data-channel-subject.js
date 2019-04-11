@@ -1,10 +1,8 @@
-import 'core-js/es7/reflect';
 import { DataChannelMock } from '../../mock/data-channel';
-import { DataChannelObservableFactory } from '../../../src/factories/data-channel-observable';
-import { DataChannelObserverFactory } from '../../../src/factories/data-channel-observer';
-import { DataChannelSubjectFactory } from '../../../src/factories/data-channel-subject';
-import { MaskedDataChannelSubjectFactory } from '../../../src/factories/masked-data-channel-subject';
-import { ReflectiveInjector } from '@angular/core';
+import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
+import { createDataChannelObservable } from '../../../src/factories/data-channel-observable';
+import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
+import { createMaskedDataChannelSubject } from '../../../src/factories/masked-data-channel-subject';
 import { filter } from 'rxjs/operators';
 
 describe('DataChannelSubject', () => {
@@ -13,16 +11,13 @@ describe('DataChannelSubject', () => {
     let dataChannelSubject;
 
     beforeEach(() => {
-        const injector = ReflectiveInjector.resolveAndCreate([
-            DataChannelObservableFactory,
-            DataChannelObserverFactory,
-            DataChannelSubjectFactory,
-            MaskedDataChannelSubjectFactory
-        ]);
-        const dataChannelSubjectFactory = injector.get(DataChannelSubjectFactory);
-
         dataChannel = new DataChannelMock();
-        dataChannelSubject = dataChannelSubjectFactory.create({ dataChannel });
+        dataChannelSubject = new DataChannelSubject(
+            createDataChannelObservable,
+            createDataChannelObserver,
+            createMaskedDataChannelSubject,
+            dataChannel
+        );
     });
 
     it('should allow to be used with other operators', (done) => {

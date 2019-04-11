@@ -1,5 +1,5 @@
 import { Observer } from 'rxjs';
-import { IDataChannel, IDataChannelObserverFactoryOptions } from '../interfaces';
+import { IDataChannel } from '../interfaces';
 
 const BUFFERED_AMOUNT_LOW_THRESHOLD = 2048;
 
@@ -9,7 +9,7 @@ export class DataChannelObserver<T> implements Observer<T> {
 
     private _isSupportingBufferedAmountLowThreshold: boolean;
 
-    constructor ({ dataChannel }: IDataChannelObserverFactoryOptions) {
+    constructor (dataChannel: IDataChannel) {
         this._dataChannel = dataChannel;
 
         if (typeof dataChannel.bufferedAmountLowThreshold === 'number') {

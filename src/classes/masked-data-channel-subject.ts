@@ -1,6 +1,6 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
 import { filter, map } from 'rxjs/operators';
-import { IMaskableSubject, IMaskedDataChannelSubjectFactoryOptions, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
+import { IMaskableSubject, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from '../types';
 
 export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
@@ -11,7 +11,7 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
 
     private _maskableSubject: IMaskableSubject<TStringifyableJsonValue>;
 
-    constructor ({ mask, maskableSubject }: IMaskedDataChannelSubjectFactoryOptions) {
+    constructor (mask: IParsedJsonObject, maskableSubject: IMaskableSubject<TStringifyableJsonValue>) {
         const stringifiedValues = Object
             .keys(mask)
             .map((key) => [ key, JSON.stringify(mask[key]) ]);
@@ -38,7 +38,7 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
 
     public mask<TMakedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedDataChannelSubject<TMakedMessage> {
         // @todo Casting this to any is a lazy fix to make TypeScript accept this as an IMaskableSubject.
-        return new MaskedDataChannelSubject<TMakedMessage>({ mask, maskableSubject: <any> this });
+        return new MaskedDataChannelSubject<TMakedMessage>(mask, <any> this);
     }
 
     public next (value: TMessage) {

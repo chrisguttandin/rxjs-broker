@@ -1,12 +1,6 @@
 import { WebSocketObserver } from '../classes/web-socket-observer';
-import { IWebSocketObserverFactoryOptions } from '../interfaces';
+import { TWebSocketObserverFactory } from '../types';
 
-export class WebSocketObserverFactory {
-
-    public create<T> ({ webSocket }: IWebSocketObserverFactoryOptions) {
-        return new WebSocketObserver<T>({ webSocket });
-    }
-
-}
-
-export const WEB_SOCKET_OBSERVER_FACTORY_PROVIDER = { deps: [ ], provide: WebSocketObserverFactory };
+export const createWebSocketObserver: TWebSocketObserverFactory = <T>(webSocket: WebSocket) => {
+    return new WebSocketObserver<T>(webSocket);
+};

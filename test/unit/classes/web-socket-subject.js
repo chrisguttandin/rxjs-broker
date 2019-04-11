@@ -1,11 +1,8 @@
-import 'core-js/es7/reflect';
-import { MaskedWebSocketSubjectFactory } from '../../../src/factories/masked-web-socket-subject';
-import { ReflectiveInjector } from '@angular/core';
-import { WebSocketFactory } from '../../../src/factories/web-socket';
-import { WebSocketFactoryMock } from '../../mock/web-socket-factory';
-import { WebSocketObservableFactory } from '../../../src/factories/web-socket-observable';
-import { WebSocketObserverFactory } from '../../../src/factories/web-socket-observer';
-import { WebSocketSubjectFactory } from '../../../src/factories/web-socket-subject';
+import { WebSocketMock } from '../../mock/web-socket';
+import { WebSocketSubject } from '../../../src/classes/web-socket-subject';
+import { createMaskedWebSocketSubject } from '../../../src/factories/masked-web-socket-subject';
+import { createWebSocketObservable } from '../../../src/factories/web-socket-observable';
+import { createWebSocketObserver } from '../../../src/factories/web-socket-observer';
 import { filter } from 'rxjs/operators';
 
 describe('WebSocketSubject', () => {
@@ -14,18 +11,13 @@ describe('WebSocketSubject', () => {
     let webSocketSubject;
 
     beforeEach(() => {
-        const injector = ReflectiveInjector.resolveAndCreate([
-            MaskedWebSocketSubjectFactory,
-            { provide: WebSocketFactory, useClass: WebSocketFactoryMock },
-            WebSocketObservableFactory,
-            WebSocketObserverFactory,
-            WebSocketSubjectFactory
-        ]);
-        const webSocketFactory = injector.get(WebSocketFactory);
-        const webSocketSubjectFactory = injector.get(WebSocketSubjectFactory);
-
-        webSocket = webSocketFactory.create();
-        webSocketSubject = webSocketSubjectFactory.create({ webSocket });
+        webSocket = new WebSocketMock();
+        webSocketSubject = new WebSocketSubject(
+            createWebSocketObservable,
+            createWebSocketObserver,
+            createMaskedWebSocketSubject,
+            webSocket
+        );
     });
 
     it('should allow to be used with other operators', (done) => {

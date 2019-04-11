@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
-import { IDataChannelObservableFactoryOptions } from '../interfaces';
+import { IDataChannel } from '../interfaces';
 
 export class DataChannelObservable<T> extends Observable<T> {
 
-    constructor ({ dataChannel }: IDataChannelObservableFactoryOptions) {
+    constructor (dataChannel: IDataChannel) {
         super((observer) => {
             const handleCloseEvent = () => observer.complete();
             const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => observer.error(error));

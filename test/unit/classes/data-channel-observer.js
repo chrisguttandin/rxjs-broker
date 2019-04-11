@@ -1,7 +1,5 @@
-import 'core-js/es7/reflect';
 import { DataChannelMock } from '../../mock/data-channel';
-import { DataChannelObserverFactory } from '../../../src/factories/data-channel-observer';
-import { ReflectiveInjector } from '@angular/core';
+import { DataChannelObserver } from '../../../src/classes/data-channel-observer';
 
 describe('DataChannelObserver', () => {
 
@@ -9,13 +7,8 @@ describe('DataChannelObserver', () => {
     let dataChannelObserver;
 
     beforeEach(() => {
-        const injector = ReflectiveInjector.resolveAndCreate([
-            DataChannelObserverFactory
-        ]);
-        const dataChannelObserverFactory = injector.get(DataChannelObserverFactory);
-
         dataChannel = new DataChannelMock();
-        dataChannelObserver = dataChannelObserverFactory.create({ dataChannel });
+        dataChannelObserver = new DataChannelObserver(dataChannel);
     });
 
     describe('next()', () => {

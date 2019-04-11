@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs';
-import { IWebSocketObservableFactoryOptions } from '../interfaces';
 
 export class WebSocketObservable<T> extends Observable<T> {
 
-    constructor ({ webSocket }: IWebSocketObservableFactoryOptions) {
+    constructor (webSocket: WebSocket) {
         super((observer) => {
             const handleCloseEvent = () => observer.complete();
             const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => observer.error(error));

@@ -1,8 +1,7 @@
 import { createDataChannelObservable } from './factories/data-channel-observable';
 import { createDataChannelObserver } from './factories/data-channel-observer';
 import { createDataChannelSubjectFactory } from './factories/data-channel-subject-factory';
-import { createMaskedDataChannelSubject } from './factories/masked-data-channel-subject';
-import { createMaskedWebSocketSubject } from './factories/masked-web-socket-subject';
+import { createMaskedSubject } from './factories/masked-subject';
 import { createWebSocketObservable } from './factories/web-socket-observable';
 import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
@@ -15,12 +14,12 @@ export * from './types';
 const createDataChannelSubject = createDataChannelSubjectFactory(
     createDataChannelObservable,
     createDataChannelObserver,
-    createMaskedDataChannelSubject
+    createMaskedSubject
 );
 const createWebSocketSubject = createWebSocketSubjectFactory(
+    createMaskedSubject,
     createWebSocketObservable,
-    createWebSocketObserver,
-    createMaskedWebSocketSubject
+    createWebSocketObserver
 );
 
 export const connect = (url: string): IMaskableSubject<TStringifyableJsonValue> => {

@@ -1,8 +1,8 @@
-import { MaskedDataChannelSubject } from '../classes/masked-data-channel-subject';
+import { MaskedSubject } from '../classes/masked-subject';
 import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from './stringifyable-json-value';
 
-export type TMaskedDataChannelSubjectFactory = <T extends TStringifyableJsonValue>(
+export type TMaskedSubjectFactory = <T extends TStringifyableJsonValue>(
     mask: IParsedJsonObject,
     maskableSubject: IMaskableSubject<TStringifyableJsonValue>
-) => MaskedDataChannelSubject<T>;
+) => MaskedSubject<T>;

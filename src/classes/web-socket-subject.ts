@@ -1,18 +1,18 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
 import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
-import { TMaskedWebSocketSubjectFactory, TStringifyableJsonValue, TWebSocketObservableFactory, TWebSocketObserverFactory } from '../types';
-import { MaskedWebSocketSubject } from './masked-web-socket-subject';
+import { TMaskedSubjectFactory, TStringifyableJsonValue, TWebSocketObservableFactory, TWebSocketObserverFactory } from '../types';
+import { MaskedSubject } from './masked-subject';
 
 export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> implements IMaskableSubject<TStringifyableJsonValue> {
 
-    private _createMaskedWebSocketSubject: TMaskedWebSocketSubjectFactory;
+    private _createMaskedSubject: TMaskedSubjectFactory;
 
     private _webSocket: WebSocket;
 
     constructor (
+        createMaskedSubject: TMaskedSubjectFactory,
         createWebSocketObservable: TWebSocketObservableFactory,
         createWebSocketObserver: TWebSocketObserverFactory,
-        createMaskedWebSocketSubject: TMaskedWebSocketSubjectFactory,
         webSocket: WebSocket
     ) {
         const observable = createWebSocketObservable<TStringifyableJsonValue>(webSocket);
@@ -21,7 +21,7 @@ export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> 
 
         super(observer, observable);
 
-        this._createMaskedWebSocketSubject = createMaskedWebSocketSubject;
+        this._createMaskedSubject = createMaskedSubject;
         this._webSocket = webSocket;
     }
 
@@ -29,8 +29,8 @@ export class WebSocketSubject extends AnonymousSubject<TStringifyableJsonValue> 
         this._webSocket.close();
     }
 
-    public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedWebSocketSubject<TMessage> {
-        return this._createMaskedWebSocketSubject<TMessage>(mask, this);
+    public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedSubject<TMessage> {
+        return this._createMaskedSubject<TMessage>(mask, this);
     }
 
     public send (message: TStringifyableJsonValue) {

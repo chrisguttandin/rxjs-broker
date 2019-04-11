@@ -2,7 +2,7 @@ import { DataChannelMock } from '../../mock/data-channel';
 import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
 import { createDataChannelObservable } from '../../../src/factories/data-channel-observable';
 import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
-import { createMaskedDataChannelSubject } from '../../../src/factories/masked-data-channel-subject';
+import { createMaskedSubject } from '../../../src/factories/masked-subject';
 import { filter } from 'rxjs/operators';
 
 describe('DataChannelSubject', () => {
@@ -15,7 +15,7 @@ describe('DataChannelSubject', () => {
         dataChannelSubject = new DataChannelSubject(
             createDataChannelObservable,
             createDataChannelObserver,
-            createMaskedDataChannelSubject,
+            createMaskedSubject,
             dataChannel
         );
     });

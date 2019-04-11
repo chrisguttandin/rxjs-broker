@@ -3,7 +3,7 @@ import { filter, map } from 'rxjs/operators';
 import { IMaskableSubject, IParsedJsonObject, IStringifyableJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from '../types';
 
-export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
+export class MaskedSubject<TMessage extends TStringifyableJsonValue>
         extends AnonymousSubject<TMessage>
         implements IMaskableSubject<TMessage> {
 
@@ -16,7 +16,7 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
             .keys(mask)
             .map((key) => [ key, JSON.stringify(mask[key]) ]);
 
-        const maskedDataChannelSubject = maskableSubject
+        const maskedSubject = maskableSubject
             .asObservable()
             .pipe(
                 filter<TStringifyableJsonValue, { message: TMessage }>((message): message is { message: TMessage } => stringifiedValues
@@ -26,7 +26,7 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
                 map(({ message }) => message)
             );
 
-        super(maskableSubject, maskedDataChannelSubject);
+        super(maskableSubject, maskedSubject);
 
         this._mask = mask;
         this._maskableSubject = maskableSubject;
@@ -36,9 +36,9 @@ export class MaskedDataChannelSubject<TMessage extends TStringifyableJsonValue>
         this._maskableSubject.close();
     }
 
-    public mask<TMakedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedDataChannelSubject<TMakedMessage> {
+    public mask<TMakedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedSubject<TMakedMessage> {
         // @todo Casting this to any is a lazy fix to make TypeScript accept this as an IMaskableSubject.
-        return new MaskedDataChannelSubject<TMakedMessage>(mask, <any> this);
+        return new MaskedSubject<TMakedMessage>(mask, <any> this);
     }
 
     public next (value: TMessage) {

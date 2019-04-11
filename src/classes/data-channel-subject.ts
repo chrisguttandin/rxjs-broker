@@ -3,21 +3,21 @@ import { IMaskableSubject, IParsedJsonObject } from '../interfaces';
 import {
     TDataChannelObservableFactory,
     TDataChannelObserverFactory,
-    TMaskedDataChannelSubjectFactory,
+    TMaskedSubjectFactory,
     TStringifyableJsonValue
 } from '../types';
-import { MaskedDataChannelSubject } from './masked-data-channel-subject';
+import { MaskedSubject } from './masked-subject';
 
 export class DataChannelSubject extends AnonymousSubject<TStringifyableJsonValue> implements IMaskableSubject<TStringifyableJsonValue> {
 
-    private _createMaskedDataChannelSubject: TMaskedDataChannelSubjectFactory;
+    private _createMaskedSubject: TMaskedSubjectFactory;
 
     private _dataChannel: RTCDataChannel;
 
     constructor (
         createDataChannelObservable: TDataChannelObservableFactory,
         createDataChannelObserver: TDataChannelObserverFactory,
-        createMaskedDataChannelSubject: TMaskedDataChannelSubjectFactory,
+        createMaskedSubject: TMaskedSubjectFactory,
         dataChannel: RTCDataChannel
     ) {
         const observable = createDataChannelObservable<TStringifyableJsonValue>(dataChannel);
@@ -26,7 +26,7 @@ export class DataChannelSubject extends AnonymousSubject<TStringifyableJsonValue
 
         super(observer, observable);
 
-        this._createMaskedDataChannelSubject = createMaskedDataChannelSubject;
+        this._createMaskedSubject = createMaskedSubject;
         this._dataChannel = dataChannel;
     }
 
@@ -34,8 +34,8 @@ export class DataChannelSubject extends AnonymousSubject<TStringifyableJsonValue
         this._dataChannel.close();
     }
 
-    public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedDataChannelSubject<TMessage> {
-        return this._createMaskedDataChannelSubject<TMessage>(mask, this);
+    public mask <TMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedSubject<TMessage> {
+        return this._createMaskedSubject<TMessage>(mask, this);
     }
 
     public send (message: TStringifyableJsonValue) {

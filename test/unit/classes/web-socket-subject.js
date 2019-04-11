@@ -1,6 +1,6 @@
 import { WebSocketMock } from '../../mock/web-socket';
 import { WebSocketSubject } from '../../../src/classes/web-socket-subject';
-import { createMaskedWebSocketSubject } from '../../../src/factories/masked-web-socket-subject';
+import { createMaskedSubject } from '../../../src/factories/masked-subject';
 import { createWebSocketObservable } from '../../../src/factories/web-socket-observable';
 import { createWebSocketObserver } from '../../../src/factories/web-socket-observer';
 import { filter } from 'rxjs/operators';
@@ -13,9 +13,9 @@ describe('WebSocketSubject', () => {
     beforeEach(() => {
         webSocket = new WebSocketMock();
         webSocketSubject = new WebSocketSubject(
+            createMaskedSubject,
             createWebSocketObservable,
             createWebSocketObserver,
-            createMaskedWebSocketSubject,
             webSocket
         );
     });

@@ -36,9 +36,9 @@ export class MaskedSubject<TMessage extends TStringifyableJsonValue>
         this._maskableSubject.close();
     }
 
-    public mask<TMakedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedSubject<TMakedMessage> {
+    public mask<TMaskedMessage extends TStringifyableJsonValue> (mask: IParsedJsonObject): MaskedSubject<TMaskedMessage> {
         // @todo Casting this to any is a lazy fix to make TypeScript accept this as an IMaskableSubject.
-        return new MaskedSubject<TMakedMessage>(mask, <any> this);
+        return new MaskedSubject<TMaskedMessage>(mask, <any> this);
     }
 
     public next (value: TMessage) {

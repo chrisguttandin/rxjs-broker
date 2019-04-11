@@ -8,19 +8,19 @@ export class WebSocketObserver<T> implements Observer<T> {
         this._webSocket = webSocket;
     }
 
-    public complete () {
+    public complete (): void {
         // This method does nothing because the DataChannel can be closed separately.
     }
 
-    public error (err: Error) {
+    public error (err: Error): void {
         throw err;
     }
 
-    public next (value: T) {
+    public next (value: T): void {
         this.send(value);
     }
 
-    public send (message: T) {
+    public send (message: T): Promise<void> {
         const stringifiedMessage = JSON.stringify(message);
 
         if (this._webSocket.readyState === WebSocket.OPEN) {

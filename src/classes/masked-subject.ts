@@ -36,11 +36,11 @@ export class MaskedSubject<T extends TStringifyableJsonValue, U extends IStringi
         this._maskableSubject = maskableSubject;
     }
 
-    public close () {
+    public close (): void {
         this._maskableSubject.close();
     }
 
-    public send (value: T) {
+    public send (value: T): Promise<void> {
         return this._maskableSubject.send(<V> { ...this._mask, message: value });
     }
 

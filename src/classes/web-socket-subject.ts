@@ -19,16 +19,18 @@ export class WebSocketSubject<T extends TStringifyableJsonValue> extends Anonymo
         this._webSocket = webSocket;
     }
 
-    public close () {
+    public close (): void {
         this._webSocket.close();
     }
 
-    public send (message: TStringifyableJsonValue) {
+    public send (message: T): Promise<void> {
         const { destination }: any = this;
 
         if (!this.isStopped) {
             return destination.send(message);
         }
+
+        return Promise.resolve();
     }
 
 }

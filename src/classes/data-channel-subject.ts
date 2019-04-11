@@ -19,16 +19,18 @@ export class DataChannelSubject<T extends TStringifyableJsonValue> extends Anony
         this._dataChannel = dataChannel;
     }
 
-    public close () {
+    public close (): void {
         this._dataChannel.close();
     }
 
-    public send (message: TStringifyableJsonValue) {
+    public send (message: T): Promise<void> {
         const { destination }: any = this;
 
         if (!this.isStopped) {
             return destination.send(message);
         }
+
+        return Promise.resolve();
     }
 
 }

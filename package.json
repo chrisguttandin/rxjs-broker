@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.4.3",
-    "rxjs": "^6.4.0",
     "tslib": "^1.9.3"
   },
   "description": "An rxjs message broker for WebRTC DataChannels, WebSockets and WebWorkers.",
@@ -45,6 +44,7 @@
     "mocha": "^6.1.2",
     "rollup": "^1.10.0",
     "rollup-plugin-babel": "^4.3.2",
+    "rxjs": "^6.4.0",
     "sinon": "^7.3.1",
     "sinon-chai": "^3.3.0",
     "ts-loader": "^5.3.3",
@@ -70,6 +70,9 @@
   "main": "build/es5/bundle.js",
   "module": "build/es2018/module.js",
   "name": "rxjs-broker",
+  "peerDependencies": {
+    "rxjs": "^6.3.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/chrisguttandin/rxjs-broker.git"

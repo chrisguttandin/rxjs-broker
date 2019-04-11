@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-export class DataChannelObservable<T> extends Observable<T> {
+export class DataChannelObservable<T> extends Observable<T> { // tslint:disable-line rxjs-no-subclass
 
     constructor (dataChannel: RTCDataChannel) {
         super((observer) => {

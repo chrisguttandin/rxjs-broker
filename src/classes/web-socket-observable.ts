@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-export class WebSocketObservable<T> extends Observable<T> {
+export class WebSocketObservable<T> extends Observable<T> { // tslint:disable-line rxjs-no-subclass
 
     constructor (webSocket: WebSocket) {
         super((observer) => {

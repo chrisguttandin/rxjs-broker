@@ -1,5 +1,5 @@
 import { Observable, Observer } from 'rxjs';
-import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line no-submodule-imports rxjs-no-internal
+import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line rxjs-no-compat no-submodule-imports rxjs-no-internal
 import { filter, map } from 'rxjs/operators';
 import { IRemoteSubject, IStringifyableJsonObject } from '../interfaces';
 import { TStringifyableJsonValue } from '../types';
@@ -12,7 +12,7 @@ export class MaskedSubject<T extends TStringifyableJsonValue, U extends IStringi
 
     private _maskableSubject: IRemoteSubject<V>;
 
-    constructor (mask: Partial<Pick<U, Exclude<keyof U, 'message'>>>, maskableSubject: IRemoteSubject<V>) {
+    constructor (mask: Partial<Pick<U, Exclude<keyof U, 'message'>>>, maskableSubject: IRemoteSubject<V>) { // tslint:disable-line max-line-length rxjs-no-exposed-subjects
         const destination: Observer<T> = {
             complete: maskableSubject.complete,
             error: maskableSubject.error,

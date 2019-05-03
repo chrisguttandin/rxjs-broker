@@ -6,7 +6,7 @@
 [![dependencies](https://img.shields.io/david/chrisguttandin/rxjs-broker.svg?style=flat-square)](https://www.npmjs.com/package/rxjs-broker)
 [![version](https://img.shields.io/npm/v/rxjs-broker.svg?style=flat-square)](https://www.npmjs.com/package/rxjs-broker)
 
-This module is using the power of [RxJS](https://rxjs-dev.firebaseapp.com) to wrap WebSockets or WebRTC DataChannels. It returns a [Subject](https://rxjs-dev.firebaseapp.com/api/index/class/Subject) which can be used with all the operators RxJS provides, but does also have some special functionality.
+This module is using the power of [RxJS](https://rxjs.dev) to wrap WebSockets or WebRTC DataChannels. It returns a [Subject](https://rxjs.dev/api/index/class/Subject) which can be used with all the operators RxJS provides, but does also have some special functionality.
 
 ## Usage
 

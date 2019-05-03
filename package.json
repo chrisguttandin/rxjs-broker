@@ -12,7 +12,7 @@
     "@babel/runtime": "^7.4.4",
     "tslib": "^1.9.3"
   },
-  "description": "An RxJS message broker for WebRTC DataChannels, WebSockets and WebWorkers.",
+  "description": "An RxJS message broker for WebRTC DataChannels and WebSockets.",
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/plugin-external-helpers": "^7.2.0",

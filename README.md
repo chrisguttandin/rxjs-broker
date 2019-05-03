@@ -6,7 +6,7 @@
 [![dependencies](https://img.shields.io/david/chrisguttandin/rxjs-broker.svg?style=flat-square)](https://www.npmjs.com/package/rxjs-broker)
 [![version](https://img.shields.io/npm/v/rxjs-broker.svg?style=flat-square)](https://www.npmjs.com/package/rxjs-broker)
 
-This module is using the power of [RxJS](http://reactivex.io/rxjs) to wrap WebSockets or WebRTC DataChannels. It returns a Subject which can be used with all the operators RxJS provides, but does also have some special functionality.
+This module is using the power of [RxJS](https://rxjs-dev.firebaseapp.com) to wrap WebSockets or WebRTC DataChannels. It returns a [Subject](https://rxjs-dev.firebaseapp.com/api/index/class/Subject) which can be used with all the operators RxJS provides, but does also have some special functionality.
 
 ## Usage
 
@@ -24,7 +24,7 @@ import { connect, wrap } from 'rxjs-broker';
 
 ### connect(url: string): WebSocketSubject
 
-The `connect()` method takes an URL as parameter and returns a `WebSocketSubject` which extends the `AnonymousSubject` provided by RxJS. It also implements the `IRemoteSubject` interface which adds two additional methods. It gets explained in more detail below.
+The `connect()` function takes an URL as a parameter and returns a `WebSocketSubject` which extends the `AnonymousSubject` provided by RxJS. It also implements the `IRemoteSubject` interface which adds two additional methods. It gets explained in more detail below.
 
 ```js
 const webSocketSubject = connect('wss://super-cool-websock.et');
@@ -32,10 +32,10 @@ const webSocketSubject = connect('wss://super-cool-websock.et');
 
 ### wrap(dataChannel: DataChannel): DataChannelSubject
 
-The `wrap()` method can be used to turn a WebRTC DataChannel into a `DataChannelSubject` which does also extend the `AnonymousSubject` and implements the `IRemoteSubject` interface.
+The `wrap()` function can be used to turn a WebRTC DataChannel into a `DataChannelSubject` which does also extend the `AnonymousSubject` and implements the `IRemoteSubject` interface.
 
 ```js
-// Let's image a variable called dataChannel containing a WebRTC DataChannel exists
+// Let's imagine a variable called dataChannel exists and its value is a WebRTC DataChannel.
 const dataChannelSubject = wrap(dataChannel);
 ```
 
@@ -55,7 +55,7 @@ interface IRemoteSubject<T> {
 
 #### close()
 
-The `close()` method is meant to close the underlying WebSocket.
+The `close()` method is meant to close the underlying WebSocket or WebRTC DataChannel.
 
 #### send(message): Promise<void>
 
@@ -69,7 +69,7 @@ The `send()` method is basically a supercharged version of `next()`. It will str
 import { mask } from 'rxjs-broker';
 ```
 
-The `mask()` method takes a JSON object which gets used to extract incoming data and two enhance outgoing data. If there is for example a DataChannel which receives two types of message: control messages and measurement messages. They might look somehow like this:
+The `mask()` function takes a JSON object which gets used to extract incoming data and to enhance outgoing data. If there is for example a DataChannel which receives two types of message: control messages and measurement messages. They might look somehow like this:
 
 ```json
 {
@@ -94,17 +94,17 @@ In case you are not interested in the messages of type control and only want to 
 ```js
 const maskedSubject = mask({ type: 'measurement' }, dataChannelSubject);
 
-// Will receive unwrapped messages like { temperature: '30°' }.
+// The callback will be called with unwrapped messages like { temperature: '30°' }.
 maskedSubject.subscribe((message) => {
     // ...
 });
 ```
 
-When you call `next()` or `send()` on the returned `IRemoteSubject` it also wraps the message with the provided mask. Considering the example introduced above, the usage of the `send()` method will look like this:
+When you call `next()` or `send()` on the returned `IRemoteSubject` also wraps the message with the provided mask. Considering the example introduced above, the usage of the `send()` method will look like this:
 
 ```js
 const maskedSubject = mask({ type: 'measurement' }, dataChannelSubject);
 
-// Will send wrapped messages like { type: 'measurement', message: { temperature: '30°' } }.
+// This will send wrapped messages like { type: 'measurement', message: { temperature: '30°' } }.
 maskedSubject.send({ temperature: '30°' });
 ```

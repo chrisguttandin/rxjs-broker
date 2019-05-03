@@ -24,7 +24,7 @@ import { connect, wrap } from 'rxjs-broker';
 
 ### connect(url: string): WebSocketSubject
 
-The `connect()` function takes an URL as a parameter and returns a `WebSocketSubject` which extends the `AnonymousSubject` provided by RxJS. It also implements the `IRemoteSubject` interface which adds two additional methods. It gets explained in more detail below.
+The `connect()` function takes a URL as a parameter and returns a `WebSocketSubject` which extends the `AnonymousSubject` provided by RxJS. It also implements the `IRemoteSubject` interface which adds two additional methods. It gets explained in more detail below.
 
 ```js
 const webSocketSubject = connect('wss://super-cool-websock.et');
@@ -69,7 +69,7 @@ The `send()` method is basically a supercharged version of `next()`. It will str
 import { mask } from 'rxjs-broker';
 ```
 
-The `mask()` function takes a JSON object which gets used to extract incoming data and to enhance outgoing data. If there is for example a DataChannel which receives two types of message: control messages and measurement messages. They might look somehow like this:
+The `mask()` function takes a JSON object which gets used to extract incoming data and to enhance outgoing data. If there is for example a DataChannel which receives two types of messages (control messages and measurement messages), they might look somehow like this:
 
 ```json
 {
@@ -100,7 +100,7 @@ maskedSubject.subscribe((message) => {
 });
 ```
 
-When you call `next()` or `send()` on the returned `IRemoteSubject` also wraps the message with the provided mask. Considering the example introduced above, the usage of the `send()` method will look like this:
+When you call `next()` or `send()` on the returned `IRemoteSubject` it also wraps the message with the provided mask. Considering the example introduced above, the usage of the `send()` method will look like this:
 
 ```js
 const maskedSubject = mask({ type: 'measurement' }, dataChannelSubject);

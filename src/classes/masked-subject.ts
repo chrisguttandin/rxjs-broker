@@ -12,7 +12,7 @@ export class MaskedSubject<T extends TStringifyableJsonValue, U extends IStringi
 
     private _maskableSubject: IRemoteSubject<V>;
 
-    constructor (mask: Partial<Omit<U, 'message'>>, maskableSubject: IRemoteSubject<V>) { // tslint:disable-line max-line-length rxjs-no-exposed-subjects
+    constructor (mask: Partial<Omit<U, 'message'>>, maskableSubject: IRemoteSubject<V>) { // tslint:disable-line rxjs-no-exposed-subjects
         const destination: Observer<T> = {
             complete: maskableSubject.complete,
             error: maskableSubject.error,

@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.5",
+    "@babel/runtime": "^7.5.0",
     "tslib": "^1.10.0"
   },
   "description": "An RxJS message broker for WebRTC DataChannels and WebSockets.",

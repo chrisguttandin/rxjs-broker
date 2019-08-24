@@ -20,7 +20,7 @@ export class WebSocketObserver<T> implements Observer<T> {
         this.send(value);
     }
 
-    public send (message: T): Promise<void> {
+    public send (message: T): Promise<void> { // tslint:disable-line:invalid-void
         const stringifiedMessage = JSON.stringify(message);
 
         if (this._webSocket.readyState === WebSocket.OPEN) {

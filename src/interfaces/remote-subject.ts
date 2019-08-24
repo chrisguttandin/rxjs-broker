@@ -5,6 +5,6 @@ export interface IRemoteSubject<T extends TStringifyableJsonValue> extends Subje
 
     close (): void;
 
-    send (message: T): Promise<void>;
+    send (message: T): Promise<void>; // tslint:disable-line:invalid-void
 
 }

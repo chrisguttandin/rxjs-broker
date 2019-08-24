@@ -23,7 +23,7 @@ export class DataChannelSubject<T extends TStringifyableJsonValue> extends Anony
         this._dataChannel.close();
     }
 
-    public send (message: T): Promise<void> {
+    public send (message: T): Promise<void> { // tslint:disable-line:invalid-void
         const { destination }: any = this;
 
         if (!this.isStopped) {

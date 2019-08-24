@@ -23,7 +23,7 @@ export class WebSocketSubject<T extends TStringifyableJsonValue> extends Anonymo
         this._webSocket.close();
     }
 
-    public send (message: T): Promise<void> {
+    public send (message: T): Promise<void> { // tslint:disable-line:invalid-void
         const { destination }: any = this;
 
         if (!this.isStopped) {

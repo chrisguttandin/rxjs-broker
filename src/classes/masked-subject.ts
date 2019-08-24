@@ -40,7 +40,7 @@ export class MaskedSubject<T extends TStringifyableJsonValue, U extends IStringi
         this._maskableSubject.close();
     }
 
-    public send (value: T): Promise<void> {
+    public send (value: T): Promise<void> { // tslint:disable-line:invalid-void
         return this._maskableSubject.send(<V> { ...this._mask, message: value });
     }
 

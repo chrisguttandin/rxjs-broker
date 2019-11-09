@@ -1,4 +1,4 @@
-import { IStringifyable, IStringifyableJsonArray } from '../interfaces';
+import { IStringifyable } from '../interfaces';
 import { TStringifyableJsonObject } from './stringifyable-json-object';
 
 export type TStringifyableJsonValue = boolean | // tslint:disable-line:no-null-undefined-union
@@ -7,5 +7,5 @@ export type TStringifyableJsonValue = boolean | // tslint:disable-line:no-null-u
     string |
     undefined |
     IStringifyable |
-    IStringifyableJsonArray |
-    TStringifyableJsonObject;
+    TStringifyableJsonObject |
+    TStringifyableJsonValue[];

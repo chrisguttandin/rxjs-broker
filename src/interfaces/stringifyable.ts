@@ -1,7 +1,7 @@
-import { IStringifyableJsonObject } from './stringifyable-json-object';
+import { TStringifyableJsonObject } from '../types';
 
 export interface IStringifyable {
 
-    toJSON (): IStringifyableJsonObject;
+    toJSON (): TStringifyableJsonObject;
 
 }

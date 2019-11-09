@@ -1,10 +1,10 @@
 import { Observable, Observer } from 'rxjs';
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line rxjs-no-compat no-submodule-imports rxjs-no-internal
 import { filter, map } from 'rxjs/operators';
-import { IRemoteSubject, IStringifyableJsonObject } from '../interfaces';
-import { TStringifyableJsonValue } from '../types';
+import { IRemoteSubject } from '../interfaces';
+import { TGetTypedKeysFunction, TStringifyableJsonObject, TStringifyableJsonValue } from '../types';
 
-export class MaskedSubject<T extends TStringifyableJsonValue, U extends IStringifyableJsonObject & { message: T }, V extends IStringifyableJsonObject | U> // tslint:disable-line max-line-length
+export class MaskedSubject<T extends TStringifyableJsonValue, U extends TStringifyableJsonObject & { message: T }, V extends TStringifyableJsonObject | U> // tslint:disable-line max-line-length
         extends AnonymousSubject<T>
         implements IRemoteSubject<T> {
 

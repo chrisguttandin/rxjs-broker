@@ -7,6 +7,7 @@ import { createDataChannelObservable } from '../../../src/factories/data-channel
 import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
 import { createWebSocketObservable } from '../../../src/factories/web-socket-observable';
 import { createWebSocketObserver } from '../../../src/factories/web-socket-observer';
+import { getTypedKeys } from '../../../src/functions/get-typed-keys';
 
 describe('MaskedSubject', () => {
 
@@ -24,6 +25,7 @@ describe('MaskedSubject', () => {
                     : new WebSocketMock();
                 message = { a: 'fake message' };
                 maskedSubject = new MaskedSubject(
+                    getTypedKeys,
                     { a: { fake: 'mask' } },
                     (transportLayer === 'DataChannel')
                         ? new DataChannelSubject(

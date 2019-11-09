@@ -1,10 +1,11 @@
 import { createDataChannelObservable } from './factories/data-channel-observable';
 import { createDataChannelObserver } from './factories/data-channel-observer';
 import { createDataChannelSubjectFactory } from './factories/data-channel-subject-factory';
-import { createMaskedSubject } from './factories/masked-subject';
+import { createMaskedSubjectFactory } from './factories/masked-subject-factory';
 import { createWebSocketObservable } from './factories/web-socket-observable';
 import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
+import { getTypedKeys } from './functions/get-typed-keys';
 import { IRemoteSubject } from './interfaces';
 import { TStringifyableJsonValue } from './types';
 
@@ -29,7 +30,7 @@ export const connect = <T extends TStringifyableJsonValue>(url: string): IRemote
  */
 export const isSupported = (typeof window !== 'undefined' && 'WebSocket' in window);
 
-export { createMaskedSubject as mask };
+export const mask = createMaskedSubjectFactory(getTypedKeys);
 
 export const wrap = <T extends TStringifyableJsonValue>(dataChannel: RTCDataChannel): IRemoteSubject<T> => {
     return createDataChannelSubject(dataChannel);

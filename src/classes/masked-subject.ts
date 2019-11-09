@@ -12,16 +12,15 @@ export class MaskedSubject<T extends TStringifyableJsonValue, U extends TStringi
 
     private _maskableSubject: IRemoteSubject<V>;
 
-    constructor (mask: Partial<Omit<U, 'message'>>, maskableSubject: IRemoteSubject<V>) { // tslint:disable-line rxjs-no-exposed-subjects
+    constructor (getTypedKeys: TGetTypedKeysFunction, mask: Partial<Omit<U, 'message'>>, maskableSubject: IRemoteSubject<V>) { // tslint:disable-line max-line-length rxjs-no-exposed-subjects
         const destination: Observer<T> = {
             complete: maskableSubject.complete,
             error: maskableSubject.error,
             next: (value) => this.send(value)
         };
 
-        const stringifiedValues = Object
-            .keys(mask)
-            .map((key) => [ key, JSON.stringify(mask[key]) ]);
+        const stringifiedValues = getTypedKeys(mask)
+            .map((key) => [ key, JSON.stringify(mask[key]) ] as const);
 
         const source: Observable<T> = (<Observable<U>> maskableSubject)
             .pipe(

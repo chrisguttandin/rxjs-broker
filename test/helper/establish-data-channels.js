@@ -1,21 +1,10 @@
-const ICE_SERVERS = [ {
-    urls: [
-        'stun:stun.l.google.com:19302',
-        'stun:global.stun.twilio.com:3478?transport=udp'
-    ]
-} ];
-
 export const establishDataChannels = () => {
     return new Promise((resolve, reject) => {
         let localDataChannel;
         let remoteDataChannelIsOpen = false;
 
-        const localPeerConnection = new RTCPeerConnection({
-            iceServers: ICE_SERVERS
-        });
-        const remotePeerConnection = new RTCPeerConnection({
-            iceServers: ICE_SERVERS
-        });
+        const localPeerConnection = new RTCPeerConnection();
+        const remotePeerConnection = new RTCPeerConnection();
 
         localPeerConnection.ondatachannel = ({ channel }) => {
             localDataChannel = channel;

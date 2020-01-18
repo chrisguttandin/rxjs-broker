@@ -22,7 +22,7 @@ npm install rxjs-broker
 import { connect, wrap } from 'rxjs-broker';
 ```
 
-### connect(url: string): WebSocketSubject
+### connect(url: string, subjectConfig?: { openObserver?: NextObserver\<void> }): WebSocketSubject
 
 The `connect()` function takes a URL as a parameter and returns a `WebSocketSubject` which extends the `AnonymousSubject` provided by RxJS. It also implements the `IRemoteSubject` interface which adds two additional methods. It gets explained in more detail below.
 
@@ -30,7 +30,9 @@ The `connect()` function takes a URL as a parameter and returns a `WebSocketSubj
 const webSocketSubject = connect('wss://super-cool-websock.et');
 ```
 
-### wrap(dataChannel: DataChannel): DataChannelSubject
+The second parameter can be used to specify an `openObserver` which works similar to the [`openObserver` of the `WebSocketSubject` provided by RxJS](https://rxjs-dev.firebaseapp.com/api/webSocket/WebSocketSubjectConfig#openObserver). The `next()` method of it gets called when the underlying WebSocket fires an open event.
+
+### wrap(dataChannel: DataChannel, subjectConfig?: { openObserver?: NextObserver\<void> }): DataChannelSubject
 
 The `wrap()` function can be used to turn a WebRTC DataChannel into a `DataChannelSubject` which does also extend the `AnonymousSubject` and implements the `IRemoteSubject` interface.
 
@@ -38,6 +40,8 @@ The `wrap()` function can be used to turn a WebRTC DataChannel into a `DataChann
 // Let's imagine a variable called dataChannel exists and its value is a WebRTC DataChannel.
 const dataChannelSubject = wrap(dataChannel);
 ```
+
+The second parameter can be used to specify an `openObserver`. The `next()` method of it gets called when the underlying DataChannel fires an open event.
 
 ### IRemoteSubject
 

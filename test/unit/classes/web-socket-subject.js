@@ -3,18 +3,22 @@ import { WebSocketSubject } from '../../../src/classes/web-socket-subject';
 import { createWebSocketObservable } from '../../../src/factories/web-socket-observable';
 import { createWebSocketObserver } from '../../../src/factories/web-socket-observer';
 import { filter } from 'rxjs/operators';
+import { spy } from 'sinon';
 
 describe('WebSocketSubject', () => {
 
+    let openObserver;
     let webSocket;
     let webSocketSubject;
 
     beforeEach(() => {
+        openObserver = { next: spy() };
         webSocket = new WebSocketMock();
         webSocketSubject = new WebSocketSubject(
             createWebSocketObservable,
             createWebSocketObserver,
-            webSocket
+            webSocket,
+            { openObserver }
         );
     });
 
@@ -47,6 +51,16 @@ describe('WebSocketSubject', () => {
     });
 
     describe('subscribe()', () => {
+
+        it('should call next on the given openObserver when the socket is open', () => {
+            const webSocketSubscription = webSocketSubject.subscribe();
+
+            webSocket.dispatchEvent({ type: 'open' });
+
+            expect(openObserver.next).to.have.been.calledOnce;
+
+            webSocketSubscription.unsubscribe();
+        });
 
         it('should emit a message from the socket', (done) => {
             const message = 'a fake message';

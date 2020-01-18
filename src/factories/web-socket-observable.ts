@@ -1,5 +1,6 @@
 import { WebSocketObservable } from '../classes/web-socket-observable';
+import { IWebSocketSubjectConfig } from '../interfaces';
 
-export const createWebSocketObservable = <T>(webSocket: WebSocket) => {
-    return new WebSocketObservable<T>(webSocket);
+export const createWebSocketObservable = <T>(webSocket: WebSocket, webSocketSubjectConfig: IWebSocketSubjectConfig) => {
+    return new WebSocketObservable<T>(webSocket, webSocketSubjectConfig);
 };

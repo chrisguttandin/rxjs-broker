@@ -1,17 +1,39 @@
 import { WebSocketMock } from '../../mock/web-socket';
 import { WebSocketObservable } from '../../../src/classes/web-socket-observable';
+import { spy } from 'sinon';
 
 describe('WebSocketObservable', () => {
 
+    let openObserver;
     let webSocket;
     let webSocketObservable;
 
     beforeEach(() => {
+        openObserver = { next: spy() };
         webSocket = new WebSocketMock();
-        webSocketObservable = new WebSocketObservable(webSocket);
+        webSocketObservable = new WebSocketObservable(webSocket, { openObserver });
     });
 
     describe('subscribe()', () => {
+
+        it('should call next on the given openObserver on an open event', () => {
+            const webSocketSubscription = webSocketObservable.subscribe();
+
+            webSocket.dispatchEvent({ type: 'open' });
+
+            expect(openObserver.next).to.have.been.calledOnce;
+
+            webSocketSubscription.unsubscribe();
+        });
+
+        it('should remove the open listener when the subscription is canceled', () => {
+            webSocketObservable
+                .subscribe()
+                .unsubscribe();
+
+            expect(webSocket.removeEventListener).to.have.been.called;
+            expect(webSocket.removeEventListener).to.have.been.calledWith('open');
+        });
 
         it('should pass on a message event to the subscribed observer', (done) => {
             const message = 'a fake message';

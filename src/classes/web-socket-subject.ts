@@ -1,5 +1,5 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line rxjs-no-compat no-submodule-imports rxjs-no-internal
-import { IRemoteSubject } from '../interfaces';
+import { IRemoteSubject, IWebSocketSubjectConfig } from '../interfaces';
 import { TStringifyableJsonValue, TWebSocketObservableFactory, TWebSocketObserverFactory } from '../types';
 
 export class WebSocketSubject<T extends TStringifyableJsonValue> extends AnonymousSubject<T> implements IRemoteSubject<T> {
@@ -9,9 +9,10 @@ export class WebSocketSubject<T extends TStringifyableJsonValue> extends Anonymo
     constructor (
         createWebSocketObservable: TWebSocketObservableFactory,
         createWebSocketObserver: TWebSocketObserverFactory,
-        webSocket: WebSocket
+        webSocket: WebSocket,
+        webSocketSubjectConfig: IWebSocketSubjectConfig
     ) {
-        const observable = createWebSocketObservable<T>(webSocket);
+        const observable = createWebSocketObservable<T>(webSocket, webSocketSubjectConfig);
         const observer = createWebSocketObserver<T>(webSocket);
 
         super(observer, observable);

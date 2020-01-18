@@ -36,7 +36,8 @@ describe('MaskedSubject', () => {
                         : new WebSocketSubject(
                             createWebSocketObservable,
                             createWebSocketObserver,
-                            dataChannelOrWebSocket
+                            dataChannelOrWebSocket,
+                            { }
                         )
                 );
             });

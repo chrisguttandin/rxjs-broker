@@ -6,7 +6,7 @@ import { createWebSocketObservable } from './factories/web-socket-observable';
 import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
 import { getTypedKeys } from './functions/get-typed-keys';
-import { IRemoteSubject } from './interfaces';
+import { IRemoteSubject, IWebSocketSubjectConfig } from './interfaces';
 import { TStringifyableJsonValue } from './types';
 
 /*
@@ -25,8 +25,11 @@ const createWebSocketSubject = createWebSocketSubjectFactory(
     createWebSocketObserver
 );
 
-export const connect = <T extends TStringifyableJsonValue>(url: string): IRemoteSubject<T> => {
-    return createWebSocketSubject(new WebSocket(url));
+export const connect = <T extends TStringifyableJsonValue>(
+    url: string,
+    webSocketSubjectConfig: IWebSocketSubjectConfig = { }
+): IRemoteSubject<T> => {
+    return createWebSocketSubject(new WebSocket(url), webSocketSubjectConfig);
 };
 
 /**

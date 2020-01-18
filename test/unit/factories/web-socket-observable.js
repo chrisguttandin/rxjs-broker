@@ -4,7 +4,7 @@ import { createWebSocketObservable } from '../../../src/factories/web-socket-obs
 describe('createWebSocketObservable()', () => {
 
     it('should return an Observable', () => {
-        expect(createWebSocketObservable({})).to.be.an.instanceOf(Observable);
+        expect(createWebSocketObservable({ }, { })).to.be.an.instanceOf(Observable);
     });
 
 });

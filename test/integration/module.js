@@ -14,6 +14,7 @@ describe('module', () => {
     describe('connect()', () => {
 
         let message;
+        let openObserverNext;
         let webSocketSubject;
 
         afterEach(() => webSocketSubject.close());
@@ -21,7 +22,23 @@ describe('module', () => {
         beforeEach(() => {
             message = { a: 'b', c: 'd' };
 
-            webSocketSubject = connect('ws://echo.websocket.org');
+            webSocketSubject = connect('ws://echo.websocket.org', {
+                openObserver: {
+                    next () {
+                        if (openObserverNext !== undefined) {
+                            openObserverNext();
+                        }
+                    }
+                }
+            });
+        });
+
+        it('should call next on a given openObserver', function (done) {
+            this.timeout(10000);
+
+            openObserverNext = done;
+
+            webSocketSubject.subscribe();
         });
 
         it('should connect to a WebSocket and send and receive an unmasked messagge', function (done) {

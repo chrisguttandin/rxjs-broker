@@ -3,18 +3,22 @@ import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
 import { createDataChannelObservable } from '../../../src/factories/data-channel-observable';
 import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
 import { filter } from 'rxjs/operators';
+import { spy } from 'sinon';
 
 describe('DataChannelSubject', () => {
 
     let dataChannel;
     let dataChannelSubject;
+    let openObserver;
 
     beforeEach(() => {
+        openObserver = { next: spy() };
         dataChannel = new DataChannelMock();
         dataChannelSubject = new DataChannelSubject(
             createDataChannelObservable,
             createDataChannelObserver,
-            dataChannel
+            dataChannel,
+            { openObserver }
         );
     });
 
@@ -47,6 +51,16 @@ describe('DataChannelSubject', () => {
     });
 
     describe('subscribe()', () => {
+
+        it('should call next on the given openObserver when the data channel is open', () => {
+            const dataChannelSubscription = dataChannelSubject.subscribe();
+
+            dataChannel.dispatchEvent({ type: 'open' });
+
+            expect(openObserver.next).to.have.been.calledOnce;
+
+            dataChannelSubscription.unsubscribe();
+        });
 
         it('should emit a message from the data channel', (done) => {
             const message = 'a fake message';

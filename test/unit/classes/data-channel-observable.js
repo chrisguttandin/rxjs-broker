@@ -1,17 +1,39 @@
 import { DataChannelMock } from '../../mock/data-channel';
 import { DataChannelObservable } from '../../../src/classes/data-channel-observable';
+import { spy } from 'sinon';
 
 describe('DataChannelObservable', () => {
 
     let dataChannel;
     let dataChannelObservable;
+    let openObserver;
 
     beforeEach(() => {
         dataChannel = new DataChannelMock();
-        dataChannelObservable = new DataChannelObservable(dataChannel);
+        openObserver = { next: spy() };
+        dataChannelObservable = new DataChannelObservable(dataChannel, { openObserver });
     });
 
     describe('subscribe()', () => {
+
+        it('should call next on the given openObserver on an open event', () => {
+            const dataChannelSubscription = dataChannelObservable.subscribe();
+
+            dataChannel.dispatchEvent({ type: 'open' });
+
+            expect(openObserver.next).to.have.been.calledOnce;
+
+            dataChannelSubscription.unsubscribe();
+        });
+
+        it('should remove the open listener when the subscription is canceled', () => {
+            dataChannelObservable
+                .subscribe()
+                .unsubscribe();
+
+            expect(dataChannel.removeEventListener).to.have.been.called;
+            expect(dataChannel.removeEventListener).to.have.been.calledWith('open');
+        });
 
         it('should pass on a message event to the subscribed observer', (done) => {
             const message = 'a fake message';

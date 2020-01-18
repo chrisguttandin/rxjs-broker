@@ -1,5 +1,5 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line rxjs-no-compat no-submodule-imports rxjs-no-internal
-import { IRemoteSubject } from '../interfaces';
+import { IDataChannelSubjectConfig, IRemoteSubject } from '../interfaces';
 import { TDataChannelObservableFactory, TDataChannelObserverFactory, TStringifyableJsonValue } from '../types';
 
 export class DataChannelSubject<T extends TStringifyableJsonValue> extends AnonymousSubject<T> implements IRemoteSubject<T> {
@@ -9,9 +9,10 @@ export class DataChannelSubject<T extends TStringifyableJsonValue> extends Anony
     constructor (
         createDataChannelObservable: TDataChannelObservableFactory,
         createDataChannelObserver: TDataChannelObserverFactory,
-        dataChannel: RTCDataChannel
+        dataChannel: RTCDataChannel,
+        dataChannelSubjectConfig: IDataChannelSubjectConfig
     ) {
-        const observable = createDataChannelObservable<T>(dataChannel);
+        const observable = createDataChannelObservable<T>(dataChannel, dataChannelSubjectConfig);
         const observer = createDataChannelObserver<T>(dataChannel);
 
         super(observer, observable);

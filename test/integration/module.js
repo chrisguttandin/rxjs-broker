@@ -22,15 +22,18 @@ describe('module', () => {
         beforeEach(() => {
             message = { a: 'b', c: 'd' };
 
-            webSocketSubject = connect('ws://echo.websocket.org', {
-                openObserver: {
-                    next () {
-                        if (openObserverNext !== undefined) {
-                            openObserverNext();
+            webSocketSubject = connect(
+                'ws://echo.websocket.org',
+                {
+                    openObserver: {
+                        next () {
+                            if (openObserverNext !== undefined) {
+                                openObserverNext();
+                            }
                         }
                     }
                 }
-            });
+            );
         });
 
         it('should call next on a given openObserver', function (done) {
@@ -101,15 +104,36 @@ describe('module', () => {
     describe('wrap()', () => {
 
         let dataChannelSubject;
+        let openObserverNext;
         let remoteDataChannel;
 
         afterEach(() => dataChannelSubject.close());
 
-        beforeEach(() => establishDataChannels()
-            .then(({ localDataChannel, remoteDataChannel: rmtDtChnnl }) => {
-                dataChannelSubject = wrap(localDataChannel);
-                remoteDataChannel = rmtDtChnnl;
-            }));
+        beforeEach(() => {
+            const dataChannels = establishDataChannels();
+
+            dataChannelSubject = wrap(
+                dataChannels.localDataChannel,
+                {
+                    openObserver: {
+                        next () {
+                            if (openObserverNext !== undefined) {
+                                openObserverNext();
+                            }
+                        }
+                    }
+                }
+            );
+            remoteDataChannel = dataChannels.remoteDataChannel;
+        });
+
+        it('should call next on a given openObserver', function (done) {
+            this.timeout(10000);
+
+            openObserverNext = done;
+
+            dataChannelSubject.subscribe();
+        });
 
         describe('with a message', () => {
 

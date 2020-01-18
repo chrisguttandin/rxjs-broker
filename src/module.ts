@@ -6,7 +6,7 @@ import { createWebSocketObservable } from './factories/web-socket-observable';
 import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
 import { getTypedKeys } from './functions/get-typed-keys';
-import { IRemoteSubject, IWebSocketSubjectConfig } from './interfaces';
+import { IDataChannelSubjectConfig, IRemoteSubject, IWebSocketSubjectConfig } from './interfaces';
 import { TStringifyableJsonValue } from './types';
 
 /*
@@ -39,6 +39,9 @@ export const isSupported = (typeof window !== 'undefined' && 'WebSocket' in wind
 
 export const mask = createMaskedSubjectFactory(getTypedKeys);
 
-export const wrap = <T extends TStringifyableJsonValue>(dataChannel: RTCDataChannel): IRemoteSubject<T> => {
-    return createDataChannelSubject(dataChannel);
+export const wrap = <T extends TStringifyableJsonValue>(
+    dataChannel: RTCDataChannel,
+    dataChannelSubjectConfig: IDataChannelSubjectConfig = { }
+): IRemoteSubject<T> => {
+    return createDataChannelSubject(dataChannel, dataChannelSubjectConfig);
 };

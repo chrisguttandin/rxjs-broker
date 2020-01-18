@@ -1,12 +1,11 @@
-import { createDataChannelObservable } from './factories/data-channel-observable';
 import { createDataChannelObserver } from './factories/data-channel-observer';
 import { createDataChannelSubjectFactory } from './factories/data-channel-subject-factory';
 import { createMaskedSubjectFactory } from './factories/masked-subject-factory';
-import { createWebSocketObservable } from './factories/web-socket-observable';
+import { createTransportObservable } from './factories/transport-observable';
 import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
 import { getTypedKeys } from './functions/get-typed-keys';
-import { IDataChannelSubjectConfig, IRemoteSubject, IWebSocketSubjectConfig } from './interfaces';
+import { IRemoteSubject, ISubjectConfig } from './interfaces';
 import { TStringifyableJsonValue } from './types';
 
 /*
@@ -16,20 +15,11 @@ import { TStringifyableJsonValue } from './types';
 export * from './interfaces/index';
 export * from './types/index';
 
-const createDataChannelSubject = createDataChannelSubjectFactory(
-    createDataChannelObservable,
-    createDataChannelObserver
-);
-const createWebSocketSubject = createWebSocketSubjectFactory(
-    createWebSocketObservable,
-    createWebSocketObserver
-);
+const createDataChannelSubject = createDataChannelSubjectFactory(createDataChannelObserver, createTransportObservable);
+const createWebSocketSubject = createWebSocketSubjectFactory(createTransportObservable, createWebSocketObserver);
 
-export const connect = <T extends TStringifyableJsonValue>(
-    url: string,
-    webSocketSubjectConfig: IWebSocketSubjectConfig = { }
-): IRemoteSubject<T> => {
-    return createWebSocketSubject(new WebSocket(url), webSocketSubjectConfig);
+export const connect = <T extends TStringifyableJsonValue>(url: string, subjectConfig: ISubjectConfig = { }): IRemoteSubject<T> => {
+    return createWebSocketSubject(new WebSocket(url), subjectConfig);
 };
 
 /**
@@ -41,7 +31,7 @@ export const mask = createMaskedSubjectFactory(getTypedKeys);
 
 export const wrap = <T extends TStringifyableJsonValue>(
     dataChannel: RTCDataChannel,
-    dataChannelSubjectConfig: IDataChannelSubjectConfig = { }
+    subjectConfig: ISubjectConfig = { }
 ): IRemoteSubject<T> => {
-    return createDataChannelSubject(dataChannel, dataChannelSubjectConfig);
+    return createDataChannelSubject(dataChannel, subjectConfig);
 };

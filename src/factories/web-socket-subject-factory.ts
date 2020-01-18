@@ -1,9 +1,9 @@
 import { WebSocketSubject } from '../classes/web-socket-subject';
-import { IWebSocketSubjectConfig } from '../interfaces';
+import { ISubjectConfig } from '../interfaces';
 import { TStringifyableJsonValue, TWebSocketSubjectFactoryFactory } from '../types';
 
-export const createWebSocketSubjectFactory: TWebSocketSubjectFactoryFactory = (createWebSocketObservable, createWebSocketObserver) => {
-    return <T extends TStringifyableJsonValue>(webSocket: WebSocket, webSocketSubjectConfig: IWebSocketSubjectConfig) => {
-        return new WebSocketSubject<T>(createWebSocketObservable, createWebSocketObserver, webSocket, webSocketSubjectConfig);
+export const createWebSocketSubjectFactory: TWebSocketSubjectFactoryFactory = (createTransportObservable, createWebSocketObserver) => {
+    return <T extends TStringifyableJsonValue>(webSocket: WebSocket, subjectConfig: ISubjectConfig) => {
+        return new WebSocketSubject<T>(createTransportObservable, createWebSocketObserver, webSocket, subjectConfig);
     };
 };

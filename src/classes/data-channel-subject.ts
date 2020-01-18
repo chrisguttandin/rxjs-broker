@@ -1,18 +1,18 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line rxjs-no-compat no-submodule-imports rxjs-no-internal
-import { IDataChannelSubjectConfig, IRemoteSubject } from '../interfaces';
-import { TDataChannelObservableFactory, TDataChannelObserverFactory, TStringifyableJsonValue } from '../types';
+import { IRemoteSubject, ISubjectConfig } from '../interfaces';
+import { TDataChannelObserverFactory, TStringifyableJsonValue, TTransportObservableFactory } from '../types';
 
 export class DataChannelSubject<T extends TStringifyableJsonValue> extends AnonymousSubject<T> implements IRemoteSubject<T> {
 
     private _dataChannel: RTCDataChannel;
 
     constructor (
-        createDataChannelObservable: TDataChannelObservableFactory,
         createDataChannelObserver: TDataChannelObserverFactory,
+        createTransportObservable: TTransportObservableFactory,
         dataChannel: RTCDataChannel,
-        dataChannelSubjectConfig: IDataChannelSubjectConfig
+        subjectConfig: ISubjectConfig
     ) {
-        const observable = createDataChannelObservable<T>(dataChannel, dataChannelSubjectConfig);
+        const observable = createTransportObservable<RTCDataChannel, T>(dataChannel, subjectConfig);
         const observer = createDataChannelObserver<T>(dataChannel);
 
         super(observer, observable);

@@ -1,6 +1,6 @@
 import { WebSocketMock } from '../../mock/web-socket';
 import { WebSocketSubject } from '../../../src/classes/web-socket-subject';
-import { createWebSocketObservable } from '../../../src/factories/web-socket-observable';
+import { createTransportObservable } from '../../../src/factories/transport-observable';
 import { createWebSocketObserver } from '../../../src/factories/web-socket-observer';
 import { filter } from 'rxjs/operators';
 import { spy } from 'sinon';
@@ -15,7 +15,7 @@ describe('WebSocketSubject', () => {
         openObserver = { next: spy() };
         webSocket = new WebSocketMock();
         webSocketSubject = new WebSocketSubject(
-            createWebSocketObservable,
+            createTransportObservable,
             createWebSocketObserver,
             webSocket,
             { openObserver }

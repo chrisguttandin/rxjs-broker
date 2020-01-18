@@ -1,18 +1,18 @@
 import { AnonymousSubject } from 'rxjs/internal/Subject'; // tslint:disable-line rxjs-no-compat no-submodule-imports rxjs-no-internal
-import { IRemoteSubject, IWebSocketSubjectConfig } from '../interfaces';
-import { TStringifyableJsonValue, TWebSocketObservableFactory, TWebSocketObserverFactory } from '../types';
+import { IRemoteSubject, ISubjectConfig } from '../interfaces';
+import { TStringifyableJsonValue, TTransportObservableFactory, TWebSocketObserverFactory } from '../types';
 
 export class WebSocketSubject<T extends TStringifyableJsonValue> extends AnonymousSubject<T> implements IRemoteSubject<T> {
 
     private _webSocket: WebSocket;
 
     constructor (
-        createWebSocketObservable: TWebSocketObservableFactory,
+        createTransportObservable: TTransportObservableFactory,
         createWebSocketObserver: TWebSocketObserverFactory,
         webSocket: WebSocket,
-        webSocketSubjectConfig: IWebSocketSubjectConfig
+        subjectConfig: ISubjectConfig
     ) {
-        const observable = createWebSocketObservable<T>(webSocket, webSocketSubjectConfig);
+        const observable = createTransportObservable<WebSocket, T>(webSocket, subjectConfig);
         const observer = createWebSocketObserver<T>(webSocket);
 
         super(observer, observable);

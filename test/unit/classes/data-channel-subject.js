@@ -1,7 +1,7 @@
 import { DataChannelMock } from '../../mock/data-channel';
 import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
-import { createDataChannelObservable } from '../../../src/factories/data-channel-observable';
 import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
+import { createTransportObservable } from '../../../src/factories/transport-observable';
 import { filter } from 'rxjs/operators';
 import { spy } from 'sinon';
 
@@ -15,8 +15,8 @@ describe('DataChannelSubject', () => {
         openObserver = { next: spy() };
         dataChannel = new DataChannelMock();
         dataChannelSubject = new DataChannelSubject(
-            createDataChannelObservable,
             createDataChannelObserver,
+            createTransportObservable,
             dataChannel,
             { openObserver }
         );

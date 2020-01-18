@@ -3,9 +3,8 @@ import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
 import { MaskedSubject } from '../../../src/classes/masked-subject';
 import { WebSocketMock } from '../../mock/web-socket';
 import { WebSocketSubject } from '../../../src/classes/web-socket-subject';
-import { createDataChannelObservable } from '../../../src/factories/data-channel-observable';
 import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
-import { createWebSocketObservable } from '../../../src/factories/web-socket-observable';
+import { createTransportObservable } from '../../../src/factories/transport-observable';
 import { createWebSocketObserver } from '../../../src/factories/web-socket-observer';
 import { getTypedKeys } from '../../../src/functions/get-typed-keys';
 
@@ -29,13 +28,13 @@ describe('MaskedSubject', () => {
                     { a: { fake: 'mask' } },
                     (transportLayer === 'DataChannel')
                         ? new DataChannelSubject(
-                            createDataChannelObservable,
                             createDataChannelObserver,
+                            createTransportObservable,
                             dataChannelOrWebSocket,
                             { }
                         )
                         : new WebSocketSubject(
-                            createWebSocketObservable,
+                            createTransportObservable,
                             createWebSocketObserver,
                             dataChannelOrWebSocket,
                             { }

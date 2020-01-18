@@ -1,5 +1,4 @@
 export * from './binary-type';
-export * from './data-channel-observable-factory';
 export * from './data-channel-observer-factory';
 export * from './data-channel-subject-factory';
 export * from './data-channel-subject-factory-factory';
@@ -9,7 +8,7 @@ export * from './masked-subject-factory';
 export * from './masked-subject-factory-factory';
 export * from './stringifyable-json-object';
 export * from './stringifyable-json-value';
-export * from './web-socket-observable-factory';
+export * from './transport-observable-factory';
 export * from './web-socket-observer-factory';
 export * from './web-socket-subject-factory';
 export * from './web-socket-subject-factory-factory';

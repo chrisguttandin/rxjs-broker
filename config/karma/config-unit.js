@@ -2,11 +2,11 @@ const { env } = require('process');
 
 module.exports = (config) => {
 
-    const files = [
-        '../../test/unit/**/*.js'
-    ];
-
     config.set({
+
+        files: [
+            '../../test/unit/**/*.js'
+        ],
 
         frameworks: [
             'mocha',
@@ -14,7 +14,6 @@ module.exports = (config) => {
         ],
 
         preprocessors: {
-            '../../test/integration/**/*.js': 'webpack',
             '../../test/unit/**/*.js': 'webpack'
         },
 
@@ -63,8 +62,6 @@ module.exports = (config) => {
                 }
             },
 
-            files,
-
             tunnelIdentifier: env.TRAVIS_JOB_NUMBER
 
         });
@@ -76,9 +73,7 @@ module.exports = (config) => {
             browsers: [
                 'ChromeCanaryHeadless',
                 'FirefoxDeveloperHeadless'
-            ],
-
-            files: [ ...files, '../../test/integration/**/*.js' ]
+            ]
 
         });
 

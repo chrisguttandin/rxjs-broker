@@ -23,7 +23,7 @@ describe('module', () => {
             message = { a: 'b', c: 'd' };
 
             webSocketSubject = connect(
-                'ws://echo.websocket.org',
+                'wss://echo.websocket.org',
                 {
                     openObserver: {
                         next () {

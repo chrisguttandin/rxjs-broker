@@ -20,7 +20,7 @@ describe('TransportObservable', () => {
             transport = (transportLayer === 'DataChannel')
                 ? new DataChannelMock()
                 : new WebSocketMock();
-            transportObservable =  new TransportObservable(transport, { openObserver });
+            transportObservable = new TransportObservable(transport, { openObserver });
         });
 
         describe('subscribe()', () => {

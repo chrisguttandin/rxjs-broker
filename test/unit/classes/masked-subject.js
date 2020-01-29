@@ -31,7 +31,7 @@ describe('MaskedSubject', () => {
                             createDataChannelObserver,
                             createTransportObservable,
                             dataChannelOrWebSocket,
-                            { }
+                            { }
                         )
                         : new WebSocketSubject(
                             createTransportObservable,

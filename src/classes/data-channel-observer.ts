@@ -34,7 +34,7 @@ export class DataChannelObserver<T> implements Observer<T> {
         this.send(value);
     }
 
-    public send (message: T): Promise<void> { // tslint:disable-line:invalid-void
+    public send (message: T): Promise<void> {
         if (this._dataChannel.readyState === 'open') {
             if (this._isSupportingBufferedAmountLowThreshold &&
                     this._dataChannel.bufferedAmount > this._dataChannel.bufferedAmountLowThreshold) {

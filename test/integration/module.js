@@ -2,20 +2,16 @@ import { connect, isSupported, mask, wrap } from '../../src/module';
 import { establishDataChannels } from '../helper/establish-data-channels';
 
 describe('module', () => {
-
     describe('isSupported', () => {
-
         it('should be a boolean', () => {
             expect(isSupported).to.be.a('boolean');
         });
-
     });
 
     // @todo Investigate why these tests fail when running on Travis.
-    if (!process.env.TRAVIS) { // eslint-disable-line no-undef
-
+    // eslint-disable-next-line no-undef
+    if (!process.env.TRAVIS) {
         describe('connect()', () => {
-
             let message;
             let openObserverNext;
             let webSocketSubject;
@@ -25,18 +21,15 @@ describe('module', () => {
             beforeEach(() => {
                 message = { a: 'b', c: 'd' };
 
-                webSocketSubject = connect(
-                    'wss://echo.websocket.org',
-                    {
-                        openObserver: {
-                            next () {
-                                if (openObserverNext !== undefined) {
-                                    openObserverNext();
-                                }
+                webSocketSubject = connect('wss://echo.websocket.org', {
+                    openObserver: {
+                        next() {
+                            if (openObserverNext !== undefined) {
+                                openObserverNext();
                             }
                         }
                     }
-                );
+                });
             });
 
             it('should call next on a given openObserver', function (done) {
@@ -50,14 +43,13 @@ describe('module', () => {
             it('should connect to a WebSocket and send and receive an unmasked messagge', function (done) {
                 this.timeout(10000);
 
-                webSocketSubject
-                    .subscribe({
-                        next (mssge) {
-                            expect(mssge).to.deep.equal(message);
+                webSocketSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-                            done();
-                        }
-                    });
+                        done();
+                    }
+                });
 
                 webSocketSubject.send(message);
             });
@@ -67,14 +59,13 @@ describe('module', () => {
 
                 webSocketSubject = mask({ a: 'fake mask' }, webSocketSubject);
 
-                webSocketSubject
-                    .subscribe({
-                        next (mssge) {
-                            expect(mssge).to.deep.equal(message);
+                webSocketSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-                            done();
-                        }
-                    });
+                        done();
+                    }
+                });
 
                 webSocketSubject.send(message);
             });
@@ -84,30 +75,24 @@ describe('module', () => {
 
                 webSocketSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, webSocketSubject));
 
-                webSocketSubject
-                    .subscribe({
-                        next (mssge) {
-                            expect(mssge).to.deep.equal(message);
+                webSocketSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-                            done();
-                        }
-                    });
+                        done();
+                    }
+                });
 
                 webSocketSubject.send(message);
             });
-
         });
-
     }
 
     describe('mask()', () => {
-
         // @todo
-
     });
 
     describe('wrap()', () => {
-
         let dataChannelSubject;
         let openObserverNext;
         let remoteDataChannel;
@@ -117,18 +102,15 @@ describe('module', () => {
         beforeEach(() => {
             const dataChannels = establishDataChannels();
 
-            dataChannelSubject = wrap(
-                dataChannels.localDataChannel,
-                {
-                    openObserver: {
-                        next () {
-                            if (openObserverNext !== undefined) {
-                                openObserverNext();
-                            }
+            dataChannelSubject = wrap(dataChannels.localDataChannel, {
+                openObserver: {
+                    next() {
+                        if (openObserverNext !== undefined) {
+                            openObserverNext();
                         }
                     }
                 }
-            );
+            });
             remoteDataChannel = dataChannels.remoteDataChannel;
         });
 
@@ -141,7 +123,6 @@ describe('module', () => {
         });
 
         describe('with a message', () => {
-
             let message;
 
             beforeEach(() => {
@@ -151,14 +132,13 @@ describe('module', () => {
             it('should send and receive a messagge through an unmasked data channel', function (done) {
                 this.timeout(10000);
 
-                dataChannelSubject
-                    .subscribe({
-                        next (mssge) {
-                            expect(mssge).to.deep.equal(message);
+                dataChannelSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-                            done();
-                        }
-                    });
+                        done();
+                    }
+                });
 
                 remoteDataChannel.addEventListener('message', (event) => {
                     expect(event.data).to.equal('{"a":"b","c":"d"}');
@@ -174,14 +154,13 @@ describe('module', () => {
 
                 dataChannelSubject = mask({ a: 'fake mask' }, dataChannelSubject);
 
-                dataChannelSubject
-                    .subscribe({
-                        next (mssge) {
-                            expect(mssge).to.deep.equal(message);
+                dataChannelSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-                            done();
-                        }
-                    });
+                        done();
+                    }
+                });
 
                 remoteDataChannel.addEventListener('message', (event) => {
                     expect(event.data).to.equal('{"a":"fake mask","message":{"a":"b","c":"d"}}');
@@ -197,14 +176,13 @@ describe('module', () => {
 
                 dataChannelSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, dataChannelSubject));
 
-                dataChannelSubject
-                    .subscribe({
-                        next (mssge) {
-                            expect(mssge).to.deep.equal(message);
+                dataChannelSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-                            done();
-                        }
-                    });
+                        done();
+                    }
+                });
 
                 remoteDataChannel.addEventListener('message', (event) => {
                     expect(event.data).to.equal('{"a":"fake mask","message":{"another":"fake mask","message":{"a":"b","c":"d"}}}');
@@ -214,24 +192,21 @@ describe('module', () => {
 
                 dataChannelSubject.send(message);
             });
-
         });
 
         describe('without a message', () => {
-
             it('should send and receive an empty messagge through a masked data channel', function (done) {
                 this.timeout(10000);
 
                 dataChannelSubject = mask({ a: 'fake mask' }, dataChannelSubject);
 
-                dataChannelSubject
-                    .subscribe({
-                        next (message) {
-                            expect(message).to.be.undefined;
+                dataChannelSubject.subscribe({
+                    next(message) {
+                        expect(message).to.be.undefined;
 
-                            done();
-                        }
-                    });
+                        done();
+                    }
+                });
 
                 remoteDataChannel.addEventListener('message', (event) => {
                     expect(event.data).to.equal('{"a":"fake mask"}');
@@ -241,9 +216,6 @@ describe('module', () => {
 
                 dataChannelSubject.send();
             });
-
         });
-
     });
-
 });

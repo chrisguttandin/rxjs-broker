@@ -4,30 +4,29 @@ import { filter, map } from 'rxjs/operators';
 import { IRemoteSubject } from '../interfaces';
 import { TGetTypedKeysFunction, TStringifyableJsonObject, TStringifyableJsonValue } from '../types';
 
-export class MaskedSubject<T extends TStringifyableJsonValue, U extends TStringifyableJsonObject & { message: T }, V extends TStringifyableJsonObject | U> // tslint:disable-line max-line-length
-        extends AnonymousSubject<T>
-        implements IRemoteSubject<T> {
-
+export class MaskedSubject<
+    T extends TStringifyableJsonValue,
+    U extends TStringifyableJsonObject & { message: T },
+    V extends TStringifyableJsonObject | U
+> extends AnonymousSubject<T> implements IRemoteSubject<T> { // tslint:disable-line max-line-length
     private _mask: Partial<Omit<U, 'message'>>;
 
     private _maskableSubject: IRemoteSubject<V>;
 
-    constructor (getTypedKeys: TGetTypedKeysFunction, mask: Partial<Omit<U, 'message'>>, maskableSubject: IRemoteSubject<V>) { // tslint:disable-line max-line-length rxjs-no-exposed-subjects
+    // tslint:disable-next-line max-line-length rxjs-no-exposed-subjects
+    constructor(getTypedKeys: TGetTypedKeysFunction, mask: Partial<Omit<U, 'message'>>, maskableSubject: IRemoteSubject<V>) {
         const destination: Observer<T> = {
             complete: maskableSubject.complete,
             error: maskableSubject.error,
             next: (value) => this.send(value)
         };
 
-        const stringifiedValues = getTypedKeys(mask)
-            .map((key) => [ key, JSON.stringify(mask[key]) ] as const);
+        const stringifiedValues = getTypedKeys(mask).map((key) => [key, JSON.stringify(mask[key])] as const);
 
-        const source: Observable<T> = (<Observable<U>> maskableSubject)
-            .pipe(
-                filter((message): message is U => stringifiedValues
-                    .every(([ key, value ]) => (value === JSON.stringify(message[key])))),
-                map(({ message }) => message)
-            );
+        const source: Observable<T> = (<Observable<U>>maskableSubject).pipe(
+            filter((message): message is U => stringifiedValues.every(([key, value]) => value === JSON.stringify(message[key]))),
+            map(({ message }) => message)
+        );
 
         super(destination, source);
 
@@ -35,12 +34,11 @@ export class MaskedSubject<T extends TStringifyableJsonValue, U extends TStringi
         this._maskableSubject = maskableSubject;
     }
 
-    public close (): void {
+    public close(): void {
         this._maskableSubject.close();
     }
 
-    public send (value: T): Promise<void> {
-        return this._maskableSubject.send(<V> { ...this._mask, message: value });
+    public send(value: T): Promise<void> {
+        return this._maskableSubject.send(<V>{ ...this._mask, message: value });
     }
-
 }

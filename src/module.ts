@@ -18,20 +18,20 @@ export * from './types/index';
 const createDataChannelSubject = createDataChannelSubjectFactory(createDataChannelObserver, createTransportObservable);
 const createWebSocketSubject = createWebSocketSubjectFactory(createTransportObservable, createWebSocketObserver);
 
-export const connect = <T extends TStringifyableJsonValue>(url: string, subjectConfig: ISubjectConfig = { }): IRemoteSubject<T> => {
+export const connect = <T extends TStringifyableJsonValue>(url: string, subjectConfig: ISubjectConfig = {}): IRemoteSubject<T> => {
     return createWebSocketSubject(new WebSocket(url), subjectConfig);
 };
 
 /**
  * This property is true if the browser supports WebSockets.
  */
-export const isSupported = (typeof window !== 'undefined' && 'WebSocket' in window);
+export const isSupported = typeof window !== 'undefined' && 'WebSocket' in window;
 
 export const mask = createMaskedSubjectFactory(getTypedKeys);
 
 export const wrap = <T extends TStringifyableJsonValue>(
     dataChannel: RTCDataChannel,
-    subjectConfig: ISubjectConfig = { }
+    subjectConfig: ISubjectConfig = {}
 ): IRemoteSubject<T> => {
     return createDataChannelSubject(dataChannel, subjectConfig);
 };

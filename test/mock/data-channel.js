@@ -2,15 +2,14 @@ import { spy, stub } from 'sinon';
 
 // @todo This is an obviously imperfect implementation of the EventTarget.
 export class DataChannelMock {
-
-    constructor () {
+    constructor() {
         const events = new Map();
 
         this.addEventListener = (type, listener) => {
             if (events.has(type)) {
                 events.get(type).add(listener);
             } else {
-                events.set(type, new Set([ listener ]));
+                events.set(type, new Set([listener]));
             }
         };
         this.bufferedAmount = 0;
@@ -32,5 +31,4 @@ export class DataChannelMock {
             }
         });
     }
-
 }

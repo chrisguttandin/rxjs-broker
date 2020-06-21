@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 import { ISubjectConfig } from '../interfaces';
 
-export class TransportObservable<T extends RTCDataChannel | WebSocket, U> extends Observable<U> { // tslint:disable-line rxjs-no-subclass
-
-    constructor (transport: T, { openObserver }: ISubjectConfig) {
+// tslint:disable-next-line rxjs-no-subclass
+export class TransportObservable<T extends RTCDataChannel | WebSocket, U> extends Observable<U> {
+    constructor(transport: T, { openObserver }: ISubjectConfig) {
         super((observer) => {
             const handleCloseEvent = () => observer.complete();
-            const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => observer.error(error));
-            const handleMessageEvent = <EventListener> (({ data }: MessageEvent) => {
+            const handleErrorEvent = <EventListener>(({ error }: ErrorEvent) => observer.error(error));
+            const handleMessageEvent = <EventListener>(({ data }: MessageEvent) => {
                 try {
                     observer.next(JSON.parse(data));
                 } catch (err) {
@@ -33,5 +33,4 @@ export class TransportObservable<T extends RTCDataChannel | WebSocket, U> extend
             };
         });
     }
-
 }

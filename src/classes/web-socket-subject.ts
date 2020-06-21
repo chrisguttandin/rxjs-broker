@@ -3,10 +3,9 @@ import { IRemoteSubject, ISubjectConfig } from '../interfaces';
 import { TStringifyableJsonValue, TTransportObservableFactory, TWebSocketObserverFactory } from '../types';
 
 export class WebSocketSubject<T extends TStringifyableJsonValue> extends AnonymousSubject<T> implements IRemoteSubject<T> {
-
     private _webSocket: WebSocket;
 
-    constructor (
+    constructor(
         createTransportObservable: TTransportObservableFactory,
         createWebSocketObserver: TWebSocketObserverFactory,
         webSocket: WebSocket,
@@ -20,11 +19,11 @@ export class WebSocketSubject<T extends TStringifyableJsonValue> extends Anonymo
         this._webSocket = webSocket;
     }
 
-    public close (): void {
+    public close(): void {
         this._webSocket.close();
     }
 
-    public send (message: T): Promise<void> {
+    public send(message: T): Promise<void> {
         const { destination }: any = this;
 
         if (!this.isStopped) {
@@ -33,5 +32,4 @@ export class WebSocketSubject<T extends TStringifyableJsonValue> extends Anonymo
 
         return Promise.resolve();
     }
-
 }

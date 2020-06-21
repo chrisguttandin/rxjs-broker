@@ -1,26 +1,25 @@
 import { Observer } from 'rxjs';
 
 export class WebSocketObserver<T> implements Observer<T> {
-
     private _webSocket: WebSocket;
 
-    constructor (webSocket: WebSocket) {
+    constructor(webSocket: WebSocket) {
         this._webSocket = webSocket;
     }
 
-    public complete (): void {
+    public complete(): void {
         // This method does nothing because the DataChannel can be closed separately.
     }
 
-    public error (err: Error): void {
+    public error(err: Error): void {
         throw err;
     }
 
-    public next (value: T): void {
+    public next(value: T): void {
         this.send(value);
     }
 
-    public send (message: T): Promise<void> {
+    public send(message: T): Promise<void> {
         const stringifiedMessage = JSON.stringify(message);
 
         if (this._webSocket.readyState === WebSocket.OPEN) {
@@ -30,7 +29,7 @@ export class WebSocketObserver<T> implements Observer<T> {
         }
 
         return new Promise((resolve, reject) => {
-            const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => {
+            const handleErrorEvent = <EventListener>(({ error }: ErrorEvent) => {
                 this._webSocket.removeEventListener('error', handleErrorEvent);
                 this._webSocket.removeEventListener('open', handleOpenEvent); // tslint:disable-line:no-use-before-declare
 
@@ -50,5 +49,4 @@ export class WebSocketObserver<T> implements Observer<T> {
             this._webSocket.addEventListener('open', handleOpenEvent);
         });
     }
-
 }

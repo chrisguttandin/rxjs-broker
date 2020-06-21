@@ -3,10 +3,9 @@ import { IRemoteSubject, ISubjectConfig } from '../interfaces';
 import { TDataChannelObserverFactory, TStringifyableJsonValue, TTransportObservableFactory } from '../types';
 
 export class DataChannelSubject<T extends TStringifyableJsonValue> extends AnonymousSubject<T> implements IRemoteSubject<T> {
-
     private _dataChannel: RTCDataChannel;
 
-    constructor (
+    constructor(
         createDataChannelObserver: TDataChannelObserverFactory,
         createTransportObservable: TTransportObservableFactory,
         dataChannel: RTCDataChannel,
@@ -20,11 +19,11 @@ export class DataChannelSubject<T extends TStringifyableJsonValue> extends Anony
         this._dataChannel = dataChannel;
     }
 
-    public close (): void {
+    public close(): void {
         this._dataChannel.close();
     }
 
-    public send (message: T): Promise<void> {
+    public send(message: T): Promise<void> {
         const { destination }: any = this;
 
         if (!this.isStopped) {
@@ -33,5 +32,4 @@ export class DataChannelSubject<T extends TStringifyableJsonValue> extends Anony
 
         return Promise.resolve();
     }
-
 }

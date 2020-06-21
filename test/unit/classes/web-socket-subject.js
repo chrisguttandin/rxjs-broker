@@ -6,7 +6,6 @@ import { filter } from 'rxjs/operators';
 import { spy } from 'sinon';
 
 describe('WebSocketSubject', () => {
-
     let openObserver;
     let webSocket;
     let webSocketSubject;
@@ -14,44 +13,34 @@ describe('WebSocketSubject', () => {
     beforeEach(() => {
         openObserver = { next: spy() };
         webSocket = new WebSocketMock();
-        webSocketSubject = new WebSocketSubject(
-            createTransportObservable,
-            createWebSocketObserver,
-            webSocket,
-            { openObserver }
-        );
+        webSocketSubject = new WebSocketSubject(createTransportObservable, createWebSocketObserver, webSocket, { openObserver });
     });
 
     it('should allow to be used with other operators', (done) => {
         const message = 'a fake message';
-        const webSocketSubscription = webSocketSubject
-            .pipe(filter(() => true))
-            .subscribe({
-                next (mssg) {
-                    expect(mssg).to.equal(message);
+        const webSocketSubscription = webSocketSubject.pipe(filter(() => true)).subscribe({
+            next(mssg) {
+                expect(mssg).to.equal(message);
 
-                    webSocketSubscription.unsubscribe();
+                webSocketSubscription.unsubscribe();
 
-                    done();
-                }
-            });
+                done();
+            }
+        });
 
         webSocket.dispatchEvent({ data: message, type: 'message' });
     });
 
     describe('close()', () => {
-
         it('should close the socket', () => {
             webSocketSubject.close();
 
             expect(webSocket.close).to.have.been.calledOnce;
             expect(webSocket.close).to.have.been.calledWithExactly();
         });
-
     });
 
     describe('subscribe()', () => {
-
         it('should call next on the given openObserver when the socket is open', () => {
             const webSocketSubscription = webSocketSubject.subscribe();
 
@@ -64,16 +53,15 @@ describe('WebSocketSubject', () => {
 
         it('should emit a message from the socket', (done) => {
             const message = 'a fake message';
-            const webSocketSubscription = webSocketSubject
-                .subscribe({
-                    next (mssg) {
-                        expect(mssg).to.equal(message);
+            const webSocketSubscription = webSocketSubject.subscribe({
+                next(mssg) {
+                    expect(mssg).to.equal(message);
 
-                        webSocketSubscription.unsubscribe();
+                    webSocketSubscription.unsubscribe();
 
-                        done();
-                    }
-                });
+                    done();
+                }
+            });
 
             webSocket.dispatchEvent({ data: message, type: 'message' });
         });
@@ -81,29 +69,25 @@ describe('WebSocketSubject', () => {
         it('should emit an error from the socket', (done) => {
             const error = 'a fake error';
 
-            webSocketSubject
-                .subscribe({
-                    error (err) {
-                        expect(err).to.equal(error);
+            webSocketSubject.subscribe({
+                error(err) {
+                    expect(err).to.equal(error);
 
-                        done();
-                    }
-                });
+                    done();
+                }
+            });
 
             webSocket.dispatchEvent({ error, type: 'error' });
         });
 
         it('should complete when the socket gets closed', (done) => {
-            webSocketSubject
-                .subscribe({
-                    complete () {
-                        done();
-                    }
-                });
+            webSocketSubject.subscribe({
+                complete() {
+                    done();
+                }
+            });
 
             webSocket.dispatchEvent({ type: 'close' });
         });
-
     });
-
 });

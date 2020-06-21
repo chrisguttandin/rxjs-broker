@@ -3,12 +3,11 @@ import { Observer } from 'rxjs';
 const BUFFERED_AMOUNT_LOW_THRESHOLD = 2048;
 
 export class DataChannelObserver<T> implements Observer<T> {
-
     private _dataChannel: RTCDataChannel;
 
     private _isSupportingBufferedAmountLowThreshold: boolean;
 
-    constructor (dataChannel: RTCDataChannel) {
+    constructor(dataChannel: RTCDataChannel) {
         this._dataChannel = dataChannel;
 
         if (typeof dataChannel.bufferedAmountLowThreshold === 'number') {
@@ -22,22 +21,24 @@ export class DataChannelObserver<T> implements Observer<T> {
         }
     }
 
-    public complete (): void {
+    public complete(): void {
         // This method does nothing because the DataChannel can be closed separately.
     }
 
-    public error (err: Error): void {
+    public error(err: Error): void {
         throw err;
     }
 
-    public next (value: T): void {
+    public next(value: T): void {
         this.send(value);
     }
 
-    public send (message: T): Promise<void> {
+    public send(message: T): Promise<void> {
         if (this._dataChannel.readyState === 'open') {
-            if (this._isSupportingBufferedAmountLowThreshold &&
-                    this._dataChannel.bufferedAmount > this._dataChannel.bufferedAmountLowThreshold) {
+            if (
+                this._isSupportingBufferedAmountLowThreshold &&
+                this._dataChannel.bufferedAmount > this._dataChannel.bufferedAmountLowThreshold
+            ) {
                 return new Promise((resolve, reject) => {
                     const handleBufferedAmountLowEvent = () => {
                         this._dataChannel.removeEventListener('bufferedamountlow', handleBufferedAmountLowEvent);
@@ -48,7 +49,7 @@ export class DataChannelObserver<T> implements Observer<T> {
                         resolve();
                     };
 
-                    const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => {
+                    const handleErrorEvent = <EventListener>(({ error }: ErrorEvent) => {
                         this._dataChannel.removeEventListener('bufferedamountlow', handleBufferedAmountLowEvent);
                         this._dataChannel.removeEventListener('error', handleErrorEvent);
 
@@ -64,7 +65,7 @@ export class DataChannelObserver<T> implements Observer<T> {
         }
 
         return new Promise((resolve, reject) => {
-            const handleErrorEvent = <EventListener> (({ error }: ErrorEvent) => {
+            const handleErrorEvent = <EventListener>(({ error }: ErrorEvent) => {
                 this._dataChannel.removeEventListener('error', handleErrorEvent);
                 this._dataChannel.removeEventListener('open', handleOpenEvent); // tslint:disable-line:no-use-before-declare
 
@@ -82,5 +83,4 @@ export class DataChannelObserver<T> implements Observer<T> {
             this._dataChannel.addEventListener('open', handleOpenEvent);
         });
     }
-
 }

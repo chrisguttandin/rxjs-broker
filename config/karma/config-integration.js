@@ -2,17 +2,10 @@ const { env } = require('process');
 const { DefinePlugin } = require('webpack');
 
 module.exports = (config) => {
-
     config.set({
+        files: ['../../test/integration/**/*.js'],
 
-        files: [
-            '../../test/integration/**/*.js'
-        ],
-
-        frameworks: [
-            'mocha',
-            'sinon-chai'
-        ],
+        frameworks: ['mocha', 'sinon-chai'],
 
         preprocessors: {
             '../../test/integration/**/*.js': 'webpack'
@@ -21,12 +14,14 @@ module.exports = (config) => {
         webpack: {
             mode: 'development',
             module: {
-                rules: [ {
-                    test: /\.ts?$/,
-                    use: {
-                        loader: 'ts-loader'
+                rules: [
+                    {
+                        test: /\.ts?$/,
+                        use: {
+                            loader: 'ts-loader'
+                        }
                     }
-                } ]
+                ]
             },
             plugins: [
                 new DefinePlugin({
@@ -36,24 +31,18 @@ module.exports = (config) => {
                 })
             ],
             resolve: {
-                extensions: [ '.js', '.ts' ]
+                extensions: ['.js', '.ts']
             }
         },
 
         webpackMiddleware: {
             noInfo: true
         }
-
     });
 
     if (env.TRAVIS) {
-
         config.set({
-
-            browsers: [
-                'ChromeSauceLabs',
-                'FirefoxSauceLabs'
-            ],
+            browsers: ['ChromeSauceLabs', 'FirefoxSauceLabs'],
 
             captureTimeout: 120000,
 
@@ -71,20 +60,10 @@ module.exports = (config) => {
             },
 
             tunnelIdentifier: env.TRAVIS_JOB_NUMBER
-
         });
-
     } else {
-
         config.set({
-
-            browsers: [
-                'ChromeCanaryHeadless',
-                'FirefoxDeveloperHeadless'
-            ]
-
+            browsers: ['ChromeCanaryHeadless', 'FirefoxDeveloperHeadless']
         });
-
     }
-
 };

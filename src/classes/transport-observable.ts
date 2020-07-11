@@ -6,7 +6,9 @@ export class TransportObservable<T extends RTCDataChannel | WebSocket, U> extend
     constructor(transport: T, { openObserver }: ISubjectConfig) {
         super((observer) => {
             const handleCloseEvent = () => observer.complete();
-            const handleErrorEvent = <EventListener>(({ error }: ErrorEvent) => observer.error(error));
+            const handleErrorEvent = <EventListener>(
+                (({ error }: ErrorEvent) => (error === undefined ? observer.error(new Error('Unknown Error')) : observer.error(error)))
+            );
             const handleMessageEvent = <EventListener>(({ data }: MessageEvent) => {
                 try {
                     observer.next(JSON.parse(data));

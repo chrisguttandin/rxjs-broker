@@ -29,6 +29,16 @@ describe('WebSocketObserver', () => {
                 expect(webSocket.send).to.have.been.calledOnce;
                 expect(webSocket.send).to.have.been.calledWithExactly(`"${value}"`);
             });
+
+            it('should give up sending a given value as message to the socket if there is an error', () => {
+                webSocketObserver.next(value);
+
+                expect(webSocket.send).to.have.not.been.called;
+
+                webSocket.dispatchEvent({ type: 'error' });
+
+                expect(webSocket.send).to.have.not.been.called;
+            });
         });
 
         describe('with an open socket', () => {
@@ -83,6 +93,20 @@ describe('WebSocketObserver', () => {
 
                 webSocket.readyState = WebSocket.OPEN;
                 webSocket.dispatchEvent({ type: 'open' });
+            });
+
+            it('should give up sending a given message to the socket if there is an error', (done) => {
+                webSocketObserver.send(message).catch((err) => {
+                    expect(err.message).to.equal('Unknown WebSocket Error');
+
+                    expect(webSocket.send).to.have.not.been.called;
+
+                    done();
+                });
+
+                expect(webSocket.send).to.have.not.been.called;
+
+                webSocket.dispatchEvent({ type: 'error' });
             });
         });
 

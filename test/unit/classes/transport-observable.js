@@ -73,6 +73,18 @@ describe('TransportObservable', () => {
                 transport.dispatchEvent({ error, type: 'error' });
             });
 
+            it('should generate an error and pass it on to the subscribed observer', (done) => {
+                transportObservable.subscribe({
+                    error(err) {
+                        expect(err.message).to.equal('Unknown Error');
+
+                        done();
+                    }
+                });
+
+                transport.dispatchEvent({ type: 'error' });
+            });
+
             it('should remove the error listener when the subscription is canceled', () => {
                 transportObservable.subscribe().unsubscribe();
 

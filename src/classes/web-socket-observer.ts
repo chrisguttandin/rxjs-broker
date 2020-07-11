@@ -28,6 +28,14 @@ export class WebSocketObserver<T> implements Observer<T> {
             return Promise.resolve();
         }
 
+        if (this._webSocket.readyState === WebSocket.CLOSING) {
+            return Promise.reject(new Error('The WebSocket is already closing.'));
+        }
+
+        if (this._webSocket.readyState === WebSocket.CLOSED) {
+            return Promise.reject(new Error('The WebSocket is already closed.'));
+        }
+
         return new Promise((resolve, reject) => {
             const handleErrorEvent = <EventListener>(({ error }: ErrorEvent) => {
                 this._webSocket.removeEventListener('error', handleErrorEvent);

@@ -58,40 +58,49 @@ module.exports = (config) => {
 
     if (env.CI) {
         config.set({
+            browserStack: {
+                accessKey: env.BROWSER_STACK_ACCESS_KEY,
+                build: `${env.GITHUB_RUN_ID}/integration-${env.TARGET}`,
+                forceLocal: true,
+                localIdentifier: `${Math.floor(Math.random() * 1000000)}`,
+                project: env.GITHUB_REPOSITORY,
+                username: env.BROWSER_STACK_USERNAME,
+                video: false
+            },
+
             browsers:
                 env.TARGET === 'chrome'
-                    ? ['ChromeSauceLabs']
+                    ? ['ChromeBrowserStack']
                     : env.TARGET === 'firefox'
-                    ? ['FirefoxSauceLabs']
+                    ? ['FirefoxBrowserStack']
                     : env.TARGET === 'safari'
-                    ? ['SafariSauceLabs']
-                    : ['ChromeSauceLabs', 'FirefoxSauceLabs', 'SafariSauceLabs'],
+                    ? ['SafariBrowserStack']
+                    : ['ChromeBrowserStack', 'FirefoxBrowserStack', 'SafariBrowserStack'],
 
             captureTimeout: 300000,
 
             customLaunchers: {
-                ChromeSauceLabs: {
-                    base: 'SauceLabs',
-                    browserName: 'chrome',
+                ChromeBrowserStack: {
+                    base: 'BrowserStack',
+                    browser: 'chrome',
                     captureTimeout: 300,
-                    platform: 'macOS 11.00'
+                    os: 'OS X',
+                    os_version: 'Big Sur' // eslint-disable-line camelcase
                 },
-                FirefoxSauceLabs: {
-                    base: 'SauceLabs',
-                    browserName: 'firefox',
+                FirefoxBrowserStack: {
+                    base: 'BrowserStack',
+                    browser: 'firefox',
                     captureTimeout: 300,
-                    platform: 'macOS 11.00'
+                    os: 'Windows',
+                    os_version: '10' // eslint-disable-line camelcase
                 },
-                SafariSauceLabs: {
-                    base: 'SauceLabs',
-                    browserName: 'safari',
+                SafariBrowserStack: {
+                    base: 'BrowserStack',
+                    browser: 'safari',
                     captureTimeout: 300,
-                    platform: 'macOS 11.00'
+                    os: 'OS X',
+                    os_version: 'Big Sur' // eslint-disable-line camelcase
                 }
-            },
-
-            sauceLabs: {
-                recordVideo: false
             }
         });
     } else {

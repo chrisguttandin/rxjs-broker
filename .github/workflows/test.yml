@@ -40,8 +40,8 @@ jobs:
               run: npm ci
 
             - env:
-                  SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-                  SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+                  BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
+                  BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
                   TARGET: ${{ matrix.target }}
                   TYPE: ${{ matrix.type }}
               name: Run ${{ matrix.type }} tests

@@ -8,85 +8,81 @@ describe('module', () => {
         });
     });
 
-    // @todo Investigate why these tests fail when running on Travis.
-    // eslint-disable-next-line no-undef
-    if (!process.env.TRAVIS) {
-        describe('connect()', () => {
-            let message;
-            let openObserverNext;
-            let webSocketSubject;
+    describe('connect()', () => {
+        let message;
+        let openObserverNext;
+        let webSocketSubject;
 
-            afterEach(() => webSocketSubject.close());
+        afterEach(() => webSocketSubject.close());
 
-            beforeEach(() => {
-                message = { a: 'b', c: 'd' };
+        beforeEach(() => {
+            message = { a: 'b', c: 'd' };
 
-                webSocketSubject = connect('wss://echo.websocket.org', {
-                    openObserver: {
-                        next() {
-                            if (openObserverNext !== undefined) {
-                                openObserverNext();
-                            }
+            webSocketSubject = connect('wss://echo.websocket.org', {
+                openObserver: {
+                    next() {
+                        if (openObserverNext !== undefined) {
+                            openObserverNext();
                         }
                     }
-                });
-            });
-
-            it('should call next on a given openObserver', function (done) {
-                this.timeout(10000);
-
-                openObserverNext = done;
-
-                webSocketSubject.subscribe();
-            });
-
-            it('should connect to a WebSocket and send and receive an unmasked messagge', function (done) {
-                this.timeout(10000);
-
-                webSocketSubject.subscribe({
-                    next(mssge) {
-                        expect(mssge).to.deep.equal(message);
-
-                        done();
-                    }
-                });
-
-                webSocketSubject.send(message);
-            });
-
-            it('should connect to a WebSocket and send and receive a masked messagge', function (done) {
-                this.timeout(10000);
-
-                webSocketSubject = mask({ a: 'fake mask' }, webSocketSubject);
-
-                webSocketSubject.subscribe({
-                    next(mssge) {
-                        expect(mssge).to.deep.equal(message);
-
-                        done();
-                    }
-                });
-
-                webSocketSubject.send(message);
-            });
-
-            it('should connect to a WebSocket and send and receive a deeply masked messagge', function (done) {
-                this.timeout(10000);
-
-                webSocketSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, webSocketSubject));
-
-                webSocketSubject.subscribe({
-                    next(mssge) {
-                        expect(mssge).to.deep.equal(message);
-
-                        done();
-                    }
-                });
-
-                webSocketSubject.send(message);
+                }
             });
         });
-    }
+
+        it('should call next on a given openObserver', function (done) {
+            this.timeout(10000);
+
+            openObserverNext = done;
+
+            webSocketSubject.subscribe();
+        });
+
+        it('should connect to a WebSocket and send and receive an unmasked messagge', function (done) {
+            this.timeout(10000);
+
+            webSocketSubject.subscribe({
+                next(mssge) {
+                    expect(mssge).to.deep.equal(message);
+
+                    done();
+                }
+            });
+
+            webSocketSubject.send(message);
+        });
+
+        it('should connect to a WebSocket and send and receive a masked messagge', function (done) {
+            this.timeout(10000);
+
+            webSocketSubject = mask({ a: 'fake mask' }, webSocketSubject);
+
+            webSocketSubject.subscribe({
+                next(mssge) {
+                    expect(mssge).to.deep.equal(message);
+
+                    done();
+                }
+            });
+
+            webSocketSubject.send(message);
+        });
+
+        it('should connect to a WebSocket and send and receive a deeply masked messagge', function (done) {
+            this.timeout(10000);
+
+            webSocketSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, webSocketSubject));
+
+            webSocketSubject.subscribe({
+                next(mssge) {
+                    expect(mssge).to.deep.equal(message);
+
+                    done();
+                }
+            });
+
+            webSocketSubject.send(message);
+        });
+    });
 
     describe('mask()', () => {
         // @todo

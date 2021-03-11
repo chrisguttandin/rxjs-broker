@@ -13,7 +13,15 @@ describe('module', () => {
         let openObserverNext;
         let webSocketSubject;
 
-        afterEach(() => webSocketSubject.close());
+        afterEach(function () {
+            this.timeout(10000);
+
+            webSocketSubject.close();
+
+            return new Promise((resolve) => {
+                setTimeout(resolve, 9000);
+            });
+        });
 
         beforeEach(() => {
             message = { a: 'b', c: 'd' };

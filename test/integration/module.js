@@ -13,20 +13,14 @@ describe('module', () => {
         let openObserverNext;
         let webSocketSubject;
 
-        afterEach(function () {
-            this.timeout(10000);
-
+        afterEach(() => {
             webSocketSubject.close();
-
-            return new Promise((resolve) => {
-                setTimeout(resolve, 9000);
-            });
         });
 
         beforeEach(() => {
             message = { a: 'b', c: 'd' };
 
-            webSocketSubject = connect('wss://echo.websocket.org', {
+            webSocketSubject = connect('ws://localhost:5432', {
                 openObserver: {
                     next() {
                         if (openObserverNext !== undefined) {

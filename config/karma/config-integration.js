@@ -1,5 +1,6 @@
 const { env } = require('process');
 const { DefinePlugin } = require('webpack');
+const { Server } = require('ws');
 
 module.exports = (config) => {
     config.set({
@@ -23,11 +24,33 @@ module.exports = (config) => {
 
         frameworks: ['mocha', 'sinon-chai'],
 
+        plugins: [
+            {
+                'reporter:web-socket': [
+                    'type',
+                    function () {
+                        let server;
+
+                        this.onRunComplete = () => {
+                            server.close();
+                        };
+
+                        this.onRunStart = () => {
+                            server = new Server({ port: 5432 });
+
+                            server.on('connection', (ws) => ws.on('message', ws.send));
+                        };
+                    }
+                ]
+            },
+            'karma-*'
+        ],
+
         preprocessors: {
             'test/integration/**/*.js': 'webpack'
         },
 
-        reporters: ['dots'],
+        reporters: ['dots', 'web-socket'],
 
         webpack: {
             mode: 'development',

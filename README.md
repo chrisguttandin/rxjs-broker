@@ -2,7 +2,6 @@
 
 **An RxJS message broker for WebRTC DataChannels and WebSockets.**
 
-[![tests](https://img.shields.io/travis/chrisguttandin/rxjs-broker/master.svg?style=flat-square)](https://travis-ci.org/chrisguttandin/rxjs-broker)
 [![dependencies](https://img.shields.io/david/chrisguttandin/rxjs-broker.svg?style=flat-square)](https://www.npmjs.com/package/rxjs-broker)
 [![version](https://img.shields.io/npm/v/rxjs-broker.svg?style=flat-square)](https://www.npmjs.com/package/rxjs-broker)
 
@@ -49,11 +48,9 @@ As mentioned above the `IRemoteSubject` interface is used to describe the common
 
 ```typescript
 interface IRemoteSubject<T> {
+    close(): void;
 
-    close (): void;
-
-    send (message: T): Promise<void>;
-
+    send(message: T): Promise<void>;
 }
 ```
 

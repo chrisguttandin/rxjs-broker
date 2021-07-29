@@ -38,7 +38,7 @@ module.exports = (config) => {
                         this.onRunStart = () => {
                             server = new Server({ port: 5432 });
 
-                            server.on('connection', (ws) => ws.on('message', ws.send));
+                            server.on('connection', (ws) => ws.on('message', (message) => ws.send(message.toString())));
                         };
                     }
                 ]

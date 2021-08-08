@@ -9,7 +9,7 @@ export class DataChannelSubject<T extends TStringifyableJsonValue> extends Anony
         createDataChannelObserver: TDataChannelObserverFactory,
         createTransportObservable: TTransportObservableFactory,
         dataChannel: RTCDataChannel,
-        subjectConfig: ISubjectConfig
+        subjectConfig: ISubjectConfig<T>
     ) {
         const observable = createTransportObservable<RTCDataChannel, T>(dataChannel, subjectConfig);
         const observer = createDataChannelObserver<T>(dataChannel);

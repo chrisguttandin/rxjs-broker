@@ -9,7 +9,7 @@ export class WebSocketSubject<T extends TStringifyableJsonValue> extends Anonymo
         createTransportObservable: TTransportObservableFactory,
         createWebSocketObserver: TWebSocketObserverFactory,
         webSocket: WebSocket,
-        subjectConfig: ISubjectConfig
+        subjectConfig: ISubjectConfig<T>
     ) {
         const observable = createTransportObservable<WebSocket, T>(webSocket, subjectConfig);
         const observer = createWebSocketObserver<T>(webSocket);

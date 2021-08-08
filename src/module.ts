@@ -18,7 +18,7 @@ export * from './types/index';
 const createDataChannelSubject = createDataChannelSubjectFactory(createDataChannelObserver, createTransportObservable);
 const createWebSocketSubject = createWebSocketSubjectFactory(createTransportObservable, createWebSocketObserver);
 
-export const connect = <T extends TStringifyableJsonValue>(url: string, subjectConfig: ISubjectConfig = {}): IRemoteSubject<T> => {
+export const connect = <T extends TStringifyableJsonValue>(url: string, subjectConfig: ISubjectConfig<T> = {}): IRemoteSubject<T> => {
     return createWebSocketSubject(new WebSocket(url), subjectConfig);
 };
 
@@ -31,7 +31,7 @@ export const mask = createMaskedSubjectFactory(getTypedKeys);
 
 export const wrap = <T extends TStringifyableJsonValue>(
     dataChannel: RTCDataChannel,
-    subjectConfig: ISubjectConfig = {}
+    subjectConfig: ISubjectConfig<T> = {}
 ): IRemoteSubject<T> => {
     return createDataChannelSubject(dataChannel, subjectConfig);
 };

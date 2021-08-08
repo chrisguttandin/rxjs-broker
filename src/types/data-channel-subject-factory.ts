@@ -4,5 +4,5 @@ import { TStringifyableJsonValue } from './stringifyable-json-value';
 
 export type TDataChannelSubjectFactory = <T extends TStringifyableJsonValue>(
     dataChannel: RTCDataChannel,
-    subjectConfig: ISubjectConfig
+    subjectConfig: ISubjectConfig<T>
 ) => DataChannelSubject<T>;

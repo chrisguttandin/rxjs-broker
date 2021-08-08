@@ -3,5 +3,5 @@ import { ISubjectConfig } from '../interfaces';
 
 export type TTransportObservableFactory = <T extends RTCDataChannel | WebSocket, U>(
     transport: T,
-    subjectConfig: ISubjectConfig
+    subjectConfig: ISubjectConfig<U>
 ) => TransportObservable<T, U>;

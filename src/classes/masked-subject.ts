@@ -5,10 +5,14 @@ import { IRemoteSubject } from '../interfaces';
 import { TGetTypedKeysFunction, TStringifyableJsonObject, TStringifyableJsonValue } from '../types';
 
 export class MaskedSubject<
-    T extends TStringifyableJsonValue,
-    U extends TStringifyableJsonObject & { message: T },
-    V extends TStringifyableJsonObject | U
-> extends AnonymousSubject<T> implements IRemoteSubject<T> { // tslint:disable-line max-line-length
+        T extends TStringifyableJsonValue,
+        U extends TStringifyableJsonObject & { message: T },
+        V extends TStringifyableJsonObject | U
+    >
+    extends AnonymousSubject<T>
+    implements IRemoteSubject<T>
+{
+    // tslint:disable-line max-line-length
     private _mask: Partial<Omit<U, 'message'>>;
 
     private _maskableSubject: IRemoteSubject<V>;
@@ -23,7 +27,7 @@ export class MaskedSubject<
 
         const stringifiedValues = getTypedKeys(mask).map((key) => [key, JSON.stringify(mask[key])] as const);
 
-        const source: Observable<T> = (<Observable<U>>maskableSubject).pipe(
+        const source: Observable<T> = (<Observable<TStringifyableJsonObject | U>>maskableSubject).pipe(
             filter((message): message is U => stringifiedValues.every(([key, value]) => value === JSON.stringify(message[key]))),
             map(({ message }) => message)
         );

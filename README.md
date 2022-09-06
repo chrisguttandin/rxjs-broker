@@ -4,11 +4,11 @@
 
 [![version](https://img.shields.io/npm/v/rxjs-broker.svg?style=flat-square)](https://www.npmjs.com/package/rxjs-broker)
 
-This module is using the power of [RxJS](https://rxjs.dev) to wrap WebSockets or WebRTC DataChannels. It returns a [Subject](https://rxjs.dev/api/index/class/Subject) which can be used with all the operators RxJS provides, but does also have some special functionality.
+This module is using the power of [RxJS](https://rxjs.dev) to wrap WebSockets or WebRTC DataChannels. It returns a [Subject](https://rxjs.dev/api/index/class/Subject) which can be used with all the operators that RxJS provides. But it also provides some additional functionality.
 
 ## Usage
 
-To install `rxjs-broker` via [npm](https://www.npmjs.com/package/rxjs-broker) you can execute the following command.
+To install `rxjs-broker` via [npm](https://www.npmjs.com/package/rxjs-broker) you can run the following command.
 
 ```shell
 npm install rxjs-broker
@@ -28,7 +28,7 @@ The `connect()` function takes a URL as a parameter and returns a `WebSocketSubj
 const webSocketSubject = connect('wss://super-cool-websock.et');
 ```
 
-The second parameter can be used to specify an `openObserver` which works similar to the [`openObserver` of the `WebSocketSubject` provided by RxJS](https://rxjs-dev.firebaseapp.com/api/webSocket/WebSocketSubjectConfig#openObserver). The `next()` method of it gets called when the underlying WebSocket fires an open event.
+The second parameter can be used to specify an `openObserver` which works similar to the [`openObserver` of the `WebSocketSubject` provided by RxJS](https://rxjs-dev.firebaseapp.com/api/webSocket/WebSocketSubjectConfig#openObserver). The `next()` method of it gets called when the underlying WebSocket emits an open event.
 
 ### wrap(dataChannel: DataChannel, subjectConfig?: { openObserver?: NextObserver\<void> }): DataChannelSubject
 
@@ -39,7 +39,7 @@ The `wrap()` function can be used to turn a WebRTC DataChannel into a `DataChann
 const dataChannelSubject = wrap(dataChannel);
 ```
 
-The second parameter can be used to specify an `openObserver`. The `next()` method of it gets called when the underlying DataChannel fires an open event.
+The second parameter can be used to specify an `openObserver`. The `next()` method of it gets called when the underlying DataChannel emits an open event.
 
 ### IRemoteSubject
 
@@ -59,7 +59,7 @@ The `close()` method is meant to close the underlying WebSocket or WebRTC DataCh
 
 #### send(message): Promise<void>
 
-The `send()` method is basically a supercharged version of `next()`. It will stringify a given JSON message before sending it and returns a `Promise` which resolves when the message is actually on it's way.
+The `send()` method is a supercharged version of `next()`. It will stringify a given JSON message before sending it and returns a `Promise` which resolves when the message is actually on it's way.
 
 ### mask(mask, maskableSubject): IRemoteSubject
 

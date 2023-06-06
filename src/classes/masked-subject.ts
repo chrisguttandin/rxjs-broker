@@ -15,6 +15,7 @@ export class MaskedSubject<
     // tslint:disable-line max-line-length
     private _mask: Partial<Omit<U, 'message'>>;
 
+    // tslint:disable-next-line rxjs-no-exposed-subjects
     private _maskableSubject: IRemoteSubject<V>;
 
     // tslint:disable-next-line max-line-length rxjs-no-exposed-subjects

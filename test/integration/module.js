@@ -31,59 +31,86 @@ describe('module', () => {
             });
         });
 
-        it('should call next on a given openObserver', function (done) {
-            this.timeout(10000);
+        // eslint-disable-next-line no-undef
+        if (process.env.CI && !/Chrome/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent)) {
+            it('should not be possible to connect with the local WebSocketServer', function (done) {
+                this.timeout(10000);
 
-            openObserverNext = done;
+                const webSocket = new WebSocket('ws://localhost:5432');
+                const removeEventListeners = () => {
+                    webSocket.onclose = null;
+                    webSocket.onerror = null;
+                    webSocket.onopen = null;
+                };
 
-            webSocketSubject.subscribe();
-        });
-
-        it('should connect to a WebSocket and send and receive an unmasked messagge', function (done) {
-            this.timeout(10000);
-
-            webSocketSubject.subscribe({
-                next(mssge) {
-                    expect(mssge).to.deep.equal(message);
-
+                webSocket.onclose = () => {
+                    removeEventListeners();
+                    done(new Error('The close event'));
+                };
+                webSocket.onerror = () => {
+                    removeEventListeners();
                     done();
-                }
+                };
+                webSocket.onopen = () => {
+                    removeEventListeners();
+                    done(new Error('The open event'));
+                };
+            });
+        } else {
+            it('should call next on a given openObserver', function (done) {
+                this.timeout(10000);
+
+                openObserverNext = done;
+
+                webSocketSubject.subscribe();
             });
 
-            webSocketSubject.send(message);
-        });
+            it('should connect to a WebSocket and send and receive an unmasked messagge', function (done) {
+                this.timeout(10000);
 
-        it('should connect to a WebSocket and send and receive a masked messagge', function (done) {
-            this.timeout(10000);
+                webSocketSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-            webSocketSubject = mask({ a: 'fake mask' }, webSocketSubject);
+                        done();
+                    }
+                });
 
-            webSocketSubject.subscribe({
-                next(mssge) {
-                    expect(mssge).to.deep.equal(message);
-
-                    done();
-                }
+                webSocketSubject.send(message);
             });
 
-            webSocketSubject.send(message);
-        });
+            it('should connect to a WebSocket and send and receive a masked messagge', function (done) {
+                this.timeout(10000);
 
-        it('should connect to a WebSocket and send and receive a deeply masked messagge', function (done) {
-            this.timeout(10000);
+                webSocketSubject = mask({ a: 'fake mask' }, webSocketSubject);
 
-            webSocketSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, webSocketSubject));
+                webSocketSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
 
-            webSocketSubject.subscribe({
-                next(mssge) {
-                    expect(mssge).to.deep.equal(message);
+                        done();
+                    }
+                });
 
-                    done();
-                }
+                webSocketSubject.send(message);
             });
 
-            webSocketSubject.send(message);
-        });
+            it('should connect to a WebSocket and send and receive a deeply masked messagge', function (done) {
+                this.timeout(10000);
+
+                webSocketSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, webSocketSubject));
+
+                webSocketSubject.subscribe({
+                    next(mssge) {
+                        expect(mssge).to.deep.equal(message);
+
+                        done();
+                    }
+                });
+
+                webSocketSubject.send(message);
+            });
+        }
     });
 
     describe('mask()', () => {

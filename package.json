@@ -38,9 +38,9 @@
         "lint-staged": "^16.1.5",
         "mocha": "^11.7.1",
         "prettier": "^3.6.2",
-        "rimraf": "^6.0.1",
         "rollup": "^4.46.2",
         "rxjs": "^7.8.2",
+        "shx": "^0.4.0",
         "sinon": "^17.0.2",
         "sinon-chai": "^3.7.0",
         "ts-loader": "^9.5.2",
@@ -69,7 +69,7 @@
         "url": "https://github.com/chrisguttandin/rxjs-broker.git"
     },
     "scripts": {
-        "build": "rimraf build/* && tsc --project src/tsconfig.json && rollup --config config/rollup/bundle.mjs",
+        "build": "shx rm -rf build/* && tsc --project src/tsconfig.json && rollup --config config/rollup/bundle.mjs",
         "lint": "npm run lint:config && npm run lint:src && npm run lint:test",
         "lint:config": "eslint --config config/eslint/config.json --ext .cjs --ext .js --ext .mjs --report-unused-disable-directives config/",
         "lint:src": "tslint --config config/tslint/src.json --project src/tsconfig.json src/*.ts src/**/*.ts",

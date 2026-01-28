@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { DataChannelMock } from '../../mock/data-channel';
 import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
 import { MaskedSubject } from '../../../src/classes/masked-subject';
@@ -36,7 +37,9 @@ describe('MaskedSubject', () => {
                 expect(dataChannelOrWebSocket.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
             });
 
-            it('should augment messages with the mask when calling send()', (done) => {
+            it('should augment messages with the mask when calling send()', () => {
+                const { promise, resolve } = Promise.withResolvers();
+
                 dataChannelOrWebSocket.readyState = transportLayer === 'DataChannel' ? 'open' : WebSocket.OPEN;
 
                 maskedSubject.send(message).then(() => {
@@ -45,22 +48,27 @@ describe('MaskedSubject', () => {
                         '{"a":{"fake":"mask"},"message":{"a":"fake message"}}'
                     );
 
-                    done();
+                    resolve();
                 });
+
+                return promise;
             });
 
-            it('should filter messages by the mask', (done) => {
+            it('should filter messages by the mask', () => {
+                const { promise, resolve } = Promise.withResolvers();
                 const subscription = maskedSubject.subscribe({
                     next(mssg) {
                         expect(mssg).to.equal(message);
 
                         subscription.unsubscribe();
 
-                        done();
+                        resolve();
                     }
                 });
 
                 dataChannelOrWebSocket.dispatchEvent({ data: { a: { fake: 'mask' }, message }, type: 'message' });
+
+                return promise;
             });
         });
     }

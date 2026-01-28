@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { DataChannelMock } from '../../mock/data-channel';
 import { DataChannelObserver } from '../../../src/classes/data-channel-observer';
 
@@ -71,31 +72,39 @@ describe('DataChannelObserver', () => {
         describe('with a connecting data channel', () => {
             beforeEach(() => (dataChannel.readyState = 'connecting'));
 
-            it("should wait with sending a given message to the data channel until it's open", (done) => {
+            it("should wait with sending a given message to the data channel until it's open", () => {
+                const { promise, resolve } = Promise.withResolvers();
+
                 dataChannelObserver.send(message).then(() => {
                     expect(dataChannel.send).to.have.been.calledOnce;
                     expect(dataChannel.send).to.have.been.calledWithExactly(`"${message}"`);
 
-                    done();
+                    resolve();
                 });
 
                 expect(dataChannel.send).to.have.not.been.called;
 
                 dataChannel.readyState = 'open';
                 dataChannel.dispatchEvent({ type: 'open' });
+
+                return promise;
             });
         });
 
         describe('with an open data channel', () => {
             beforeEach(() => (dataChannel.readyState = 'open'));
 
-            it('should send a given message to the data channel', (done) => {
+            it('should send a given message to the data channel', () => {
+                const { promise, resolve } = Promise.withResolvers();
+
                 dataChannelObserver.send(message).then(() => {
                     expect(dataChannel.send).to.have.been.calledOnce;
                     expect(dataChannel.send).to.have.been.calledWithExactly(`"${message}"`);
 
-                    done();
+                    resolve();
                 });
+
+                return promise;
             });
         });
 
@@ -106,18 +115,22 @@ describe('DataChannelObserver', () => {
                 dataChannel.readyState = 'open';
             });
 
-            it('should wait with sending a given message to the data channel until its buffered amount of data is below the threshold', (done) => {
+            it('should wait with sending a given message to the data channel until its buffered amount of data is below the threshold', () => {
+                const { promise, resolve } = Promise.withResolvers();
+
                 dataChannelObserver.send(message).then(() => {
                     expect(dataChannel.send).to.have.been.calledOnce;
                     expect(dataChannel.send).to.have.been.calledWithExactly(`"${message}"`);
 
-                    done();
+                    resolve();
                 });
 
                 expect(dataChannel.send).to.have.not.been.called;
 
                 dataChannel.bufferedAmount = 2047;
                 dataChannel.dispatchEvent({ type: 'bufferedamountlow' });
+
+                return promise;
             });
         });
     });

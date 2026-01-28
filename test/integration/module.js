@@ -1,4 +1,6 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { connect, isSupported, mask, wrap } from '../../src/module';
+import { commands } from 'vitest/browser';
 import { establishDataChannels } from '../helper/establish-data-channels';
 
 describe('module', () => {
@@ -15,12 +17,18 @@ describe('module', () => {
 
         afterEach(() => {
             webSocketSubject.close();
+
+            return commands.stopWebSocketServer();
         });
 
-        beforeEach(() => {
+        beforeEach(async () => {
             message = { a: 'b', c: 'd' };
 
-            webSocketSubject = connect('ws://localhost:5432', {
+            const port = 5432;
+
+            await commands.startWebSocketServer(port);
+
+            webSocketSubject = connect(`ws://localhost:${port}`, {
                 openObserver: {
                     next() {
                         if (openObserverNext !== undefined) {
@@ -31,30 +39,34 @@ describe('module', () => {
             });
         });
 
-        it('should call next on a given openObserver', function (done) {
-            this.timeout(10000);
+        it('should call next on a given openObserver', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
-            openObserverNext = done;
+            openObserverNext = () => resolve();
 
             webSocketSubject.subscribe();
+
+            return promise;
         });
 
-        it('should connect to a WebSocket and send and receive an unmasked messagge', function (done) {
-            this.timeout(10000);
+        it('should connect to a WebSocket and send and receive an unmasked messagge', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
             webSocketSubject.subscribe({
                 next(mssge) {
                     expect(mssge).to.deep.equal(message);
 
-                    done();
+                    resolve();
                 }
             });
 
             webSocketSubject.send(message);
+
+            return promise;
         });
 
-        it('should connect to a WebSocket and send and receive a masked messagge', function (done) {
-            this.timeout(10000);
+        it('should connect to a WebSocket and send and receive a masked messagge', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
             webSocketSubject = mask({ a: 'fake mask' }, webSocketSubject);
 
@@ -62,15 +74,17 @@ describe('module', () => {
                 next(mssge) {
                     expect(mssge).to.deep.equal(message);
 
-                    done();
+                    resolve();
                 }
             });
 
             webSocketSubject.send(message);
+
+            return promise;
         });
 
-        it('should connect to a WebSocket and send and receive a deeply masked messagge', function (done) {
-            this.timeout(10000);
+        it('should connect to a WebSocket and send and receive a deeply masked messagge', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
             webSocketSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, webSocketSubject));
 
@@ -78,16 +92,19 @@ describe('module', () => {
                 next(mssge) {
                     expect(mssge).to.deep.equal(message);
 
-                    done();
+                    resolve();
                 }
             });
 
             webSocketSubject.send(message);
+
+            return promise;
         });
     });
 
-    describe('mask()', () => {
+    describe('mask()', ({ skip }) => {
         // @todo
+        skip();
     });
 
     describe('wrap()', () => {
@@ -112,12 +129,14 @@ describe('module', () => {
             remoteDataChannel = dataChannels.remoteDataChannel;
         });
 
-        it('should call next on a given openObserver', function (done) {
-            this.timeout(10000);
+        it('should call next on a given openObserver', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
-            openObserverNext = done;
+            openObserverNext = () => resolve();
 
             dataChannelSubject.subscribe();
+
+            return promise;
         });
 
         describe('with a message', () => {
@@ -127,14 +146,14 @@ describe('module', () => {
                 message = { a: 'b', c: 'd' };
             });
 
-            it('should send and receive a messagge through an unmasked data channel', function (done) {
-                this.timeout(10000);
+            it('should send and receive a messagge through an unmasked data channel', () => {
+                const { promise, resolve } = Promise.withResolvers();
 
                 dataChannelSubject.subscribe({
                     next(mssge) {
                         expect(mssge).to.deep.equal(message);
 
-                        done();
+                        resolve();
                     }
                 });
 
@@ -145,10 +164,12 @@ describe('module', () => {
                 });
 
                 dataChannelSubject.send(message);
+
+                return promise;
             });
 
-            it('should send and receive a messagge through a masked data channel', function (done) {
-                this.timeout(10000);
+            it('should send and receive a messagge through a masked data channel', () => {
+                const { promise, resolve } = Promise.withResolvers();
 
                 dataChannelSubject = mask({ a: 'fake mask' }, dataChannelSubject);
 
@@ -156,7 +177,7 @@ describe('module', () => {
                     next(mssge) {
                         expect(mssge).to.deep.equal(message);
 
-                        done();
+                        resolve();
                     }
                 });
 
@@ -167,10 +188,12 @@ describe('module', () => {
                 });
 
                 dataChannelSubject.send(message);
+
+                return promise;
             });
 
-            it('should send and receive a messagge through a deeply masked data channel', function (done) {
-                this.timeout(10000);
+            it('should send and receive a messagge through a deeply masked data channel', () => {
+                const { promise, resolve } = Promise.withResolvers();
 
                 dataChannelSubject = mask({ another: 'fake mask' }, mask({ a: 'fake mask' }, dataChannelSubject));
 
@@ -178,7 +201,7 @@ describe('module', () => {
                     next(mssge) {
                         expect(mssge).to.deep.equal(message);
 
-                        done();
+                        resolve();
                     }
                 });
 
@@ -189,12 +212,14 @@ describe('module', () => {
                 });
 
                 dataChannelSubject.send(message);
+
+                return promise;
             });
         });
 
         describe('without a message', () => {
-            it('should send and receive an empty messagge through a masked data channel', function (done) {
-                this.timeout(10000);
+            it('should send and receive an empty messagge through a masked data channel', () => {
+                const { promise, resolve } = Promise.withResolvers();
 
                 dataChannelSubject = mask({ a: 'fake mask' }, dataChannelSubject);
 
@@ -202,7 +227,7 @@ describe('module', () => {
                     next(message) {
                         expect(message).to.be.undefined;
 
-                        done();
+                        resolve();
                     }
                 });
 
@@ -213,6 +238,8 @@ describe('module', () => {
                 });
 
                 dataChannelSubject.send();
+
+                return promise;
             });
         });
     });

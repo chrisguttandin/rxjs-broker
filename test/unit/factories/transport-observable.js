@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { Observable } from 'rxjs';
 import { createTransportObservable } from '../../../src/factories/transport-observable';
 

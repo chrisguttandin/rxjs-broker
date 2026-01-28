@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { WebSocketMock } from '../../mock/web-socket';
 import { WebSocketSubject } from '../../../src/classes/web-socket-subject';
 import { createTransportObservable } from '../../../src/factories/transport-observable';
@@ -16,7 +17,8 @@ describe('WebSocketSubject', () => {
         webSocketSubject = new WebSocketSubject(createTransportObservable, createWebSocketObserver, webSocket, { openObserver });
     });
 
-    it('should allow to be used with other operators', (done) => {
+    it('should allow to be used with other operators', () => {
+        const { promise, resolve } = Promise.withResolvers();
         const message = 'a fake message';
         const webSocketSubscription = webSocketSubject.pipe(filter(() => true)).subscribe({
             next(mssg) {
@@ -24,11 +26,13 @@ describe('WebSocketSubject', () => {
 
                 webSocketSubscription.unsubscribe();
 
-                done();
+                resolve();
             }
         });
 
         webSocket.dispatchEvent({ data: message, type: 'message' });
+
+        return promise;
     });
 
     describe('close()', () => {
@@ -51,7 +55,8 @@ describe('WebSocketSubject', () => {
             webSocketSubscription.unsubscribe();
         });
 
-        it('should emit a message from the socket', (done) => {
+        it('should emit a message from the socket', () => {
+            const { promise, resolve } = Promise.withResolvers();
             const message = 'a fake message';
             const webSocketSubscription = webSocketSubject.subscribe({
                 next(mssg) {
@@ -59,35 +64,44 @@ describe('WebSocketSubject', () => {
 
                     webSocketSubscription.unsubscribe();
 
-                    done();
+                    resolve();
                 }
             });
 
             webSocket.dispatchEvent({ data: message, type: 'message' });
+
+            return promise;
         });
 
-        it('should emit an error from the socket', (done) => {
+        it('should emit an error from the socket', () => {
+            const { promise, resolve } = Promise.withResolvers();
             const error = 'a fake error';
 
             webSocketSubject.subscribe({
                 error(err) {
                     expect(err).to.equal(error);
 
-                    done();
+                    resolve();
                 }
             });
 
             webSocket.dispatchEvent({ error, type: 'error' });
+
+            return promise;
         });
 
-        it('should complete when the socket gets closed', (done) => {
+        it('should complete when the socket gets closed', () => {
+            const { promise, resolve } = Promise.withResolvers();
+
             webSocketSubject.subscribe({
                 complete() {
-                    done();
+                    resolve();
                 }
             });
 
             webSocket.dispatchEvent({ type: 'close' });
+
+            return promise;
         });
     });
 });

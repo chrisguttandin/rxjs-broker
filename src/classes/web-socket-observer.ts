@@ -16,7 +16,9 @@ export class WebSocketObserver<T> implements Observer<T> {
     }
 
     public next(value: T): void {
-        this.send(value);
+        this.send(value).catch(() => {
+            // Ignore errors.
+        });
     }
 
     public send(message: T): Promise<void> {

@@ -31,7 +31,7 @@
         "lint-staged": "^16.2.7",
         "prettier": "^3.8.1",
         "rimraf": "^6.1.2",
-        "rollup": "^4.57.0",
+        "rollup": "^4.57.1",
         "rxjs": "^7.8.2",
         "sinon": "^21.0.1",
         "sinon-chai": "^4.0.1",

@@ -6,7 +6,7 @@ import { createWebSocketObserver } from './factories/web-socket-observer';
 import { createWebSocketSubjectFactory } from './factories/web-socket-subject-factory';
 import { getTypedKeys } from './functions/get-typed-keys';
 import { IRemoteSubject, ISubjectConfig } from './interfaces';
-import { TStringifyableJsonValue } from './types';
+import { ConnectionFactory, TStringifyableJsonValue } from './types';
 
 /*
  * @todo Explicitly referencing the barrel file seems to be necessary when enabling the
@@ -30,8 +30,24 @@ export const isSupported = typeof window !== 'undefined' && 'WebSocket' in windo
 export const mask = createMaskedSubjectFactory(getTypedKeys);
 
 export const wrap = <T extends TStringifyableJsonValue>(
-    dataChannel: RTCDataChannel,
+    connection: RTCDataChannel | WebSocket | ConnectionFactory,
     subjectConfig: ISubjectConfig<T> = {}
 ): IRemoteSubject<T> => {
-    return createDataChannelSubject(dataChannel, subjectConfig);
+    const wrapped = typeof connection === 'function' ? connection() : connection;
+
+    /**
+     * Check by duck typing instead of instanceof,
+     * so that it will work with different WebSocket or RTCDataChannel implementations
+     * such as polyfills or test mocks.
+     */
+    if (!('send' in wrapped && 'close' in wrapped)) {
+        throw new Error('Invalid connection object');
+    }
+
+    if ('url' in wrapped) {
+        // WebSockets have URLs, data channels don't.
+        return createWebSocketSubject(wrapped, subjectConfig);
+    }
+
+    return createDataChannelSubject(wrapped, subjectConfig);
 };

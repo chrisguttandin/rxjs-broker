@@ -28,7 +28,7 @@ describe('WebSocketObserver', () => {
                 webSocket.dispatchEvent({ type: 'open' });
 
                 expect(webSocket.send).to.have.been.calledOnce;
-                expect(webSocket.send).to.have.been.calledWithExactly(`"${value}"`);
+                expect(webSocket.send).to.have.been.calledWith(`"${value}"`);
             });
 
             it('should give up sending a given value as message to the socket if there is an error', () => {
@@ -49,7 +49,7 @@ describe('WebSocketObserver', () => {
                 webSocketObserver.next(value);
 
                 expect(webSocket.send).to.have.been.calledOnce;
-                expect(webSocket.send).to.have.been.calledWithExactly(`"${value}"`);
+                expect(webSocket.send).to.have.been.calledWith(`"${value}"`);
             });
         });
 
@@ -87,7 +87,7 @@ describe('WebSocketObserver', () => {
 
                 webSocketObserver.send(message).then(() => {
                     expect(webSocket.send).to.have.been.calledOnce;
-                    expect(webSocket.send).to.have.been.calledWithExactly(`"${message}"`);
+                    expect(webSocket.send).to.have.been.calledWith(`"${message}"`);
 
                     resolve();
                 });
@@ -127,7 +127,7 @@ describe('WebSocketObserver', () => {
 
                 webSocketObserver.send(message).then(() => {
                     expect(webSocket.send).to.have.been.calledOnce;
-                    expect(webSocket.send).to.have.been.calledWithExactly(`"${message}"`);
+                    expect(webSocket.send).to.have.been.calledWith(`"${message}"`);
 
                     resolve();
                 });

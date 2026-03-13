@@ -1,4 +1,4 @@
-import { spy, stub } from 'sinon';
+import { vi } from 'vitest';
 
 // @todo This is an obviously imperfect implementation of the EventTarget.
 export class WebSocketMock {
@@ -12,7 +12,7 @@ export class WebSocketMock {
                 events.set(type, new Set([listener]));
             }
         };
-        this.close = spy();
+        this.close = vi.fn();
         this.dispatchEvent = (event) => {
             if (events.has(event.type)) {
                 events.get(event.type).forEach((listener) => {
@@ -20,10 +20,10 @@ export class WebSocketMock {
                 });
             }
         };
-        this.removeEventListener = stub();
-        this.send = spy();
+        this.removeEventListener = vi.fn();
+        this.send = vi.fn();
 
-        this.removeEventListener.callsFake((type, listener) => {
+        this.removeEventListener.mockImplementation((type, listener) => {
             if (events.has(type)) {
                 events.get(type).delete(listener);
             }

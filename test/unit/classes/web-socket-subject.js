@@ -1,10 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { WebSocketMock } from '../../mock/web-socket';
 import { WebSocketSubject } from '../../../src/classes/web-socket-subject';
 import { createTransportObservable } from '../../../src/factories/transport-observable';
 import { createWebSocketObserver } from '../../../src/factories/web-socket-observer';
 import { filter } from 'rxjs/operators';
-import { spy } from 'sinon';
 
 describe('WebSocketSubject', () => {
     let openObserver;
@@ -12,7 +11,7 @@ describe('WebSocketSubject', () => {
     let webSocketSubject;
 
     beforeEach(() => {
-        openObserver = { next: spy() };
+        openObserver = { next: vi.fn() };
         webSocket = new WebSocketMock();
         webSocketSubject = new WebSocketSubject(createTransportObservable, createWebSocketObserver, webSocket, { openObserver });
     });
@@ -40,7 +39,7 @@ describe('WebSocketSubject', () => {
             webSocketSubject.close();
 
             expect(webSocket.close).to.have.been.calledOnce;
-            expect(webSocket.close).to.have.been.calledWithExactly();
+            expect(webSocket.close).to.have.been.calledWith();
         });
     });
 

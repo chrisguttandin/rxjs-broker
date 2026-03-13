@@ -28,7 +28,7 @@ describe('DataChannelObserver', () => {
                 dataChannel.dispatchEvent({ type: 'open' });
 
                 expect(dataChannel.send).to.have.been.calledOnce;
-                expect(dataChannel.send).to.have.been.calledWithExactly(`"${value}"`);
+                expect(dataChannel.send).to.have.been.calledWith(`"${value}"`);
             });
         });
 
@@ -39,7 +39,7 @@ describe('DataChannelObserver', () => {
                 dataChannelObserver.send(value);
 
                 expect(dataChannel.send).to.have.been.calledOnce;
-                expect(dataChannel.send).to.have.been.calledWithExactly(`"${value}"`);
+                expect(dataChannel.send).to.have.been.calledWith(`"${value}"`);
             });
         });
 
@@ -59,7 +59,7 @@ describe('DataChannelObserver', () => {
                 dataChannel.dispatchEvent({ type: 'bufferedamountlow' });
 
                 expect(dataChannel.send).to.have.been.calledOnce;
-                expect(dataChannel.send).to.have.been.calledWithExactly(`"${value}"`);
+                expect(dataChannel.send).to.have.been.calledWith(`"${value}"`);
             });
         });
     });
@@ -77,7 +77,7 @@ describe('DataChannelObserver', () => {
 
                 dataChannelObserver.send(message).then(() => {
                     expect(dataChannel.send).to.have.been.calledOnce;
-                    expect(dataChannel.send).to.have.been.calledWithExactly(`"${message}"`);
+                    expect(dataChannel.send).to.have.been.calledWith(`"${message}"`);
 
                     resolve();
                 });
@@ -99,7 +99,7 @@ describe('DataChannelObserver', () => {
 
                 dataChannelObserver.send(message).then(() => {
                     expect(dataChannel.send).to.have.been.calledOnce;
-                    expect(dataChannel.send).to.have.been.calledWithExactly(`"${message}"`);
+                    expect(dataChannel.send).to.have.been.calledWith(`"${message}"`);
 
                     resolve();
                 });
@@ -120,7 +120,7 @@ describe('DataChannelObserver', () => {
 
                 dataChannelObserver.send(message).then(() => {
                     expect(dataChannel.send).to.have.been.calledOnce;
-                    expect(dataChannel.send).to.have.been.calledWithExactly(`"${message}"`);
+                    expect(dataChannel.send).to.have.been.calledWith(`"${message}"`);
 
                     resolve();
                 });

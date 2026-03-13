@@ -34,7 +34,7 @@ describe('MaskedSubject', () => {
                 maskedSubject.next(message);
 
                 expect(dataChannelOrWebSocket.send).to.have.been.calledOnce;
-                expect(dataChannelOrWebSocket.send).to.have.been.calledWithExactly('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
+                expect(dataChannelOrWebSocket.send).to.have.been.calledWith('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
             });
 
             it('should augment messages with the mask when calling send()', () => {
@@ -44,9 +44,7 @@ describe('MaskedSubject', () => {
 
                 maskedSubject.send(message).then(() => {
                     expect(dataChannelOrWebSocket.send).to.have.been.calledOnce;
-                    expect(dataChannelOrWebSocket.send).to.have.been.calledWithExactly(
-                        '{"a":{"fake":"mask"},"message":{"a":"fake message"}}'
-                    );
+                    expect(dataChannelOrWebSocket.send).to.have.been.calledWith('{"a":{"fake":"mask"},"message":{"a":"fake message"}}');
 
                     resolve();
                 });

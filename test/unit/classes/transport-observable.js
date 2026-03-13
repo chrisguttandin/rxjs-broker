@@ -1,14 +1,13 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DataChannelMock } from '../../mock/data-channel';
 import { TransportObservable } from '../../../src/classes/transport-observable';
 import { WebSocketMock } from '../../mock/web-socket';
-import { spy } from 'sinon';
 
 describe('TransportObservable', () => {
     let openObserver;
 
     beforeEach(() => {
-        openObserver = { next: spy() };
+        openObserver = { next: vi.fn() };
     });
 
     for (const transportLayer of ['DataChannel', 'WebSocket']) {
@@ -35,7 +34,7 @@ describe('TransportObservable', () => {
                 transportObservable.subscribe().unsubscribe();
 
                 expect(transport.removeEventListener).to.have.been.called;
-                expect(transport.removeEventListener).to.have.been.calledWith('open');
+                expect(transport.removeEventListener).to.have.been.calledWith('open', expect.any(Function));
             });
 
             it('should pass on a message event to the subscribed observer', () => {
@@ -60,7 +59,7 @@ describe('TransportObservable', () => {
                 transportObservable.subscribe().unsubscribe();
 
                 expect(transport.removeEventListener).to.have.been.called;
-                expect(transport.removeEventListener).to.have.been.calledWith('message');
+                expect(transport.removeEventListener).to.have.been.calledWith('message', expect.any(Function));
             });
 
             it('should pass on an error event to the subscribed observer', () => {
@@ -100,7 +99,7 @@ describe('TransportObservable', () => {
                 transportObservable.subscribe().unsubscribe();
 
                 expect(transport.removeEventListener).to.have.been.called;
-                expect(transport.removeEventListener).to.have.been.calledWith('error');
+                expect(transport.removeEventListener).to.have.been.calledWith('error', expect.any(Function));
             });
 
             it('should complete the subscribed observer on a close event', () => {
@@ -121,7 +120,7 @@ describe('TransportObservable', () => {
                 transportObservable.subscribe().unsubscribe();
 
                 expect(transport.removeEventListener).to.have.been.called;
-                expect(transport.removeEventListener).to.have.been.calledWith('close');
+                expect(transport.removeEventListener).to.have.been.calledWith('close', expect.any(Function));
             });
         });
     }

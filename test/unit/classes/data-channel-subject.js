@@ -1,10 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DataChannelMock } from '../../mock/data-channel';
 import { DataChannelSubject } from '../../../src/classes/data-channel-subject';
 import { createDataChannelObserver } from '../../../src/factories/data-channel-observer';
 import { createTransportObservable } from '../../../src/factories/transport-observable';
 import { filter } from 'rxjs/operators';
-import { spy } from 'sinon';
 
 describe('DataChannelSubject', () => {
     let dataChannel;
@@ -12,7 +11,7 @@ describe('DataChannelSubject', () => {
     let openObserver;
 
     beforeEach(() => {
-        openObserver = { next: spy() };
+        openObserver = { next: vi.fn() };
         dataChannel = new DataChannelMock();
         dataChannelSubject = new DataChannelSubject(createDataChannelObserver, createTransportObservable, dataChannel, { openObserver });
     });
@@ -40,7 +39,7 @@ describe('DataChannelSubject', () => {
             dataChannelSubject.close();
 
             expect(dataChannel.close).to.have.been.calledOnce;
-            expect(dataChannel.close).to.have.been.calledWithExactly();
+            expect(dataChannel.close).to.have.been.calledWith();
         });
     });
 

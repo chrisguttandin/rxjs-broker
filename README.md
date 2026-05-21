@@ -30,16 +30,23 @@ const webSocketSubject = connect('wss://super-cool-websock.et');
 
 The second parameter can be used to specify an `openObserver` which works similar to the [`openObserver` of the `WebSocketSubject` provided by RxJS](https://rxjs-dev.firebaseapp.com/api/webSocket/WebSocketSubjectConfig#openObserver). The `next()` method of it gets called when the underlying WebSocket emits an open event.
 
-### wrap(dataChannel: DataChannel, subjectConfig?: { openObserver?: NextObserver\<void> }): DataChannelSubject
+### wrap(dataChannel: DataChannel | WebSocket | Function, subjectConfig?: { openObserver?: NextObserver\<void> }): DataChannelSubject
 
-The `wrap()` function can be used to turn a WebRTC DataChannel into a `DataChannelSubject` which does also extend the `AnonymousSubject` and implements the `IRemoteSubject` interface.
+The `wrap()` function wraps a WebRTC DataChannel or a WebSocket into an appropriate subclass of `AnonymousSubject` that implements the `IRemoteSubject` interface.
 
 ```js
 // Let's imagine a variable called dataChannel exists and its value is a WebRTC DataChannel.
 const dataChannelSubject = wrap(dataChannel);
+
+// Or you can also wrap a WebSocket.
+const webSocketSubject = wrap(webSocket);
+
+// Or even a function that creates and returns a WebSocket or DataChannel.
+// This lets you use a custom implementation of either (e.g. ws or node-datachannel).
+const anotherSubject = wrap(createAndReturnAWebSocketOrDataChannelSomehow);
 ```
 
-The second parameter can be used to specify an `openObserver`. The `next()` method of it gets called when the underlying DataChannel emits an open event.
+The second parameter can be used to specify an `openObserver`. The `next()` method of it gets called when the underlying connection object emits an open event.
 
 ### IRemoteSubject
 

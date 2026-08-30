@@ -1,4 +1,5 @@
 export * from './binary-type';
+export * from './connection-factory';
 export * from './data-channel-observer-factory';
 export * from './data-channel-subject-factory';
 export * from './data-channel-subject-factory-factory';

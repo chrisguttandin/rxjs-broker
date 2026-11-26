@@ -31,7 +31,7 @@
         "lint-staged": "^17.6.1",
         "prettier": "^3.10.1",
         "rimraf": "^6.1.4",
-        "rollup": "^4.63.0",
+        "rollup": "^4.68.7",
         "rxjs": "^7.8.2",
         "ts-loader": "^9.6.2",
         "tsconfig-holy-grail": "^16.0.0",
